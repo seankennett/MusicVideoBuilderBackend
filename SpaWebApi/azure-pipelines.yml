@@ -21,8 +21,15 @@ variables:
 steps:
 - task: DotNetCoreCLI@2
   inputs:
+    command: 'restore'
+    projects: '$(projectPath)'
+  displayName: 'Restore NuGet packages'
+
+- task: DotNetCoreCLI@2
+  inputs:
     command: 'build'
     projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration)'
   displayName: 'Build solution'
   
 - task: DotNetCoreCLI@2
@@ -44,6 +51,6 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     appName: 'musicvideobuilder'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     deploymentMethod: runFromPackage
     appType: webApp

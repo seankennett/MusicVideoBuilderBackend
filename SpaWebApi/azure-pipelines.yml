@@ -6,6 +6,8 @@ trigger:
         include:
         - SpaWebApi
         - SpaWebApi.Test
+        - SharedEntities
+        - DataAccessLayer
 
 pool:
   vmImage: 'windows-2022'

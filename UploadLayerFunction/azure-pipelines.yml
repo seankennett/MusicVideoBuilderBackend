@@ -10,7 +10,7 @@ trigger:
 variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
   functioNamespace: 'uploadlayerfunction'
-  projectPath: '/UploadLayerFunction/UploadLayerFunction.csproj'
+  projectPath: 'UploadLayerFunction/UploadLayerFunction.csproj'
   buildConfiguration: 'Release'
 
 pool:

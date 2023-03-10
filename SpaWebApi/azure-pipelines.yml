@@ -15,8 +15,8 @@ pool:
 variables:
   buildConfiguration: 'Release'
   azureSubscription: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
-  projectPath: '/SpaWebApi/SpaWebApi.csproj'
-  testProjectPath: '/SpaWebApi.Test/SpaWebApi.Test.csproj'
+  projectPath: 'SpaWebApi/SpaWebApi.csproj'
+  testProjectPath: 'SpaWebApi.Test/SpaWebApi.Test.csproj'
 
 steps:
 - task: DotNetCoreCLI@2

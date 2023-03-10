@@ -9,7 +9,7 @@ trigger:
 variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
   functioNamespace: 'newvideofunction'
-  projectPath: '/NewVideoFunction/NewVideoFunction.csproj'
+  projectPath: 'NewVideoFunction/NewVideoFunction.csproj'
   buildConfiguration: 'Release'
 
 pool:

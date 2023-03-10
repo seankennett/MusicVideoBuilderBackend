@@ -1,0 +1,53 @@
+trigger:
+    branches:
+        include:
+        - master
+    paths:
+        include:
+        - BuilderFunction
+
+variables:
+  azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
+  freeFunctioNamespace: 'freebuilderfunction'
+  hdFunctioNamespace: 'hdbuilderfunction'
+  projectPath: '/BuilderFunction/BuilderFunction.csproj'
+  buildConfiguration: 'Release'
+
+pool:
+  vmImage: 'windows-2022'
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '$(projectPath)'
+  displayName: 'Restore NuGet packages'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '$(projectPath)'
+  displayName: 'Build solution'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+  displayName: 'Publish solution'
+- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: '$(azureServiceConnection)'
+    appType: 'functionApp'
+    appName: '$(freeFunctioNamespace)'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    deploymentMethod : 'zipDeploy'
+  displayName: Deploy Free Azure Function
+- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: '$(azureServiceConnection)'
+    appType: 'functionApp'
+    appName: '$(hdFunctioNamespace)'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    deploymentMethod : 'zipDeploy'
+  displayName: Deploy HD Azure Function

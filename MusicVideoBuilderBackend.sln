@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaWebApi", "SpaWebApi\SpaWebApi.csproj", "{043904AA-1410-452F-B149-C984C01D2E07}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaWebApi.Test", "SpaWebApi.Test\SpaWebApi.Test.csproj", "{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewVideoFunction", "NewVideoFunction\NewVideoFunction.csproj", "{406F4F7A-1EE9-4E5F-B549-B62A2B3D521D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuilderFunction", "BuilderFunction\BuilderFunction.csproj", "{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UploadLayerFunction", "UploadLayerFunction\UploadLayerFunction.csproj", "{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedEntities", "SharedEntities\SharedEntities.csproj", "{383E50B1-6288-4239-B508-63ADABEC2A53}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{043904AA-1410-452F-B149-C984C01D2E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043904AA-1410-452F-B149-C984C01D2E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043904AA-1410-452F-B149-C984C01D2E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043904AA-1410-452F-B149-C984C01D2E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{406F4F7A-1EE9-4E5F-B549-B62A2B3D521D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{406F4F7A-1EE9-4E5F-B549-B62A2B3D521D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{406F4F7A-1EE9-4E5F-B549-B62A2B3D521D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{406F4F7A-1EE9-4E5F-B549-B62A2B3D521D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{383E50B1-6288-4239-B508-63ADABEC2A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{383E50B1-6288-4239-B508-63ADABEC2A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{383E50B1-6288-4239-B508-63ADABEC2A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{383E50B1-6288-4239-B508-63ADABEC2A53}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98D49D88-D239-4EA3-9D32-1392D7A8E17D}
+	EndGlobalSection
+EndGlobal

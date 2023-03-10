@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaWebApi", "SpaWebApi\SpaWebApi.csproj", "{043904AA-1410-452F-B149-C984C01D2E07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaWebApi.Test", "SpaWebApi.Test\SpaWebApi.Test.csproj", "{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{043904AA-1410-452F-B149-C984C01D2E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043904AA-1410-452F-B149-C984C01D2E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043904AA-1410-452F-B149-C984C01D2E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043904AA-1410-452F-B149-C984C01D2E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3B52DF0-5779-4E07-9566-5E6AB2B5421C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98D49D88-D239-4EA3-9D32-1392D7A8E17D}
+	EndGlobalSection
+EndGlobal

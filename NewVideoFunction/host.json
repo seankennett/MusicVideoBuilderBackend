@@ -1,0 +1,19 @@
+{
+  "version": "2.0",
+  //"extensions": {
+  //  "queues": {
+  //    "maxDequeueCount": 2
+  //  },
+  //  "durableTask": {
+  //    "storeInputsInOrchestrationHistory": true
+  //  }
+  //},
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request;Exception"
+      }
+    }
+  }
+}

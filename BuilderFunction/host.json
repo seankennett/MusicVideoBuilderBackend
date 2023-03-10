@@ -1,0 +1,26 @@
+{
+  "version": "2.0",
+  "extensions": {
+    "queues": {
+      "maxDequeueCount": 1
+    },
+    "durableTask": {
+      "storageProvider": {
+        "maxQueuePollingInterval": "00:01:00",
+        "partitionCount": 1
+      },
+      "storeInputsInOrchestrationHistory": true,
+      "extendedSessionsEnabled": true,
+      "extendedSessionIdleTimeoutInSeconds": 30
+    }
+  },
+  "functionTimeout": "00:05:00",
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request;Exception"
+      }
+    }
+  }
+}

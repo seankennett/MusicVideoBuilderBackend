@@ -11,7 +11,7 @@ variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
   freeFunctioNamespace: 'freebuilderfunction'
   hdFunctioNamespace: 'hdbuilderfunction'
-  projectPath: '/BuilderFunction/BuilderFunction.csproj'
+  projectPath: 'BuilderFunction/BuilderFunction.csproj'
   buildConfiguration: 'Release'
 
 pool:

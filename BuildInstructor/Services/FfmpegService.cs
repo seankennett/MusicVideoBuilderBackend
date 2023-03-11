@@ -1,8 +1,10 @@
 ﻿using SharedEntities;
 using SharedEntities.Models;
+using System;
+using System.Collections.Generic;
 using System.Text;
 
-namespace SpaWebApi.Services
+namespace BuildInstructor.Services
 {
     public class FfmpegService : IFfmpegService
     {
@@ -51,12 +53,12 @@ namespace SpaWebApi.Services
             return command.ToString();
         }
 
-        public string GetMergeCode(bool fromCommandLine, string blobPrefix, string outputVideoName, string? audioFileName, string concatFileName)
+        public string GetMergeCode(bool fromCommandLine, string blobPrefix, string outputVideoName, string audioFileName, string concatFileName)
         {
             return GetMergeCode(fromCommandLine, blobPrefix, blobPrefix, outputVideoName, audioFileName, concatFileName);
         }
 
-        public string GetMergeCode(bool fromCommandLine, string blobPrefix, string outputBlobPrefix, string outputVideoName, string? audioFileName, string concatFileName)
+        public string GetMergeCode(bool fromCommandLine, string blobPrefix, string outputBlobPrefix, string outputVideoName, string audioFileName, string concatFileName)
         {
             var command = new StringBuilder();
             if (fromCommandLine)

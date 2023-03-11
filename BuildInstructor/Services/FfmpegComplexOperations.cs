@@ -1,13 +1,15 @@
 ﻿using SharedEntities;
 using SharedEntities.Extensions;
 using SharedEntities.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace SpaWebApi.Services
+namespace BuildInstructor.Services
 {
     public class FfmpegComplexOperations : IFfmpegComplexOperations
     {
-        public List<(string id, string ffmpegReference)> BuildInputList(StringBuilder command, Clip clip, byte bpm, string? audioFileName, Resolution resolution)
+        public List<(string id, string ffmpegReference)> BuildInputList(StringBuilder command, Clip clip, byte bpm, string audioFileName, Resolution resolution)
         {
             List<(string id, string ffmpegReference)> inputList = new List<(string id, string ffmpegReference)>();
             var uniqueUserLayers = clip.Layers != null ? clip.Layers.DistinctBy(x => x.LayerId).ToList() : new List<Layer>();
@@ -46,7 +48,7 @@ namespace SpaWebApi.Services
             }
         }
 
-        public List<(string id, string ffmpegReference)> SetBackgroundColourMaxFrames(StringBuilder command, string backgroundColour, List<(string id, string ffmpegReference)> inputList, string? ffmpegOutputPrefix)
+        public List<(string id, string ffmpegReference)> SetBackgroundColourMaxFrames(StringBuilder command, string backgroundColour, List<(string id, string ffmpegReference)> inputList, string ffmpegOutputPrefix)
         {
             var matchingInputindex = inputList.FindIndex(x => x.id == backgroundColour);
             var output = $"[{ffmpegOutputPrefix}]";

@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿
 using System.Data.SqlClient;
 using System.Data;
 using Dapper;
 using SharedEntities.Models;
 using DataAccessLayer.DTOEntities;
+using Microsoft.Extensions.Options;
 
 namespace DataAccessLayer.Repositories
 {

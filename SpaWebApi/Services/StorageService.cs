@@ -16,7 +16,7 @@ namespace SpaWebApi.Services
         public StorageService(IOptions<Connections> connections)
         {
             _blobServiceClient = new Lazy<BlobServiceClient>(() => new BlobServiceClient(connections.Value.PrivateStorageConnectionString));
-            _queueClientImageProcess = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, SharedConstants.ImageProcessQueue, new QueueClientOptions
+            _queueClientImageProcess = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, SharedConstants.UploadLayerQueue, new QueueClientOptions
             {
                 MessageEncoding = QueueMessageEncoding.Base64
             }));
@@ -62,17 +62,6 @@ namespace SpaWebApi.Services
             return containerClient.GenerateSasUri(builder);
         }
 
-        public async Task<Uri> CreateContainerAsync(string containerName, bool isNew, TimeSpan sasTokenLength)
-        {
-            var containerClient = _blobServiceClient.Value.GetBlobContainerClient(containerName);
-            if (isNew)
-            {
-                await containerClient.CreateIfNotExistsAsync();
-            }
-
-            return containerClient.GenerateSasUri(BlobContainerSasPermissions.Write, DateTime.UtcNow.Add(sasTokenLength));
-        }
-
         public async Task<Uri> CreateBlobAsync(string containerName, string blobName, bool isNewContainer, TimeSpan sasTokenLength)
         {
             var containerClient = _blobServiceClient.Value.GetBlobContainerClient(containerName);
@@ -97,19 +86,7 @@ namespace SpaWebApi.Services
             }
 
             await _queueClientImageProcess.Value.SendMessageAsync(JsonSerializer.Serialize(layerUpload));
-        }
-
-        public async Task UploadTextFile(string containerName, string blobPrefix, string fileName, string contents, bool createContainer)
-        {
-            var containerClient = _blobServiceClient.Value.GetBlobContainerClient(containerName);
-            if (createContainer)
-            {
-                await containerClient.CreateIfNotExistsAsync();
-            }
-
-            var blobClient = containerClient.GetBlobClient($"{blobPrefix}/{fileName}");
-            await blobClient.UploadAsync(BinaryData.FromString(contents));
-        }
+        }       
 
         public async Task<Uri?> GetSASLink(string userContainerName, string blobPrefix, string excludePrefix, DateTimeOffset tokenLength)
         {

@@ -51,7 +51,7 @@ namespace BuilderFunction
 
             try
             {
-                var assetsDownloadDTO = (AssetsDownloadDTO)builderMessage.AssetsDownload;
+                var assetsDownloadDTO = new AssetsDownloadDTO(builderMessage.AssetsDownload);
                 assetsDownloadDTO.WorkingDirectory = workingDirectory;
                 assetsDownloadDTO.TemporaryBlobPrefix = builderMessage.TemporaryBlobPrefix;
                 assetsDownloadDTO.UserContainerName = builderMessage.UserContainerName;
@@ -116,7 +116,7 @@ namespace BuilderFunction
 
         private FfmpegIOCommandDTO BuildFfmpegIOCommandDTO(FfmpegIOCommand command, BuilderMessage builderMessage, string workingDirectory)
         {
-            var commandDTO = (FfmpegIOCommandDTO)command;
+            var commandDTO = new FfmpegIOCommandDTO(command);
             commandDTO.TemporaryBlobPrefix = builderMessage.TemporaryBlobPrefix;
             commandDTO.WorkingDirectory = workingDirectory;
 

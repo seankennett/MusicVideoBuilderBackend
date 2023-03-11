@@ -54,8 +54,6 @@ builder.Services.AddSingleton<IUserLayerRepository, UserLayerRepository>();
 builder.Services.AddSingleton<IClipRepository, ClipRepository>();
 builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
 builder.Services.AddSingleton<IVideoAssetService, VideoAssetService>();
-builder.Services.AddSingleton<IFfmpegService, FfmpegService>();
-builder.Services.AddSingleton<IFfmpegComplexOperations, FfmpegComplexOperations>();
 builder.Services.AddSingleton<IStorageService, StorageService>();
 builder.Services.AddSingleton<IUserLayerService, UserLayerService>();
 builder.Services.AddSingleton<IClipService, ClipService>();

@@ -1,11 +1,11 @@
+using BuildInstructor.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedEntities.Models;
-using SpaWebApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SpaWebApi.Test.Service
+namespace BuildInstructor.Test.Service
 {
     [TestClass]
     public class FfmpegServiceTests

@@ -10,6 +10,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SharedEntities;
 using SharedEntities.Models;
 using UploadLayerFunction.Interfaces;
 using UploadLayerFunction.Models;
@@ -30,7 +31,7 @@ namespace UploadLayerFunction
         }
 
         [FunctionName("UploadLayerFunctionExecutor")]
-        public async Task RunExecutor([QueueTrigger("image-process", Connection = "ConnectionString")] LayerUploadMessage layerUploadMessage, [DurableClient] IDurableOrchestrationClient starter)
+        public async Task RunExecutor([QueueTrigger(SharedConstants.UploadLayerQueue, Connection = "ConnectionString")] LayerUploadMessage layerUploadMessage, [DurableClient] IDurableOrchestrationClient starter)
         {
             await starter.StartNewAsync("UploadLayerFunctionOrchastrator", layerUploadMessage);
         }

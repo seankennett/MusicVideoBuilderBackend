@@ -11,7 +11,7 @@
         public const string TempBlobPrefix = "temp";
         public const string AudioFileName = "audio.mp3";
         public const int VideoSplitLengthSeconds = 15;
-        public const string UploadLayerQueue = "layer-upload";
+        public const string UploadLayerQueue = "upload-layer";
         public const string BuilderQueueSuffix = "-builder";
         public const string FourKStorageContainer = "4k-zips";
         public const string HDStorageContainer = "hd-zips";

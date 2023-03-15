@@ -23,32 +23,19 @@ namespace BuildInstructor.Services
         private readonly IVideoRepository _videoRepository;
         private readonly IFfmpegService _ffmpegService;
         private readonly IStorageService _storageService;
-        private readonly Lazy<QueueClient> _queueClientFree;
-        private readonly Lazy<QueueClient> _queueClientHd;
-        private readonly string _poolId;
-        private readonly BatchSharedKeyCredentials _batchCredentials;
+        private readonly IBuilderFunctionSender _builderFunctionSender;
+        private readonly IAzureBatchService _azureBatchService;
+        private readonly IUserLayerRepository _userLayerRepository;
 
-        private const string AllFramesConcatFileName = "concatAllFrames.txt";
-        private const string SplitFramesConcatFileName = "concatSplitFrames.txt";
-        private const string AllFramesVideoName = "allframes";
-
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IOptions<Connections> connections)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserLayerRepository userLayerRepository)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;
             _ffmpegService = ffmpegService;
             _storageService = storageService;
-            _queueClientFree = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, Resolution.Free.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix, new QueueClientOptions
-            {
-                MessageEncoding = QueueMessageEncoding.Base64
-            }));
-            _queueClientHd = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, Resolution.Hd.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix, new QueueClientOptions
-            {
-                MessageEncoding = QueueMessageEncoding.Base64
-            }));
-
-            _batchCredentials = new BatchSharedKeyCredentials(connections.Value.BatchServiceEndpoint, connections.Value.BatchServiceName, connections.Value.BatchServiceKey);
-            _poolId = connections.Value.PoolName;
+            _builderFunctionSender = builderFunctionSender;
+            _azureBatchService = azureBatchService;
+            _userLayerRepository = userLayerRepository;
         }
         public async Task InstructBuildAsync(string paymentIntentId)
         {
@@ -65,22 +52,60 @@ namespace BuildInstructor.Services
 
         public async Task InstructBuildAsync(UserBuild build)
         {
-            var userContainerName = GuidHelper.GetUserContainerName(build.UserObjectId);
-            var hasAudio = build.HasAudio;
+            var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId);
+            
             var buildId = build.BuildId;
             var resolution = build.Resolution;
-            var outputBlobPrefix = buildId.ToString();
             var tempBlobPrefix = GuidHelper.GetTempBlobPrefix(buildId);
-            var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId);
-            var videoFileName = $"{video.VideoName}.{video.Format}";
-            var allFrameVideoFileName = $"{AllFramesVideoName}.{video.Format}";
 
-            var uniqueClips = video.Clips.DistinctBy(x => x.ClipId);
+            var is4KFormat = build.Resolution == Resolution.FourK;
+            var uniqueClips = video.Clips.DistinctBy(x => x.ClipId).ToList();
+            var layerIdsPerClip = new Dictionary<int, IEnumerable<string>>();
+            var uniqueLayers = new List<string>();
+            var clipCommands = new List<FfmpegIOCommand>();
+            for (var i = 0; i < uniqueClips.Count(); i++)
+            {
+                var clip = uniqueClips[i];
+                clipCommands.Add(new FfmpegIOCommand
+                {
+                    //_ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, true, ".")
+                    FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, is4KFormat,
+                // directory will not be created in clipcode's batch case so putting file flat on file system
+                is4KFormat ? "." : tempBlobPrefix),
+                    VideoName = $"{clip.ClipId}.{video.Format}"
+                });
+
+                if (clip.Layers != null)
+                {
+                    var layerIds = clip.Layers.Select(l => l.LayerId.ToString());
+                    layerIdsPerClip[i] = layerIds;
+                    uniqueLayers = uniqueLayers.Union(layerIds).ToList();
+                }
+            }
+
+            if (resolution != Resolution.Free)
+            {
+                await _userLayerRepository.SaveUserLayersAsync(uniqueLayers.Select(u => Guid.Parse(u)), build.UserObjectId, build.BuildId);
+            }
+
+            var userContainerName = GuidHelper.GetUserContainerName(build.UserObjectId);
+            var hasAudio = build.HasAudio;
+            var outputBlobPrefix = buildId.ToString();
+            
+            var videoFileName = $"{video.VideoName}.{video.Format}";
+            var allFrameVideoFileName = $"{InstructorConstants.AllFramesVideoName}.{video.Format}";           
+            
+
+            //_ffmpegService.GetMergeCode(true, tempBlobPrefix, allFrameVideoFileName, null, AllFramesConcatFileName)
+            var clipMergeCommand = new FfmpegIOCommand
+            {
+                FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, allFrameVideoFileName, null, InstructorConstants.AllFramesConcatFileName),
+                VideoName = allFrameVideoFileName
+            };           
 
             var splitFrameCommands = new List<FfmpegIOCommand>();
             var videoLengthSeconds = video.Clips.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
             var splitVideoTotal = (int)Math.Ceiling(videoLengthSeconds / SharedConstants.VideoSplitLengthSeconds);
-            var is4KFormat = build.Resolution == Resolution.FourK;
             for (var i = 0; i < splitVideoTotal; i++)
             {
                 var splitFrameVideoName = $"s{i}.{video.Format}";
@@ -91,150 +116,26 @@ namespace BuildInstructor.Services
                 });
             }
 
+            var splitFrameMergeCommand = new FfmpegIOCommand
+            {
+                FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? SharedConstants.AudioFileName : null, InstructorConstants.SplitFramesConcatFileName),
+                VideoName = videoFileName
+            };
+
             var concatClipFileContents = _ffmpegService.GetConcatCode(video.Clips.Select(x => $"{x.ClipId}.{video.Format}"));
-            await _storageService.UploadTextFile(userContainerName, tempBlobPrefix, AllFramesConcatFileName, concatClipFileContents, !hasAudio);
+            await _storageService.UploadTextFile(userContainerName, tempBlobPrefix, InstructorConstants.AllFramesConcatFileName, concatClipFileContents, !hasAudio);
 
             var concatSplitFrameFileContents = _ffmpegService.GetConcatCode(splitFrameCommands.Select(x => x.VideoName));
-            await _storageService.UploadTextFile(userContainerName, tempBlobPrefix, SplitFramesConcatFileName, concatSplitFrameFileContents, false);
+            await _storageService.UploadTextFile(userContainerName, tempBlobPrefix, InstructorConstants.SplitFramesConcatFileName, concatSplitFrameFileContents, false);
 
             if (is4KFormat)
             {
-                var outputContainerSasUri = _storageService.GetContainerSasUri(userContainerName, TimeSpan.FromDays(1));
-
-                List<ResourceFile> allFrameVideoInputs = new List<ResourceFile> { ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{AllFramesConcatFileName}") };
-                var clipTasks = new List<CloudTask>();
-                foreach (var clip in uniqueClips)
-                {
-                    // directory will not be created in clipcode's case so putting file flat on file system
-                    var clipCommand = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, true, ".");
-                    var clipTaskId = $"c-{buildId}-{clip.ClipId}";
-                    var clipFileName = $"{clip.ClipId}.{video.Format}";
-
-                    List<ResourceFile> inputFiles = new List<ResourceFile>();
-                    if (clip.Layers != null)
-                    {
-                        foreach (var userLayer in clip.Layers)
-                        {
-                            inputFiles.Add(ResourceFile.FromAutoStorageContainer(userLayer.LayerId.ToString(), userLayer.LayerId.ToString(), resolution.GetBlobPrefixByResolution()));
-                        }
-                    }
-
-                    var outputBlobName = $"{tempBlobPrefix}/{clipFileName}";
-                    CloudTask clipTask = SetUpTask(outputBlobName, outputContainerSasUri, $"{tempBlobPrefix}/{clip.ClipId}", clipCommand, clipTaskId, inputFiles, clipFileName);
-                    clipTasks.Add(clipTask);
-
-                    allFrameVideoInputs.Add(ResourceFile.FromAutoStorageContainer(userContainerName, null, outputBlobName));
-                }
-
-                var allFrameVideoCommand = _ffmpegService.GetMergeCode(true, tempBlobPrefix, allFrameVideoFileName, null, AllFramesConcatFileName);
-                var allFramesTaskId = $"a-{buildId}";
-                var allFramesOutputBlobName = $"{tempBlobPrefix}/{allFrameVideoFileName}";
-                var allFramesTask = SetUpTask(allFramesOutputBlobName, outputContainerSasUri, $"{tempBlobPrefix}/{AllFramesVideoName}", allFrameVideoCommand, allFramesTaskId, allFrameVideoInputs, allFramesOutputBlobName);
-                allFramesTask.DependsOn = TaskDependencies.OnTasks(clipTasks);
-
-                List<ResourceFile> splitFrameInputs = new List<ResourceFile> { ResourceFile.FromAutoStorageContainer(userContainerName, null, allFramesOutputBlobName) };
-                List<ResourceFile> splitFrameMergeInputs = new List<ResourceFile> { ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{SplitFramesConcatFileName}") };
-                if (hasAudio)
-                {
-                    splitFrameMergeInputs.Add(ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{SharedConstants.AudioFileName}"));
-                }
-
-                var splitFramesTasks = new List<CloudTask>();
-                for (int i = 0; i < splitFrameCommands.Count; i++)
-                {
-                    var splitFrameCommand = splitFrameCommands[i];
-                    var splitTaskId = $"s-{buildId}-{i}";
-                    var splitFrameOutputBlobName = $"{tempBlobPrefix}/{splitFrameCommand.VideoName}";
-                    CloudTask splitFrameTask = SetUpTask(splitFrameOutputBlobName, outputContainerSasUri, $"{tempBlobPrefix}/split", splitFrameCommand.FfmpegCode, splitTaskId, splitFrameInputs, splitFrameOutputBlobName);
-                    splitFrameTask.DependsOn = TaskDependencies.OnTasks(allFramesTask);
-                    splitFramesTasks.Add(splitFrameTask);
-
-                    splitFrameMergeInputs.Add(ResourceFile.FromAutoStorageContainer(userContainerName, null, splitFrameOutputBlobName));
-                }
-
-                var splitMergeVideoCommand = _ffmpegService.GetMergeCode(true, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? SharedConstants.AudioFileName : null, SplitFramesConcatFileName);
-                var splitMergeTaskId = $"v-{buildId}";
-                var splitMergeBlobName = $"{outputBlobPrefix}/{videoFileName}";
-                var splitMergeTask = SetUpTask(splitMergeBlobName, outputContainerSasUri, tempBlobPrefix, splitMergeVideoCommand, splitMergeTaskId, splitFrameMergeInputs, splitMergeBlobName);
-                splitMergeTask.DependsOn = TaskDependencies.OnTasks(splitFramesTasks);
-
-                var allTasks = clipTasks.Union(splitFramesTasks).Union(new List<CloudTask> { allFramesTask, splitMergeTask });
-                using (var batchClient = BatchClient.Open(_batchCredentials))
-                {
-                    var job = batchClient.JobOperations.CreateJob(splitMergeTaskId, new PoolInformation { PoolId = _poolId }); // get pool from config
-                    job.OnAllTasksComplete = OnAllTasksComplete.TerminateJob;
-                    job.UsesTaskDependencies = true;
-                    job.Constraints = new JobConstraints { MaxTaskRetryCount = 1, MaxWallClockTime = TimeSpan.FromDays(1) };
-
-                    await job.CommitAsync();
-                    await batchClient.JobOperations.AddTaskAsync(job.Id, allTasks);
-                }
+                await _azureBatchService.SendBatchRequest(userContainerName, hasAudio, buildId, resolution, outputBlobPrefix, tempBlobPrefix, layerIdsPerClip, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
             }
             else
             {
-                BuilderMessage builderMessage = new BuilderMessage
-                {
-                    OutputBlobPrefix = outputBlobPrefix,
-                    UserContainerName = userContainerName,
-                    TemporaryBlobPrefix = tempBlobPrefix,
-                    ClipCommands = uniqueClips.Select(uc => new FfmpegIOCommand
-                    {
-                        FfmpegCode = _ffmpegService.GetClipCode(uc, resolution, video.Format, video.BPM, false, tempBlobPrefix),
-                        VideoName = $"{uc.ClipId}.{video.Format}"
-                    }),
-                    ClipMergeCommand = new FfmpegIOCommand
-                    {
-                        FfmpegCode = _ffmpegService.GetMergeCode(false, tempBlobPrefix, allFrameVideoFileName, null, AllFramesConcatFileName),
-                        VideoName = allFrameVideoFileName
-                    },
-                    SplitFrameCommands = splitFrameCommands,
-                    SplitFrameMergeCommand = new FfmpegIOCommand
-                    {
-                        FfmpegCode = _ffmpegService.GetMergeCode(false, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? SharedConstants.AudioFileName : null, SplitFramesConcatFileName),
-                        VideoName = videoFileName
-                    },
-                    AssetsDownload = new AssetsDownload
-                    {
-                        LayerIds = uniqueClips.Where(x => x.Layers != null).SelectMany(x => x.Layers).Select(x => x.LayerId.ToString()).Distinct(),
-                        TemporaryFiles = new List<string> { AllFramesConcatFileName, SplitFramesConcatFileName }
-                    }
-                };
-
-                if (hasAudio)
-                {
-                    builderMessage.AssetsDownload.TemporaryFiles.Add(SharedConstants.AudioFileName);
-                }
-
-                if (resolution == Resolution.Free)
-                {
-                    await _queueClientFree.Value.SendMessageAsync(JsonSerializer.Serialize(builderMessage));
-                }
-                else
-                {
-                    await _queueClientHd.Value.SendMessageAsync(JsonSerializer.Serialize(builderMessage));
-                }
+                await _builderFunctionSender.SendBuilderFunctionMessage(userContainerName, hasAudio, resolution, outputBlobPrefix, tempBlobPrefix, uniqueLayers, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
             }
         }
-
-        private CloudTask SetUpTask(string outputBlobName, Uri outputContainerSasUri, string errorBlobPrefix, string command, string taskId, List<ResourceFile> inputFiles, string filePath)
-        {
-            CloudTask cloudTask = new CloudTask(taskId, command);
-            cloudTask.ResourceFiles = inputFiles;
-            cloudTask.Constraints = new TaskConstraints { MaxWallClockTime = TimeSpan.FromHours(1), RetentionTime = TimeSpan.Zero };
-
-            List<OutputFile> outputFileList = new List<OutputFile>();
-            OutputFileBlobContainerDestination outputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerSasUri.ToString(), outputBlobName);
-            OutputFileBlobContainerDestination errorOutputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerSasUri.ToString(), errorBlobPrefix);
-            outputFileList.Add(new OutputFile(filePath,
-                                                   new OutputFileDestination(outputFileBlobContainerDestination),
-                                                   new OutputFileUploadOptions(OutputFileUploadCondition.TaskSuccess)));
-            outputFileList.Add(new OutputFile(@"../std*.txt",
-                                                   new OutputFileDestination(errorOutputFileBlobContainerDestination),
-                                                   new OutputFileUploadOptions(OutputFileUploadCondition.TaskFailure)));
-
-            cloudTask.OutputFiles = outputFileList;
-            return cloudTask;
-        }
-
     }    
 }

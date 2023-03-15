@@ -47,6 +47,17 @@ namespace SpaWebApi.Controllers
             return await _videoAssetService.CreateUserAudioBlobUri(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId, videoAssetRequest.Resolution);
         }
 
+        [HttpPost("Assets/ValidateAudioBlob")]
+        public async Task ValidateAudioBlob(int videoId, VideoBuildRequest videoAssetRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception($"Validate audio blob invalid: {string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))}");
+            }
+
+            await _videoAssetService.ValidateAudioBlob(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId, videoAssetRequest.Resolution);
+        }
+
         [HttpPost("Checkout")]
         public async Task<string> Post(int videoId, PaymentIntentRequest paymentIntentRequest)
         {

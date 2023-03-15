@@ -9,5 +9,6 @@ namespace SpaWebApi.Services
         Task<string> CreatePaymentIntent(Guid userObjectId, int videoId, PaymentIntentRequest paymentIntent);
         Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, Guid buildId, Resolution resolution);
         Task<IEnumerable<VideoAsset>> GetAllAsync(Guid userObjectId);
+        Task ValidateAudioBlob(Guid userObjectId, int videoId, Guid buildId, Resolution resolution);
     }
 }

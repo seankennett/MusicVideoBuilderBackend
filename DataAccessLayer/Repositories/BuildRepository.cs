@@ -36,6 +36,26 @@ namespace DataAccessLayer.Repositories
             }
         }
 
+        public async Task<UserBuild?> GetAsync(Guid buildId)
+        {
+            using (var connection = new SqlConnection(_sqlConnection))
+            {
+                var buildDto = await connection.QueryFirstOrDefaultAsync<BuildDTO?>("GetUserBuild", new { BuildId = buildId }, commandType: CommandType.StoredProcedure);
+                return buildDto != null && buildDto.UserObjectId.HasValue ? new UserBuild
+                {
+                    License = (License)buildDto.LicenseId,
+                    Resolution = (Resolution)buildDto.ResolutionId,
+                    BuildId = buildDto.BuildId,
+                    BuildStatus = (BuildStatus)buildDto.BuildStatusId,
+                    VideoId = buildDto.VideoId,
+                    HasAudio = buildDto.HasAudio,
+                    PaymentIntentId = buildDto.PaymentIntentId,
+                    DateUpdated = buildDto.DateUpdated,
+                    UserObjectId = buildDto.UserObjectId.Value
+                } : null;
+            }
+        }
+
         public async Task<UserBuild?> GetByPaymentIntentId(string paymentIntentId)
         {
             using (var connection = new SqlConnection(_sqlConnection))

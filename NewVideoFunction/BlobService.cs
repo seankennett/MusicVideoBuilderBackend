@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
 using NewVideoFunction.Interfaces;
+using SharedEntities;
 using System;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace NewVideoFunction
         public async Task CleanTempFiles(string containerName, string blobPrefix)
         {
             var blobContainerClient = new BlobContainerClient(_privateConnectionString, containerName);
-            var blobs = blobContainerClient.GetBlobsAsync(Azure.Storage.Blobs.Models.BlobTraits.None, Azure.Storage.Blobs.Models.BlobStates.None, $"{blobPrefix}/temp");
+            var blobs = blobContainerClient.GetBlobsAsync(Azure.Storage.Blobs.Models.BlobTraits.None, Azure.Storage.Blobs.Models.BlobStates.None, $"{blobPrefix}/{SharedConstants.TempBlobPrefix}");
             await foreach (var blob in blobs)
             {
                 var blobClient = blobContainerClient.GetBlobClient(blob.Name);

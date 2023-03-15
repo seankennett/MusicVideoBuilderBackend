@@ -1,9 +1,11 @@
 ﻿using Azure.Identity;
+using DataAccessLayer.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NewVideoFunction;
 using NewVideoFunction.Interfaces;
+using Stripe;
 using System;
 
 [assembly: FunctionsStartup(typeof(Startup))]
@@ -20,10 +22,11 @@ namespace NewVideoFunction
                     configuration.Bind(settings);
                 });
 
-            builder.Services.AddSingleton<IDatabaseWriter, DatabaseWriter>();
+            builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
             builder.Services.AddSingleton<IMailer, Mailer>();
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IBlobService, BlobService>();
+            builder.Services.AddSingleton<IChargeService, ChargeService>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
@@ -38,6 +41,7 @@ namespace NewVideoFunction
                         .AddEnvironmentVariables()
                     .Build();
 
+            StripeConfiguration.ApiKey = config["StripeSecretKey"];
         }
     }
 }

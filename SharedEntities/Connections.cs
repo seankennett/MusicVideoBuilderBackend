@@ -12,4 +12,8 @@
     public string Resolution { get; set; }
     public int MaxConcurrentActivityFunctions { get; set; }
     public TimeSpan FunctionTimeOut { get; set; }
+    public string SmtpPassword { get; set; }
+    public string TenantId { get; set; }
+    public string VideoNotifyFunctionClientId { get; set; }
+    public string VideoNotifyFunctionClientSecret { get; set; }
 }

@@ -6,20 +6,20 @@ using Stripe;
 
 public class PaymentService : IPaymentService
 {
-    private readonly IUserLayerService _userLayerService;
+    private readonly IUserLayerRepository _userLayerRepository;
     private readonly IBuildRepository _buildRepository;
     private readonly ILogger<PaymentService> _logger;
 
-    public PaymentService(IUserLayerService userLayerService, IBuildRepository buildRepository, ILogger<PaymentService> logger)
+    public PaymentService(IUserLayerRepository userLayerRepository, IBuildRepository buildRepository, ILogger<PaymentService> logger)
     {
-        _userLayerService = userLayerService;
+        _userLayerRepository = userLayerRepository;
         _buildRepository = buildRepository;
         _logger = logger;
     }
 
     public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)
     {
-        var userLayers = await _userLayerService.GetAllAsync(userObjectId);
+        var userLayers = await _userLayerRepository.GetAllCompleteAsync(userObjectId);
         int serverCalculatedCost = GetVideoCost(video.Clips.Where(c => c.Layers != null).SelectMany(c => c.Layers).Select(l => l.LayerId).Distinct(), userLayers, paymentIntentRequest.Resolution, paymentIntentRequest.License);
         if (serverCalculatedCost != paymentIntentRequest.Cost) {
             throw new Exception($"Client cost {paymentIntentRequest.Cost} not the same as server cost {serverCalculatedCost} for video {video.VideoId}");

@@ -1,8 +1,5 @@
 ﻿using Azure.Storage.Queues;
 using DataAccessLayer.Repositories;
-using Microsoft.Azure.Batch;
-using Microsoft.Azure.Batch.Auth;
-using Microsoft.Azure.Batch.Common;
 using Microsoft.Extensions.Options;
 using SharedEntities;
 using SharedEntities.Extensions;
@@ -16,26 +13,20 @@ namespace SpaWebApi.Services
     {
         private readonly IVideoRepository _videoRepository;
         private readonly IStorageService _storageService;
-        private readonly BatchSharedKeyCredentials _batchCredentials;
-        private readonly string _poolId;
         private readonly Lazy<QueueClient> _queueClient;
-        private readonly ILogger<VideoAssetService> _logger;
         private readonly IBuildRepository _buildRepository;
         private readonly IPaymentService _paymentService;
 
-        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IOptions<Connections> connections, IBuildRepository buildRepository, ILogger<VideoAssetService> logger, IPaymentService paymentService)
+        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IOptions<Connections> connections, IBuildRepository buildRepository, ILogger<VideoAssetService> logger, IPaymentService paymentService, IUserLayerRepository userLayerRepository)
         {
             _videoRepository = videoRepository;
             _storageService = storageService;
             _buildRepository = buildRepository;
             _paymentService = paymentService;
-            _batchCredentials = new BatchSharedKeyCredentials(connections.Value.BatchServiceEndpoint, connections.Value.BatchServiceName, connections.Value.BatchServiceKey);
-            _poolId = connections.Value.PoolName;
             _queueClient = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, SharedConstants.BuildInstructorQueue, new QueueClientOptions
             {
                 MessageEncoding = QueueMessageEncoding.Base64
             }));
-            _logger = logger;
         }
 
         public async Task<IEnumerable<VideoAsset>> GetAllAsync(Guid userObjectId)
@@ -59,20 +50,8 @@ namespace SpaWebApi.Services
         }
 
         public async Task<VideoAsset> BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId)
-        {
-            Video video = await GetAndValidateVideo(userObjectId, videoId);
+        {            
             var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
-
-            var userContainerName = GuidHelper.GetUserContainerName(userObjectId);
-            var hasAudio = currentBuild != null && currentBuild.HasAudio;
-            if (hasAudio)
-            {
-                var isValidAudio = await _storageService.ValidateAudioBlob(userContainerName, GuidHelper.GetAudioBlobName(buildId));
-                if (!isValidAudio)
-                {
-                    throw new Exception($"Problem finding audio blob or blob too big for user {userObjectId}");
-                }
-            }
 
             if (currentBuild != null)
             {
@@ -81,6 +60,8 @@ namespace SpaWebApi.Services
             }
             else
             {
+                await GetAndValidateVideo(userObjectId, videoId);
+
                 currentBuild = new Build { BuildId = buildId, BuildStatus = BuildStatus.BuildingPending, HasAudio = false, License = License.Personal, Resolution = Resolution.Free, VideoId = videoId };
                 await _buildRepository.SaveAsync(currentBuild, userObjectId);
             }
@@ -88,10 +69,10 @@ namespace SpaWebApi.Services
             var userBuild = new UserBuild(currentBuild);
             userBuild.UserObjectId = userObjectId;
 
-            await _queueClient.Value.SendMessageAsync(JsonSerializer.Serialize(userBuild));          
+            await _queueClient.Value.SendMessageAsync(JsonSerializer.Serialize(userBuild));
 
             return new VideoAsset { BuildStatus = currentBuild.BuildStatus, DateCreated = DateTimeOffset.UtcNow, DownloadLink = null, VideoId = videoId };
-        }            
+        }
 
         private async Task<Video> GetAndValidateVideo(Guid userObjectId, int videoId)
         {
@@ -116,18 +97,41 @@ namespace SpaWebApi.Services
         }
 
         public async Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, Guid buildId, Resolution resolution)
-        {
-            await GetAndValidateVideo(userObjectId, videoId);
+        {            
             var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
             if (resolution != Resolution.Free && currentBuild == null)
             {
                 throw new Exception($"Could not find build {buildId} for resolution {resolution} for video {videoId}");
             }
 
+            if (currentBuild == null)
+            {
+                await GetAndValidateVideo(userObjectId, videoId);
+            }
+
             var blobName = GuidHelper.GetAudioBlobName(buildId);
-            var returnUrl = await _storageService.CreateBlobAsync(GuidHelper.GetUserContainerName(userObjectId), blobName, true, TimeSpan.FromMinutes(10));
+            return await _storageService.CreateBlobAsync(GuidHelper.GetUserContainerName(userObjectId), blobName, true, TimeSpan.FromMinutes(10));
+        }
+
+        public async Task ValidateAudioBlob(Guid userObjectId, int videoId, Guid buildId, Resolution resolution)
+        {
+            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
+            if (resolution != Resolution.Free && currentBuild == null)
+            {
+                throw new Exception($"Could not find build {buildId} for resolution {resolution} for video {videoId}");
+            }
+
+            var userContainerName = GuidHelper.GetUserContainerName(userObjectId);
+
+            var isValidAudio = await _storageService.ValidateAudioBlob(userContainerName, GuidHelper.GetAudioBlobName(buildId));
+            if (!isValidAudio)
+            {
+                throw new Exception($"Problem finding audio blob or blob too big for user {userObjectId}");
+            }
+
             if (resolution == Resolution.Free)
             {
+                await GetAndValidateVideo(userObjectId, videoId);
                 await _buildRepository.SaveAsync(new Build { BuildId = buildId, BuildStatus = BuildStatus.PaymentAuthorisationPending, HasAudio = true, License = License.Personal, Resolution = resolution, PaymentIntentId = null, VideoId = videoId }, userObjectId);
             }
             else if (currentBuild != null)
@@ -135,8 +139,6 @@ namespace SpaWebApi.Services
                 currentBuild.HasAudio = true;
                 await _buildRepository.SaveAsync(currentBuild, userObjectId);
             }
-
-            return returnUrl;
         }
 
         public async Task<string> CreatePaymentIntent(Guid userObjectId, int videoId, PaymentIntentRequest paymentIntentRequest)

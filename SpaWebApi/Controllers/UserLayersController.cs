@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataAccessLayer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using SharedEntities.Models;
 using SpaWebApi.Extensions;
-using SpaWebApi.Services;
 
 namespace SpaWebApi.Controllers
 {
@@ -13,17 +13,17 @@ namespace SpaWebApi.Controllers
     [ApiController]
     public class UserLayersController : ControllerBase
     {
-        private readonly IUserLayerService _userLayerService;
+        private readonly IUserLayerRepository _userLayerRepository;
 
-        public UserLayersController(IUserLayerService userLayerService)
+        public UserLayersController(IUserLayerRepository userLayerRepository)
         {
-            _userLayerService = userLayerService;
+            _userLayerRepository = userLayerRepository;
         }
 
         [HttpGet]
         public async Task<IEnumerable<UserLayer>> Get()
         {
-            return await _userLayerService.GetAllAsync(User.GetUserObjectId());
+            return await _userLayerRepository.GetAllCompleteAsync(User.GetUserObjectId());
         }
     }
 }

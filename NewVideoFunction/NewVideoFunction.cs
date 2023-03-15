@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Messaging.EventGrid;
+using DataAccessLayer.Repositories;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Microsoft.Extensions.Logging;
@@ -12,19 +14,19 @@ namespace NewVideoFunction
 {
     public class NewVideoFunction
     {
-        private readonly Connections _connections;
-        private readonly IDatabaseWriter _databaseWriter;
         private readonly IMailer _mailer;
         private readonly IUserService _userService;
         private readonly IBlobService _blobService;
+        private readonly IBuildRepository _buildRepository;
+        private readonly IChargeService _chargeService;
 
-        public NewVideoFunction(IOptions<Connections> options, IDatabaseWriter databaseWriter, IMailer mailer, IUserService userService, IBlobService blobService)
+        public NewVideoFunction(IOptions<Connections> options, IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService)
         {
-            _connections = options.Value;
-            _databaseWriter = databaseWriter;
             _mailer = mailer;
             _userService = userService;
             _blobService = blobService;
+            _buildRepository = buildRepository;
+            _chargeService = chargeService;
         }
         /*
          https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-grid-trigger?tabs=in-process%2Cextensionv3&pivots=programming-language-csharp
@@ -40,7 +42,7 @@ Content-Length: 1008
 [{
 	"id": "741a105c-501e-007b-2436-25dfaa06188a",
 	"topic": "/subscriptions/285ec89b-c6b0-46a6-9758-a0bce37bd2da/resourceGroups/music-video-builder/providers/Microsoft.Storage/storageAccounts/musicvideobuilderprivate",
-	"subject": "/blobServices/default/containers/user-69d12eed-18c7-4763-8df2-ad828af710df/blobs/user/69d12eed-18c7-4763-8df2-ad828af710df/1/2023-01-10T20-49-57/CircleOfLifeExtended.mp4",
+	"subject": "/blobServices/default/containers/user-69d12eed-18c7-4763-8df2-ad828af710df/blobs/3193af5c-50a2-4bb6-89fc-bebe0935d4d1/test.mp4",
 	"data": {
 		"api": "PutBlockList",
 		"requestId": "741a105c-501e-007b-2436-25dfaa000000",
@@ -58,8 +60,6 @@ Content-Length: 1008
 	"eventTime": "2023-01-10T21:02:35.5883377Z",
 	"dataVersion": ""
 }]
-         Prefix set like this
-        $"{userObjectId}/{video.VideoId}/{date}/{video.VideoName}.{video.Format}"
          */
         [FunctionName("NewVideoFunction")]
         public async Task Run([EventGridTrigger] EventGridEvent eventGridEvent, ILogger log)
@@ -69,21 +69,40 @@ Content-Length: 1008
 
             var splitBlob = blobPath.Split('/');
             var containerName = splitBlob[4];
-            var userObjectId = splitBlob[7];
-            var videoId = splitBlob[8];
+            var buildId = splitBlob[6];
+
+            log.LogInformation($"Container {containerName} buildId {buildId} subject {blobPath}");
+
+            var build = await _buildRepository.GetAsync(Guid.Parse(buildId));
+            if (build == null)
+            {
+                log.LogError($"Build {buildId} not in database");
+                return;
+            }
+
+            build.BuildStatus = SharedEntities.Models.BuildStatus.PaymentChargePending;
+            await _buildRepository.SaveAsync(build, build.UserObjectId);
+
+            if (build.Resolution != SharedEntities.Models.Resolution.Free)
+            {
+                if (!await _chargeService.Charge(build.PaymentIntentId))
+                {
+                    return;
+                }
+            }
+
             var videoName = splitBlob.Last();
-            var blobName = string.Join("/", splitBlob.Skip(6));
-            var blobPrefix = string.Join("/", splitBlob.Skip(6).Take(4));
+            var blobName = $"{buildId}/{videoName}";
+            var blobPrefix = buildId;
 
-            log.LogInformation($"Container {containerName} userId {userObjectId} videoId {videoId} blobName {blobName} blobPrefix {blobPrefix} subject {blobPath}");
-
-            var userDetails = await _userService.GetDetails(userObjectId);
+            var userDetails = await _userService.GetDetails(build.UserObjectId.ToString());
 
             await _blobService.CleanTempFiles(containerName, blobPrefix);
 
             var blobSasUri = await _blobService.GetBlobSas(containerName, blobName);
 
-            await _databaseWriter.UpdateIsBuilding(int.Parse(videoId));
+            build.BuildStatus = SharedEntities.Models.BuildStatus.Complete;
+            await _buildRepository.SaveAsync(build, build.UserObjectId);
 
             _mailer.Send(userDetails.username, userDetails.email, blobSasUri.ToString(), videoName);
         }

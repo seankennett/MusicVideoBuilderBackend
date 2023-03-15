@@ -16,11 +16,11 @@ namespace DataAccessLayer.Repositories
             _sqlConnection = connections.Value.SqlConnectionString;
         }
 
-        public async Task<IEnumerable<UserLayer>> GetAllAsync(Guid userObjectId)
+        public async Task<IEnumerable<UserLayer>> GetAllCompleteAsync(Guid userObjectId)
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                var userLayers = await connection.QueryAsync<UserLayerDTO>("GetUserLayers", new { userObjectId }, commandType: CommandType.StoredProcedure);
+                var userLayers = await connection.QueryAsync<UserLayerDTO>("GetUserLayersByBuildStatus", new { userObjectId, BuildStatusId = BuildStatus.Complete }, commandType: CommandType.StoredProcedure);
                 return userLayers.Select(ul => new UserLayer
                 {
                     LayerId = ul.LayerId,
@@ -32,54 +32,27 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        //public async Task<UserLayer> SaveAsync(Guid userObjectId, Guid layerId)
-        //{
-        //    using (var connection = new SqlConnection(_sqlConnection))
-        //    {
-        //        var ul = await connection.QueryFirstAsync<UserLayerDTO>("InsertUserLayer", new { userObjectId, layerId, userLayerStatusId = UserLayerStatus.Saved }, commandType: CommandType.StoredProcedure);
-        //        return new UserLayer
-        //        {
-        //            DateUpdated = ul.DateUpdated,
-        //            LayerId = ul.LayerId,
-        //            LayerName = ul.LayerName,
-        //            LayerType = (LayerTypes)ul.LayerTypeId,
-        //            UserLayerId = ul.UserLayerId,
-        //            UserLayerStatus = (UserLayerStatus)ul.UserLayerStatusId
-        //        };
-        //    }
-        //}
+        public async Task SaveUserLayersAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId)
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("ForeignId");
+            dataTable.Columns.Add("Order");
+            for (short i = 0; i < uniqueLayers.Count(); i++)
+            {
+                dataTable.Rows.Add(uniqueLayers.ElementAt(i), i);
+            }
 
-        //public async Task<UserLayerDTO> GetAsync(Guid userObjectId, int userLayerId)
-        //{
-        //    using (var connection = new SqlConnection(_sqlConnection))
-        //    {
-        //        return await connection.QueryFirstOrDefaultAsync<UserLayerDTO>("GetUserLayer", new { userObjectId, UserLayerId = userLayerId }, commandType: CommandType.StoredProcedure);                
-        //    }
-        //}
+            using (var connection = new SqlConnection(_sqlConnection))
+            {
+                await connection.ExecuteAsync("InsertUserLayers", new
+                {
+                    userObjectId,
+                    BuildId = buildId,
+                    Layers = dataTable.AsTableValuedParameter("GuidOrderType"),
 
-        //public async Task DeleteAsync(int userLayerId)
-        //{         
-        //    using (var connection = new SqlConnection(_sqlConnection))
-        //    {
-        //        await connection.ExecuteAsync("DeleteUserLayer", new { UserLayerId = userLayerId }, commandType: CommandType.StoredProcedure);
-        //    }
-        //}
-
-        //public async Task<UserLayer> UpdateAsync(int userLayerId, UserLayerStatus userLayerStatus)
-        //{
-        //    using (var connection = new SqlConnection(_sqlConnection))
-        //    {
-        //        var ul = await connection.QueryFirstAsync<UserLayerDTO>("UpdateUserLayer", new { userLayerId, userLayerStatusId = userLayerStatus }, commandType: CommandType.StoredProcedure);
-        //        return new UserLayer
-        //        {
-        //            DateUpdated = ul.DateUpdated,
-        //            LayerId = ul.LayerId,
-        //            LayerName = ul.LayerName,
-        //            LayerType = (LayerTypes)ul.LayerTypeId,
-        //            UserLayerId = ul.UserLayerId,
-        //            UserLayerStatus = (UserLayerStatus)ul.UserLayerStatusId
-        //        };
-        //    }
-        //}
+                }, commandType: CommandType.StoredProcedure);
+                
+            }
+        }
     }
 }

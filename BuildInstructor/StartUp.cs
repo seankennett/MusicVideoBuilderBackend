@@ -23,9 +23,13 @@ namespace BuildInstructor
 
             builder.Services.AddSingleton<IBuildService, BuildService>();
             builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
+            builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
+            builder.Services.AddSingleton<IUserLayerRepository, UserLayerRepository>();
             builder.Services.AddSingleton<IFfmpegComplexOperations, FfmpegComplexOperations>();
             builder.Services.AddSingleton<IFfmpegService, FfmpegService>();
             builder.Services.AddSingleton<IStorageService, StorageService>();
+            builder.Services.AddSingleton<IAzureBatchService, AzureBatchService>();
+            builder.Services.AddSingleton<IBuilderFunctionSender, BuilderFunctionSender>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

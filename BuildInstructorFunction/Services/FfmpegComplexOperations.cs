@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public class FfmpegComplexOperations : IFfmpegComplexOperations
     {

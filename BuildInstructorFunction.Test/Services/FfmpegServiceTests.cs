@@ -1,11 +1,7 @@
-using BuildInstructor.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BuildInstructorFunction.Services;
 using SharedEntities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace BuildInstructor.Test.Service
+namespace BuildInstructorFunction.Test.Services
 {
     [TestClass]
     public class FfmpegServiceTests

@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SpaWebApi.Test.Service
+namespace SpaWebApi.Test.Services
 {
     [TestClass]
     public class ClipServiceTests

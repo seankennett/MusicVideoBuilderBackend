@@ -6,16 +6,12 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Azure.Core;
 using Stripe;
 using Microsoft.Extensions.Options;
-using SharedEntities.Models;
-using DataAccessLayer.Repositories;
-using BuildInstructor.Services;
 using SharedEntities;
+using BuildInstructorFunction.Services;
 
-namespace BuildInstructor
+namespace BuildInstructorFunction
 {
     public class BuildInstructorFunction
     {

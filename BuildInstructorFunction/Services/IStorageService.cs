@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public interface IStorageService
     {

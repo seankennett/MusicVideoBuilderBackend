@@ -1,6 +1,6 @@
 ﻿using Azure.Identity;
-using BuildInstructor;
-using BuildInstructor.Services;
+using BuildInstructorFunction;
+using BuildInstructorFunction.Services;
 using DataAccessLayer.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 
 [assembly: FunctionsStartup(typeof(Startup))]
-namespace BuildInstructor
+namespace BuildInstructorFunction
 {
     public class Startup : FunctionsStartup
     {

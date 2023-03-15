@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public interface IFfmpegService
     {

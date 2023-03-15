@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Batch.Common;
 using Microsoft.Extensions.Options;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public class AzureBatchService : IAzureBatchService
     {
@@ -18,7 +18,7 @@ namespace BuildInstructor.Services
         private readonly BatchSharedKeyCredentials _batchCredentials;
         private readonly string _poolId;
 
-        public AzureBatchService(IStorageService storageService, IOptions<Connections> connections) 
+        public AzureBatchService(IStorageService storageService, IOptions<Connections> connections)
         {
             _storageService = storageService;
 

@@ -1,21 +1,13 @@
-﻿using Azure.Storage.Queues;
-using DataAccessLayer.Repositories;
-using Microsoft.Azure.Batch;
-using Microsoft.Azure.Batch.Auth;
-using Microsoft.Azure.Batch.Common;
-using Microsoft.Extensions.Options;
+﻿using DataAccessLayer.Repositories;
 using SharedEntities;
 using SharedEntities.Extensions;
 using SharedEntities.Models;
-using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public class BuildService : IBuildService
     {
@@ -53,7 +45,7 @@ namespace BuildInstructor.Services
         public async Task InstructBuildAsync(UserBuild build)
         {
             var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId);
-            
+
             var buildId = build.BuildId;
             var resolution = build.Resolution;
             var tempBlobPrefix = GuidHelper.GetTempBlobPrefix(buildId);
@@ -91,17 +83,17 @@ namespace BuildInstructor.Services
             var userContainerName = GuidHelper.GetUserContainerName(build.UserObjectId);
             var hasAudio = build.HasAudio;
             var outputBlobPrefix = buildId.ToString();
-            
+
             var videoFileName = $"{video.VideoName}.{video.Format}";
-            var allFrameVideoFileName = $"{InstructorConstants.AllFramesVideoName}.{video.Format}";           
-            
+            var allFrameVideoFileName = $"{InstructorConstants.AllFramesVideoName}.{video.Format}";
+
 
             //_ffmpegService.GetMergeCode(true, tempBlobPrefix, allFrameVideoFileName, null, AllFramesConcatFileName)
             var clipMergeCommand = new FfmpegIOCommand
             {
                 FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, allFrameVideoFileName, null, InstructorConstants.AllFramesConcatFileName),
                 VideoName = allFrameVideoFileName
-            };           
+            };
 
             var splitFrameCommands = new List<FfmpegIOCommand>();
             var videoLengthSeconds = video.Clips.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
@@ -137,5 +129,5 @@ namespace BuildInstructor.Services
                 await _builderFunctionSender.SendBuilderFunctionMessage(userContainerName, hasAudio, resolution, outputBlobPrefix, tempBlobPrefix, uniqueLayers, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
             }
         }
-    }    
+    }
 }

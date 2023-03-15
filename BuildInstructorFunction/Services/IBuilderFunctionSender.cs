@@ -1,11 +1,8 @@
 ﻿using SharedEntities.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public interface IBuilderFunctionSender
     {

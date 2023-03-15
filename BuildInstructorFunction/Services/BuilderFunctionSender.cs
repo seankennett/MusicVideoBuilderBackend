@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BuildInstructor.Services
+namespace BuildInstructorFunction.Services
 {
     public class BuilderFunctionSender : IBuilderFunctionSender
     {
         private readonly Lazy<QueueClient> _queueClientFree;
         private readonly Lazy<QueueClient> _queueClientHd;
 
-        public BuilderFunctionSender(IOptions<Connections> connections) 
+        public BuilderFunctionSender(IOptions<Connections> connections)
         {
             _queueClientFree = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, Resolution.Free.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix, new QueueClientOptions
             {

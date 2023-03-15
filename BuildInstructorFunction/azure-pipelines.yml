@@ -4,14 +4,16 @@ trigger:
         - master
     paths:
         include:
-        - NewVideoFunction
+        - BuildInstructorFunction
+        - BuildInstructorFunction.Test
         - SharedEntities
         - DataAccessLayer
 
 variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
-  functioNamespace: 'newvideofunction'
-  projectPath: 'NewVideoFunction/NewVideoFunction.csproj'
+  functioNamespace: 'buildinstructorfunction'
+  projectPath: 'BuildInstructorFunction/BuildInstructorFunction.csproj'
+  testProjectPath: 'SpaWebApi.Test/SpaWebApi.Test.csproj'
   buildConfiguration: 'Release'
 
 pool:
@@ -29,6 +31,12 @@ steps:
     projects: '$(projectPath)'
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'Build solution'
+
+- task: DotNetCoreCLI@2
+  displayName: 'test'
+  inputs:
+    command: 'test'
+    projects: '$(testProjectPath)'
     
 - task: DotNetCoreCLI@2
   inputs:

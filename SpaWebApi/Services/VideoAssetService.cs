@@ -38,11 +38,17 @@ namespace SpaWebApi.Services
             var result = new List<VideoAsset>();
             foreach (var build in builds.Where(x => x.BuildStatus != BuildStatus.Failed && x.BuildStatus != BuildStatus.PaymentAuthorisationPending))
             {
+                Uri? downloadLink = null;
+                if (build.BuildStatus == BuildStatus.Complete)
+                {
+                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{SharedConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(28));
+                }
+
                 result.Add(new VideoAsset
                 {
                     BuildStatus = build.BuildStatus,
                     DateCreated = build.DateUpdated,
-                    DownloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{SharedConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(28)),
+                    DownloadLink = downloadLink,
                     VideoId = build.VideoId
                 });
             }

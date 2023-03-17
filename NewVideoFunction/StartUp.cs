@@ -34,7 +34,7 @@ namespace NewVideoFunction
             var config = builder.ConfigurationBuilder.Build();
             var keyVaultEndpoint = config["AzureKeyVaultEndpoint"];
 
-            builder.ConfigurationBuilder
+            config = builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
                         .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
                         .AddJsonFile("local.settings.json", true)

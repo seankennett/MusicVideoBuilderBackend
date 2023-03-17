@@ -19,7 +19,7 @@ public class PaymentService : IPaymentService
 
     public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)
     {
-        var userLayers = await _userLayerRepository.GetAllCompleteAsync(userObjectId);
+        var userLayers = await _userLayerRepository.GetAllAsync(userObjectId);
         int serverCalculatedCost = GetVideoCost(video.Clips.Where(c => c.Layers != null).SelectMany(c => c.Layers).Select(l => l.LayerId).Distinct(), userLayers, paymentIntentRequest.Resolution, paymentIntentRequest.License);
         if (serverCalculatedCost != paymentIntentRequest.Cost) {
             throw new Exception($"Client cost {paymentIntentRequest.Cost} not the same as server cost {serverCalculatedCost} for video {video.VideoId}");

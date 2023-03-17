@@ -23,7 +23,7 @@ namespace SpaWebApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<UserLayer>> Get()
         {
-            return await _userLayerRepository.GetAllCompleteAsync(User.GetUserObjectId());
+            return await _userLayerRepository.GetAllAsync(User.GetUserObjectId());
         }
     }
 }

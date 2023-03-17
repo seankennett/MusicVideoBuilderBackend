@@ -16,11 +16,11 @@ namespace DataAccessLayer.Repositories
             _sqlConnection = connections.Value.SqlConnectionString;
         }
 
-        public async Task<IEnumerable<UserLayer>> GetAllCompleteAsync(Guid userObjectId)
+        public async Task<IEnumerable<UserLayer>> GetAllAsync(Guid userObjectId)
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                var userLayers = await connection.QueryAsync<UserLayerDTO>("GetUserLayersByBuildStatus", new { userObjectId, BuildStatusId = BuildStatus.Complete }, commandType: CommandType.StoredProcedure);
+                var userLayers = await connection.QueryAsync<UserLayerDTO>("GetUserLayers", new { userObjectId }, commandType: CommandType.StoredProcedure);
                 return userLayers.Select(ul => new UserLayer
                 {
                     LayerId = ul.LayerId,

@@ -1,8 +1,10 @@
 ﻿using Azure.Identity;
+using Azure.Storage.Queues;
 using BuildInstructorFunction;
 using BuildInstructorFunction.Services;
 using DataAccessLayer.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -14,12 +16,25 @@ namespace BuildInstructorFunction
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            var configuration = builder.GetContext().Configuration;
+
             builder.Services.AddLogging();
             builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);
                 });
+
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.UseCredential(new DefaultAzureCredential());
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
+                clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"])).ConfigureOptions(queueClientOptions =>
+                {
+                    queueClientOptions.MessageEncoding = QueueMessageEncoding.Base64;
+
+                });
+            });
 
             builder.Services.AddSingleton<IBuildService, BuildService>();
             builder.Services.AddSingleton<IVideoRepository, VideoRepository>();

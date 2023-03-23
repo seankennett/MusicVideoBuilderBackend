@@ -1,8 +1,10 @@
 using Azure.Identity;
+using Azure.Storage.Queues;
 using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
+using SharedEntities;
 using SpaWebApi.Services;
 using Stripe;
 
@@ -12,14 +14,6 @@ var configuration = builder.Configuration;
 if (!builder.Environment.IsDevelopment())
 {
     configuration.AddAzureKeyVault(new Uri(configuration["AzureKeyVaultEndpoint"]), new DefaultAzureCredential());
-}
-else
-{
-    // silly kestral limit - azure will use iis and therefore webconfig
-    builder.Services.Configure<KestrelServerOptions>(options =>
-    {
-        options.Limits.MaxRequestBodySize = int.MaxValue;
-    });
 }
 
 // Add services to the container.
@@ -42,6 +36,17 @@ builder.Services.AddAuthorization(options => {
     });
 });
 builder.Services.AddMemoryCache();
+
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.UseCredential(new DefaultAzureCredential());
+    clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
+    clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"])).ConfigureOptions(queueClientOptions =>
+    {
+        queueClientOptions.MessageEncoding = QueueMessageEncoding.Base64;
+        
+    });
+});
 
 builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
                 (settings, configuration) =>

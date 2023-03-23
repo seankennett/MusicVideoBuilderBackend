@@ -1,5 +1,6 @@
 ﻿using Azure.Identity;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,12 +14,20 @@ namespace UploadLayerFunction
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            var configuration = builder.GetContext().Configuration;
+
             builder.Services.AddLogging();
             builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);
                 });
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.UseCredential(new DefaultAzureCredential());
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"])).WithName("PrivateBlobServiceClient");
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PublicBlobStorageUrl"])).WithName("PublicBlobServiceClient");
+            });
 
             builder.Services.AddSingleton<IDatabaseWriter, DatabaseWriter>();
         }

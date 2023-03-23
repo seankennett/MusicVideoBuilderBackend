@@ -22,6 +22,7 @@ namespace BuildInstructorFunction.Services
         {
             _storageService = storageService;
 
+            // waiting on MS to allow identity stuff here :(
             _batchCredentials = new BatchSharedKeyCredentials(connections.Value.BatchServiceEndpoint, connections.Value.BatchServiceName, connections.Value.BatchServiceKey);
             _poolId = connections.Value.PoolName;
         }

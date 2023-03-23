@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using BuilderFunction;
+using Microsoft.Extensions.Azure;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BuilderFunction
@@ -12,6 +13,8 @@ namespace BuilderFunction
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            var configuration = builder.GetContext().Configuration;
+
             builder.Services.AddLogging();
             builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
                 (settings, configuration) =>
@@ -20,6 +23,12 @@ namespace BuilderFunction
                     settings.MaxConcurrentActivityFunctions = int.Parse(configuration["AzureFunctionsJobHost:extensions:durableTask:maxConcurrentActivityFunctions"]);
                     settings.FunctionTimeOut = TimeSpan.Parse(configuration["AzureFunctionsJobHost:functionTimeout"]);
                 });
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.UseCredential(new DefaultAzureCredential());
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"])).WithName("PrivateBlobServiceClient");
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PublicBlobStorageUrl"])).WithName("PublicBlobServiceClient");
+            });
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

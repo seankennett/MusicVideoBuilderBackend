@@ -13,7 +13,6 @@ namespace SpaWebApi.Services
     {
         private readonly IVideoRepository _videoRepository;
         private readonly IStorageService _storageService;
-        private readonly Lazy<QueueClient> _queueClient;
         private readonly IBuildRepository _buildRepository;
         private readonly IPaymentService _paymentService;
 
@@ -23,10 +22,6 @@ namespace SpaWebApi.Services
             _storageService = storageService;
             _buildRepository = buildRepository;
             _paymentService = paymentService;
-            _queueClient = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, SharedConstants.BuildInstructorQueue, new QueueClientOptions
-            {
-                MessageEncoding = QueueMessageEncoding.Base64
-            }));
         }
 
         public async Task<IEnumerable<VideoAsset>> GetAllAsync(Guid userObjectId)
@@ -75,7 +70,7 @@ namespace SpaWebApi.Services
             var userBuild = new UserBuild(currentBuild);
             userBuild.UserObjectId = userObjectId;
 
-            await _queueClient.Value.SendMessageAsync(JsonSerializer.Serialize(userBuild));
+            await _storageService.SendToBuildInstructorQueueAsync(userBuild);
 
             return new VideoAsset { BuildStatus = currentBuild.BuildStatus, DateCreated = DateTimeOffset.UtcNow, DownloadLink = null, VideoId = videoId };
         }
@@ -116,7 +111,7 @@ namespace SpaWebApi.Services
             }
 
             var blobName = GuidHelper.GetAudioBlobName(buildId);
-            return await _storageService.CreateBlobAsync(GuidHelper.GetUserContainerName(userObjectId), blobName, true, TimeSpan.FromMinutes(10));
+            return await _storageService.CreateBlobAsync(GuidHelper.GetUserContainerName(userObjectId), blobName, true, DateTimeOffset.UtcNow.AddMinutes(10));
         }
 
         public async Task ValidateAudioBlob(Guid userObjectId, int videoId, Guid buildId, Resolution resolution)

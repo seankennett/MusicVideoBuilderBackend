@@ -21,7 +21,7 @@ namespace SpaWebApi.Services
         public async Task SendToImageProcessingFunction(Guid userObjectId, LayerUploadMessage layerUpload)
         {
             layerUpload.AuthorObjectId = userObjectId;
-            await _storageService.RemoveContainerPolicySendToQueueAsync(layerUpload);
+            await _storageService.RemoveContainerPolicySendToUploadLayerQueueAsync(layerUpload);
         }
     }
 }

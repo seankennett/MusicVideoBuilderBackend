@@ -1,12 +1,17 @@
 {
     "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=https://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=https://127.0.0.1:10001/devstoreaccount1;TableEndpoint=https://127.0.0.1:10002/devstoreaccount1;",
+    "AzureWebJobsStorage__blobServiceUri": "https://127.0.0.1:10000/devstoreaccount1",
+    "AzureWebJobsStorage__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",
+    "AzureWebJobsStorage__tableServiceUri": "https://127.0.0.1:10002/devstoreaccount1",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureKeyVaultEndpoint": "https://musicvideobuilder.vault.azure.net/",
     "QueueName": "free-builder",
     "Resolution": "free",
     "AzureFunctionsJobHost:extensions:durableTask:maxConcurrentActivityFunctions": 4,
-    "AzureFunctionsJobHost:functionTimeout": "00:05:00"
+    "AzureFunctionsJobHost:functionTimeout": "00:05:00",
+    "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
+    "PublicBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
+    "ConnectionString__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1"
   }
 }

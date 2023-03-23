@@ -12,19 +12,11 @@ namespace BuildInstructorFunction.Services
 {
     public class BuilderFunctionSender : IBuilderFunctionSender
     {
-        private readonly Lazy<QueueClient> _queueClientFree;
-        private readonly Lazy<QueueClient> _queueClientHd;
+        private readonly IStorageService _storageService;
 
-        public BuilderFunctionSender(IOptions<Connections> connections)
+        public BuilderFunctionSender(IStorageService storageService)
         {
-            _queueClientFree = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, Resolution.Free.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix, new QueueClientOptions
-            {
-                MessageEncoding = QueueMessageEncoding.Base64
-            }));
-            _queueClientHd = new Lazy<QueueClient>(() => new QueueClient(connections.Value.PrivateStorageConnectionString, Resolution.Hd.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix, new QueueClientOptions
-            {
-                MessageEncoding = QueueMessageEncoding.Base64
-            }));
+            _storageService = storageService;
         }
         public async Task SendBuilderFunctionMessage(string userContainerName, bool hasAudio, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, List<string> uniqueLayers, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)
         {
@@ -51,11 +43,11 @@ namespace BuildInstructorFunction.Services
 
             if (resolution == Resolution.Free)
             {
-                await _queueClientFree.Value.SendMessageAsync(JsonSerializer.Serialize(builderMessage));
+                await _storageService.SendFreeBuilderMessageAsync(builderMessage);
             }
             else
             {
-                await _queueClientHd.Value.SendMessageAsync(JsonSerializer.Serialize(builderMessage));
+                await _storageService.SendHdBuilderMessageAsync(builderMessage);
             }
         }
     }

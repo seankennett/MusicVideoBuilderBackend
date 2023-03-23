@@ -9,15 +9,16 @@ namespace NewVideoFunction
 {
     public class BlobService : IBlobService
     {
-        private readonly string _privateConnectionString;
-        public BlobService(IOptions<Connections> options)
+        private readonly BlobServiceClient _blobServiceClient;
+
+        public BlobService(BlobServiceClient blobServiceClient)
         {
-            _privateConnectionString = options.Value.PrivateStorageConnectionString;
+            _blobServiceClient = blobServiceClient;
         }
 
         public async Task CleanTempFiles(string containerName, string blobPrefix)
         {
-            var blobContainerClient = new BlobContainerClient(_privateConnectionString, containerName);
+            var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             var blobs = blobContainerClient.GetBlobsAsync(Azure.Storage.Blobs.Models.BlobTraits.None, Azure.Storage.Blobs.Models.BlobStates.None, $"{blobPrefix}/{SharedConstants.TempBlobPrefix}");
             await foreach (var blob in blobs)
             {
@@ -28,9 +29,10 @@ namespace NewVideoFunction
 
         public async Task<Uri> GetBlobSas(string containerName, string blobName)
         {
-            var blobContainerClient = new BlobClient(_privateConnectionString, containerName, blobName);
-            var properties = await blobContainerClient.GetPropertiesAsync();
-            return blobContainerClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, properties.Value.CreatedOn.AddDays(28));
+            var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+            var blobClient = blobContainerClient.GetBlobClient(blobName);
+            var properties = await blobClient.GetPropertiesAsync();
+            return blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, properties.Value.CreatedOn.AddDays(28));
         }
     }
 }

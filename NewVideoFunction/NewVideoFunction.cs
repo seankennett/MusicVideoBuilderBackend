@@ -20,7 +20,7 @@ namespace NewVideoFunction
         private readonly IBuildRepository _buildRepository;
         private readonly IChargeService _chargeService;
 
-        public NewVideoFunction(IOptions<Connections> options, IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService)
+        public NewVideoFunction(IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService)
         {
             _mailer = mailer;
             _userService = userService;
@@ -42,7 +42,7 @@ Content-Length: 1008
 [{
 	"id": "741a105c-501e-007b-2436-25dfaa06188a",
 	"topic": "/subscriptions/285ec89b-c6b0-46a6-9758-a0bce37bd2da/resourceGroups/music-video-builder/providers/Microsoft.Storage/storageAccounts/musicvideobuilderprivate",
-	"subject": "/blobServices/default/containers/user-69d12eed-18c7-4763-8df2-ad828af710df/blobs/3193af5c-50a2-4bb6-89fc-bebe0935d4d1/test.mp4",
+	"subject": "/blobServices/default/containers/user-69d12eed-18c7-4763-8df2-ad828af710df/blobs/c636dff0-3c67-466e-a2cd-13afca023dc2/test2.mp4",
 	"data": {
 		"api": "PutBlockList",
 		"requestId": "741a105c-501e-007b-2436-25dfaa000000",

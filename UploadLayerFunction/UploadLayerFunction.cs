@@ -8,6 +8,7 @@ using Azure.Storage.Blobs.Models;
 using ImageMagick;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SharedEntities;
@@ -19,14 +20,16 @@ namespace UploadLayerFunction
 {
     public class UploadLayerFunction
     {
-        private readonly Connections _connections;
         private readonly IDatabaseWriter _databaseWriter;
+        private readonly BlobServiceClient _privateBlobServiceClient;
+        private readonly BlobServiceClient _publicBlobServiceClient;
         private const int NumberOfImages = 64;
         private const int SpriteHeight = 216;
         private const int SpriteWidth = 384;
-        public UploadLayerFunction(IOptions<Connections> options, IDatabaseWriter databaseWriter)
+        public UploadLayerFunction(IDatabaseWriter databaseWriter, IAzureClientFactory<BlobServiceClient> azureClientFactory)
         {
-            _connections = options.Value;
+            _privateBlobServiceClient = azureClientFactory.CreateClient("PrivateBlobServiceClient");
+            _publicBlobServiceClient = azureClientFactory.CreateClient("PublicBlobServiceClient");
             _databaseWriter = databaseWriter;
         }
 
@@ -63,8 +66,8 @@ namespace UploadLayerFunction
         public async Task<List<string>> RunValidateAndGetBlobs([ActivityTrigger] IDurableActivityContext activityContext)
         {
             var containerName = activityContext.GetInput<string>();
-            var privateContainerClient = new BlobContainerClient(_connections.PrivateStorageConnectionString, containerName);
-            var publicContainerClient = new BlobContainerClient(_connections.PublicStorageConnectionString, containerName);
+            var privateContainerClient = _privateBlobServiceClient.GetBlobContainerClient(containerName);
+            var publicContainerClient = _publicBlobServiceClient.GetBlobContainerClient(containerName);
             await publicContainerClient.CreateIfNotExistsAsync(PublicAccessType.Blob); // won't exist on live
 
             var blobs = privateContainerClient.GetBlobs(BlobTraits.None, BlobStates.None, "4k/raw").ToList();
@@ -87,7 +90,7 @@ namespace UploadLayerFunction
                     MagickImage image = new MagickImage(input.SpriteImages[i]);
                     imageCollection.Add(image);
                 }
-                var publicContainerClient = new BlobContainerClient(_connections.PublicStorageConnectionString, input.ContainerName);
+                var publicContainerClient = _publicBlobServiceClient.GetBlobContainerClient(input.ContainerName);
                 var spriteBlobClient = publicContainerClient.GetBlobClient($"sprite.png");
 
                 using (var spriteImage = imageCollection.Montage(
@@ -107,9 +110,9 @@ namespace UploadLayerFunction
 
             await _databaseWriter.InsertLayer(input.LayerUploadMessage);
 
+            var containerClient = _privateBlobServiceClient.GetBlobContainerClient(input.ContainerName);
             foreach (var blobName in input.BlobNames)
             {
-                var containerClient = new BlobContainerClient(_connections.PrivateStorageConnectionString, input.ContainerName);
                 var deleteClient = containerClient.GetBlobClient(blobName);
                 await deleteClient.DeleteAsync();
             }
@@ -119,8 +122,8 @@ namespace UploadLayerFunction
         public async Task<byte[]> RunActivity([ActivityTrigger] IDurableActivityContext activityContext, ILogger log, ExecutionContext context)
         {
             var input = activityContext.GetInput<ProcessImageDTO>();
-            var privateContainerClient = new BlobContainerClient(_connections.PrivateStorageConnectionString, input.ContainerName);
-            var publicContainerClient = new BlobContainerClient(_connections.PublicStorageConnectionString, input.ContainerName);
+            var privateContainerClient = _privateBlobServiceClient.GetBlobContainerClient(input.ContainerName);
+            var publicContainerClient = _publicBlobServiceClient.GetBlobContainerClient(input.ContainerName);
 
             var blobClient = privateContainerClient.GetBlobClient(input.OriginalName);
             string watermarkFilePath = Path.Combine(context.FunctionAppDirectory, "watermark.png");

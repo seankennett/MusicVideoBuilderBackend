@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using DataAccessLayer.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NewVideoFunction;
@@ -15,12 +16,20 @@ namespace NewVideoFunction
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            var configuration = builder.GetContext().Configuration;
+            builder.Services.AddLogging();
+            
             builder.Services.AddLogging();
             builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);
                 });
+            builder.Services.AddAzureClients(clientBuilder =>
+            {
+                clientBuilder.UseCredential(new DefaultAzureCredential());
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
+            });
 
             builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
             builder.Services.AddSingleton<IMailer, Mailer>();

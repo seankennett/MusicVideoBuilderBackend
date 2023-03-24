@@ -7,7 +7,6 @@ using DataAccessLayer.Repositories;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NewVideoFunction.Interfaces;
 
 namespace NewVideoFunction

@@ -1,5 +1,5 @@
 ﻿using Azure.Storage.Blobs;
-using Microsoft.Extensions.Options;
+using Azure.Storage.Sas;
 using NewVideoFunction.Interfaces;
 using SharedEntities;
 using System;
@@ -29,10 +29,30 @@ namespace NewVideoFunction
 
         public async Task<Uri> GetBlobSas(string containerName, string blobName)
         {
-            var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-            var blobClient = blobContainerClient.GetBlobClient(blobName);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+            var blobClient = containerClient.GetBlobClient(blobName);
             var properties = await blobClient.GetPropertiesAsync();
-            return blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, properties.Value.CreatedOn.AddDays(28));
+            var expiresOn = properties.Value.CreatedOn.AddDays(7);
+            var startsOn = DateTimeOffset.UtcNow;
+
+            var userDelegationKey = await _blobServiceClient.GetUserDelegationKeyAsync(startsOn, expiresOn);
+            var sasBuilder = new BlobSasBuilder
+            {
+                BlobName = blobName,
+                BlobContainerName = containerClient.Name,
+                Resource = "b",
+                StartsOn = startsOn,
+                ExpiresOn = expiresOn,
+            };
+            var uri = blobClient.Uri;
+
+            sasBuilder.SetPermissions(BlobSasPermissions.Read);
+            var blobUriBuilder = new BlobUriBuilder(uri)
+            {
+                Sas = sasBuilder.ToSasQueryParameters(userDelegationKey, _blobServiceClient.AccountName)
+            };
+
+            return blobUriBuilder.ToUri();
         }
     }
 }

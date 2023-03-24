@@ -15,6 +15,10 @@ namespace UploadLayerFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var configuration = builder.GetContext().Configuration;
+            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
+            };
 
             builder.Services.AddLogging();
             builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
@@ -24,7 +28,7 @@ namespace UploadLayerFunction
                 });
             builder.Services.AddAzureClients(clientBuilder =>
             {
-                clientBuilder.UseCredential(new DefaultAzureCredential());
+                clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"])).WithName("PrivateBlobServiceClient");
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PublicBlobStorageUrl"])).WithName("PublicBlobServiceClient");
             });
@@ -36,10 +40,14 @@ namespace UploadLayerFunction
         {
             var config = builder.ConfigurationBuilder.Build();
             var keyVaultEndpoint = config["AzureKeyVaultEndpoint"];
+            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = config["ManagedIdentityClientId"]
+            };
 
             builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
-                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
+                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential(defaultAzureCredentialOptions))
                         .AddJsonFile("local.settings.json", true)
                         .AddEnvironmentVariables()
                     .Build();

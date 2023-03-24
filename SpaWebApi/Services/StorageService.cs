@@ -60,13 +60,7 @@ namespace SpaWebApi.Services
 
             //BlobSasBuilder builder = new BlobSasBuilder { Identifier = layerId.ToString() };
 
-            var url = await GenerateUserDelegateSas(BlobAccountSasPermissions.Write, containerClient, null, DateTimeOffset.UtcNow.AddMinutes(10));
-
-            var test = new BlobContainerClient(url);
-
-            await test.UploadBlobAsync("test", new BinaryData("test"));
-
-            return url;
+            return await GenerateUserDelegateSas(BlobAccountSasPermissions.Write, containerClient, null, DateTimeOffset.UtcNow.AddMinutes(10));
         }
 
         public async Task<Uri> CreateBlobAsync(string containerName, string blobName, bool isNewContainer, DateTimeOffset tokenLength)

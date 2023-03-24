@@ -11,9 +11,14 @@ using Stripe;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
+{
+    ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
+};
+
 if (!builder.Environment.IsDevelopment())
 {
-    configuration.AddAzureKeyVault(new Uri(configuration["AzureKeyVaultEndpoint"]), new DefaultAzureCredential());
+    configuration.AddAzureKeyVault(new Uri(configuration["AzureKeyVaultEndpoint"]), new DefaultAzureCredential(defaultAzureCredentialOptions));
 }
 
 // Add services to the container.
@@ -39,7 +44,8 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddAzureClients(clientBuilder =>
 {
-    clientBuilder.UseCredential(new DefaultAzureCredential());
+    
+    clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
     clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
     clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"])).ConfigureOptions(queueClientOptions =>
     {

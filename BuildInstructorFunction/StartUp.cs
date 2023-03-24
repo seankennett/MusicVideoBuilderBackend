@@ -28,6 +28,11 @@ namespace BuildInstructorFunction
                 {
                     configuration.Bind(settings);
                 });
+            builder.Services.AddOptions<SqlConfig>().Configure<IConfiguration>(
+                (settings, configuration) =>
+                {
+                    configuration.Bind(settings);
+                });
 
             builder.Services.AddAzureClients(clientBuilder =>
             {

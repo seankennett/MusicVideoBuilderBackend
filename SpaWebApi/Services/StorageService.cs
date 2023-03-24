@@ -113,12 +113,13 @@ namespace SpaWebApi.Services
 
         private async Task<Uri> GenerateUserDelegateSas(BlobAccountSasPermissions permission, BlobContainerClient containerClient, BlobClient? blobClient, DateTimeOffset expiresOn)
         {
-            var userDelegationKey = await _blobServiceClient.GetUserDelegationKeyAsync(DateTimeOffset.UtcNow, expiresOn);
+            var startsOn = DateTimeOffset.UtcNow;
+            var userDelegationKey = await _blobServiceClient.GetUserDelegationKeyAsync(startsOn, expiresOn);
             var sasBuilder = new BlobSasBuilder
             {
                 BlobContainerName = containerClient.Name,                
                 Resource = "c",
-                StartsOn = DateTimeOffset.UtcNow,
+                StartsOn = startsOn,
                 ExpiresOn = expiresOn,
             };
             var uri = containerClient.Uri;

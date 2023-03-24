@@ -36,7 +36,7 @@ namespace SpaWebApi.Services
                 Uri? downloadLink = null;
                 if (build.BuildStatus == BuildStatus.Complete)
                 {
-                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{SharedConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(28));
+                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{SharedConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(7));
                 }
 
                 result.Add(new VideoAsset

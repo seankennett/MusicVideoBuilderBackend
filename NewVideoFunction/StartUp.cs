@@ -17,9 +17,10 @@ namespace NewVideoFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var configuration = builder.GetContext().Configuration;
+            var managedClientId = configuration["ManagedIdentityClientId"];
             var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
             {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
+                ManagedIdentityClientId = managedClientId
             };
 
             builder.Services.AddLogging();
@@ -35,12 +36,15 @@ namespace NewVideoFunction
                 clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
             });
+            builder.Services.AddSingleton(new ChainedTokenCredential(
+                new ManagedIdentityCredential(managedClientId),
+                new EnvironmentCredential()));
 
             builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
             builder.Services.AddSingleton<IMailer, Mailer>();
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IBlobService, BlobService>();
-            builder.Services.AddSingleton<IChargeService, ChargeService>();
+            builder.Services.AddSingleton<IChargeService, ChargeService>();            
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

@@ -17,6 +17,11 @@ namespace NewVideoFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var configuration = builder.GetContext().Configuration;
+            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
+            };
+
             builder.Services.AddLogging();
             
             builder.Services.AddLogging();
@@ -27,7 +32,7 @@ namespace NewVideoFunction
                 });
             builder.Services.AddAzureClients(clientBuilder =>
             {
-                clientBuilder.UseCredential(new DefaultAzureCredential());
+                clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
             });
 
@@ -40,17 +45,22 @@ namespace NewVideoFunction
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            var config = builder.ConfigurationBuilder.Build();
-            var keyVaultEndpoint = config["AzureKeyVaultEndpoint"];
+            var configuration = builder.ConfigurationBuilder.Build();
+            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
+            };
 
-            config = builder.ConfigurationBuilder
+            var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
+
+            configuration = builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
-                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
+                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential(defaultAzureCredentialOptions))
                         .AddJsonFile("local.settings.json", true)
                         .AddEnvironmentVariables()
                     .Build();
 
-            StripeConfiguration.ApiKey = config["StripeSecretKey"];
+            StripeConfiguration.ApiKey = configuration["StripeSecretKey"];
         }
     }
 }

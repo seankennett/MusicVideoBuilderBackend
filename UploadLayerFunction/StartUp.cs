@@ -38,12 +38,13 @@ namespace UploadLayerFunction
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            var config = builder.ConfigurationBuilder.Build();
-            var keyVaultEndpoint = config["AzureKeyVaultEndpoint"];
+            var configuration = builder.ConfigurationBuilder.Build();
             var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
             {
-                ManagedIdentityClientId = config["ManagedIdentityClientId"]
+                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
             };
+
+            var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
 
             builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)

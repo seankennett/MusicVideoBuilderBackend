@@ -24,10 +24,10 @@ namespace BuildInstructorFunction.Services
             _queueClientHd = queueServiceClient.GetQueueClient(Resolution.Hd.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix);
         }
 
-        public Uri GetContainerSasUri(string containerName, TimeSpan sasTokenLength)
+        public Uri GetContainerUri(string containerName)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-            return containerClient.GenerateSasUri(BlobContainerSasPermissions.Write, DateTime.UtcNow.Add(sasTokenLength));
+            return containerClient.Uri;
         }
 
         public async Task SendFreeBuilderMessageAsync(BuilderMessage builderMessage)

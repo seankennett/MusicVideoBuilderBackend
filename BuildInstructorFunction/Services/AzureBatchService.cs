@@ -17,19 +17,21 @@ namespace BuildInstructorFunction.Services
         private readonly IStorageService _storageService;
         private readonly BatchSharedKeyCredentials _batchCredentials;
         private readonly string _poolId;
+        private readonly ComputeNodeIdentityReference _computeNodeIdentityReference;
 
-        public AzureBatchService(IStorageService storageService, IOptions<Connections> connections)
+        public AzureBatchService(IStorageService storageService, IOptions<InstructorConfig> config)
         {
             _storageService = storageService;
 
             // waiting on MS to allow identity stuff here :(
-            _batchCredentials = new BatchSharedKeyCredentials(connections.Value.BatchServiceEndpoint, connections.Value.BatchServiceName, connections.Value.BatchServiceKey);
-            _poolId = connections.Value.PoolName;
+            _batchCredentials = new BatchSharedKeyCredentials(config.Value.BatchServiceEndpoint, config.Value.BatchServiceName, config.Value.BatchServiceKey);
+            _poolId = config.Value.PoolName;
+            _computeNodeIdentityReference =new ComputeNodeIdentityReference { ResourceId = config.Value.ManagedIdentityIdReference };
         }
 
         public async Task SendBatchRequest(string userContainerName, bool hasAudio, Guid buildId, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, Dictionary<int, IEnumerable<string>> layerIdsPerClip, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)
         {
-            var outputContainerSasUri = _storageService.GetContainerSasUri(userContainerName, TimeSpan.FromDays(1));
+            var outputContainerUri = _storageService.GetContainerUri(userContainerName);
 
             List<ResourceFile> allFrameVideoInputs = new List<ResourceFile> { ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{InstructorConstants.AllFramesConcatFileName}") };
             var clipTasks = new List<CloudTask>();
@@ -51,7 +53,7 @@ namespace BuildInstructorFunction.Services
                 }
 
                 var outputBlobName = $"{tempBlobPrefix}/{clipFileName}";
-                CloudTask clipTask = SetUpTask(outputBlobName, outputContainerSasUri, $"{tempBlobPrefix}/{i}", clipCommand.FfmpegCode, clipTaskId, inputFiles, clipFileName);
+                CloudTask clipTask = SetUpTask(outputBlobName, outputContainerUri, $"{tempBlobPrefix}/{i}", clipCommand.FfmpegCode, clipTaskId, inputFiles, clipFileName);
                 clipTasks.Add(clipTask);
 
                 allFrameVideoInputs.Add(ResourceFile.FromAutoStorageContainer(userContainerName, null, outputBlobName));
@@ -60,7 +62,7 @@ namespace BuildInstructorFunction.Services
             var allFrameVideoCommand = clipMergeCommand.FfmpegCode;
             var allFramesTaskId = $"a-{buildId}";
             var allFramesOutputBlobName = $"{tempBlobPrefix}/{clipMergeCommand.VideoName}";
-            var allFramesTask = SetUpTask(allFramesOutputBlobName, outputContainerSasUri, $"{tempBlobPrefix}/{InstructorConstants.AllFramesVideoName}", allFrameVideoCommand, allFramesTaskId, allFrameVideoInputs, allFramesOutputBlobName);
+            var allFramesTask = SetUpTask(allFramesOutputBlobName, outputContainerUri, $"{tempBlobPrefix}/{InstructorConstants.AllFramesVideoName}", allFrameVideoCommand, allFramesTaskId, allFrameVideoInputs, allFramesOutputBlobName);
             allFramesTask.DependsOn = TaskDependencies.OnTasks(clipTasks);
 
             List<ResourceFile> splitFrameInputs = new List<ResourceFile> { ResourceFile.FromAutoStorageContainer(userContainerName, null, allFramesOutputBlobName) };
@@ -76,7 +78,7 @@ namespace BuildInstructorFunction.Services
                 var splitFrameCommand = splitFrameCommands[i];
                 var splitTaskId = $"s-{buildId}-{i}";
                 var splitFrameOutputBlobName = $"{tempBlobPrefix}/{splitFrameCommand.VideoName}";
-                CloudTask splitFrameTask = SetUpTask(splitFrameOutputBlobName, outputContainerSasUri, $"{tempBlobPrefix}/split", splitFrameCommand.FfmpegCode, splitTaskId, splitFrameInputs, splitFrameOutputBlobName);
+                CloudTask splitFrameTask = SetUpTask(splitFrameOutputBlobName, outputContainerUri, $"{tempBlobPrefix}/split", splitFrameCommand.FfmpegCode, splitTaskId, splitFrameInputs, splitFrameOutputBlobName);
                 splitFrameTask.DependsOn = TaskDependencies.OnTasks(allFramesTask);
                 splitFramesTasks.Add(splitFrameTask);
 
@@ -86,7 +88,7 @@ namespace BuildInstructorFunction.Services
             var splitFrameMergeVideoCommand = splitFrameMergeCommand.FfmpegCode;
             var splitMergeTaskId = $"v-{buildId}";
             var splitMergeBlobName = $"{outputBlobPrefix}/{splitFrameMergeCommand.VideoName}";
-            var splitMergeTask = SetUpTask(splitMergeBlobName, outputContainerSasUri, tempBlobPrefix, splitFrameMergeVideoCommand, splitMergeTaskId, splitFrameMergeInputs, splitMergeBlobName);
+            var splitMergeTask = SetUpTask(splitMergeBlobName, outputContainerUri, tempBlobPrefix, splitFrameMergeVideoCommand, splitMergeTaskId, splitFrameMergeInputs, splitMergeBlobName);
             splitMergeTask.DependsOn = TaskDependencies.OnTasks(splitFramesTasks);
 
             var allTasks = clipTasks.Union(splitFramesTasks).Union(new List<CloudTask> { allFramesTask, splitMergeTask });
@@ -102,15 +104,15 @@ namespace BuildInstructorFunction.Services
             }
         }
 
-        public CloudTask SetUpTask(string outputBlobName, Uri outputContainerSasUri, string errorBlobPrefix, string command, string taskId, List<ResourceFile> inputFiles, string filePath)
+        public CloudTask SetUpTask(string outputBlobName, Uri outputContainerUri, string errorBlobPrefix, string command, string taskId, List<ResourceFile> inputFiles, string filePath)
         {
             CloudTask cloudTask = new CloudTask(taskId, command);
             cloudTask.ResourceFiles = inputFiles;
             cloudTask.Constraints = new TaskConstraints { MaxWallClockTime = TimeSpan.FromHours(1), RetentionTime = TimeSpan.Zero };
 
             List<OutputFile> outputFileList = new List<OutputFile>();
-            OutputFileBlobContainerDestination outputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerSasUri.ToString(), outputBlobName);
-            OutputFileBlobContainerDestination errorOutputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerSasUri.ToString(), errorBlobPrefix);
+            OutputFileBlobContainerDestination outputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerUri.ToString(), _computeNodeIdentityReference, outputBlobName);
+            OutputFileBlobContainerDestination errorOutputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerUri.ToString(), _computeNodeIdentityReference, errorBlobPrefix);
             outputFileList.Add(new OutputFile(filePath,
                                                    new OutputFileDestination(outputFileBlobContainerDestination),
                                                    new OutputFileUploadOptions(OutputFileUploadCondition.TaskSuccess)));

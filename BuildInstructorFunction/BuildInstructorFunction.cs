@@ -18,9 +18,9 @@ namespace BuildInstructorFunction
         private readonly string _stripeWebhookKey;
         private readonly IBuildService _buildService;
 
-        public BuildInstructorFunction(IOptions<Connections> connections, IBuildService buildService)
+        public BuildInstructorFunction(IOptions<InstructorConfig> config, IBuildService buildService)
         {
-            _stripeWebhookKey = connections.Value.StripeWebhookKey;
+            _stripeWebhookKey = config.Value.StripeWebhookKey;
             _buildService = buildService;
         }
 

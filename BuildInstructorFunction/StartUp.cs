@@ -23,7 +23,7 @@ namespace BuildInstructorFunction
             };
 
             builder.Services.AddLogging();
-            builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
+            builder.Services.AddOptions<InstructorConfig>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);

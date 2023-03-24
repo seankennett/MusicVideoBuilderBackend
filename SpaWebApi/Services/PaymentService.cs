@@ -89,33 +89,4 @@ public class PaymentService : IPaymentService
     {
         return ((int)resolution - 1) * 5;
     }
-
-    public async Task HandleStripeEvent(Event stripeEvent)
-    {
-        var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-        if (stripeEvent.Type == Events.PaymentIntentSucceeded)
-        {
-            _logger.LogInformation($"PaymentIntent {paymentIntent.Id} sucessful for amount {paymentIntent?.Amount}");
-        }
-        else if (stripeEvent.Type == Events.PaymentIntentAmountCapturableUpdated) // card on hold so can crack on with building video
-        {
-            UserBuild? build = await _buildRepository.GetByPaymentIntentId(paymentIntent.Id);
-            if (build == null)
-            {
-                throw new Exception($"payment intent {paymentIntent.Id} not in build table");
-            }
-            
-            build.BuildStatus = BuildStatus.BuildingPending;
-            await _buildRepository.SaveAsync(build, build.UserObjectId);
-            // save build status then send onto build conductor
-        }
-        else if (stripeEvent.Type == Events.PaymentIntentPaymentFailed)
-        {
-            _logger.LogWarning($"PaymentIntent {paymentIntent.Id} failed");
-        }
-        else
-        {
-            _logger.LogInformation($"Unknown stripe event json: {stripeEvent.ToJson()}");
-        }
-    }
 }

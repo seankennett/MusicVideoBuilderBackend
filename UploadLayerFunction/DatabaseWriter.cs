@@ -13,7 +13,7 @@ namespace UploadLayerFunction
     {
         private string _sqlConnection;
 
-        public DatabaseWriter(IOptions<Connections> connections)
+        public DatabaseWriter(IOptions<SqlConfig> connections)
         {
             _sqlConnection = connections.Value.SqlConnectionString;
         }

@@ -54,7 +54,7 @@ builder.Services.AddAzureClients(clientBuilder =>
     });
 });
 
-builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
+builder.Services.AddOptions<SqlConfig>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);

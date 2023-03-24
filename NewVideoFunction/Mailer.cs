@@ -8,9 +8,9 @@ namespace NewVideoFunction
     public class Mailer : IMailer
     {
         private readonly string _password;
-        public Mailer(IOptions<Connections> connections)
+        public Mailer(IOptions<NewVideoConfig> config)
         {
-            _password = connections.Value.SmtpPassword;
+            _password = config.Value.SmtpPassword;
         }
         public void Send(string username, string emailAddress, string blobSasUrl, string videoName)
         {

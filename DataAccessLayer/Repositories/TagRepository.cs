@@ -9,7 +9,7 @@ namespace DataAccessLayer.Repositories
     {
         private readonly string _sqlConnection;
 
-        public TagRepository(IOptions<Connections> connections)
+        public TagRepository(IOptions<SqlConfig> connections)
         {
             _sqlConnection = connections.Value.SqlConnectionString;
         }

@@ -1,5 +1,4 @@
 ﻿using Azure.Identity;
-using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using NewVideoFunction.Interfaces;
 using System.Linq;

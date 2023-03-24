@@ -16,7 +16,7 @@ namespace SpaWebApi.Services
         private readonly IBuildRepository _buildRepository;
         private readonly IPaymentService _paymentService;
 
-        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IOptions<Connections> connections, IBuildRepository buildRepository, ILogger<VideoAssetService> logger, IPaymentService paymentService, IUserLayerRepository userLayerRepository)
+        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IOptions<SqlConfig> connections, IBuildRepository buildRepository, ILogger<VideoAssetService> logger, IPaymentService paymentService, IUserLayerRepository userLayerRepository)
         {
             _videoRepository = videoRepository;
             _storageService = storageService;

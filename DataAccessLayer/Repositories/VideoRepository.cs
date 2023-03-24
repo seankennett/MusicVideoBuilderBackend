@@ -11,7 +11,7 @@ namespace DataAccessLayer.Repositories
     {
         private readonly string _sqlConnection;
 
-        public VideoRepository(IOptions<Connections> connections)
+        public VideoRepository(IOptions<SqlConfig> connections)
         {
             _sqlConnection = connections.Value.SqlConnectionString;
         }

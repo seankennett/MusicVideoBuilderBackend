@@ -11,7 +11,7 @@ namespace DataAccessLayer.Repositories
     {
         private readonly string _sqlConnection;
 
-        public UserLayerRepository(IOptions<Connections> connections)
+        public UserLayerRepository(IOptions<SqlConfig> connections)
         {
             _sqlConnection = connections.Value.SqlConnectionString;
         }

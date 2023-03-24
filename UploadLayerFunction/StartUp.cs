@@ -21,7 +21,7 @@ namespace UploadLayerFunction
             };
 
             builder.Services.AddLogging();
-            builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
+            builder.Services.AddOptions<SqlConfig>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);

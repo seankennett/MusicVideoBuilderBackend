@@ -26,7 +26,12 @@ namespace NewVideoFunction
             builder.Services.AddLogging();
             
             builder.Services.AddLogging();
-            builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
+            builder.Services.AddOptions<NewVideoConfig>().Configure<IConfiguration>(
+                (settings, configuration) =>
+                {
+                    configuration.Bind(settings);
+                });
+            builder.Services.AddOptions<SqlConfig>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);

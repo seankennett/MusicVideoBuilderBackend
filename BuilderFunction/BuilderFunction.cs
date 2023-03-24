@@ -18,15 +18,15 @@ namespace BuilderFunction
 {
     public class BuilderFunction
     {
-        private readonly Connections _connections;
+        private readonly BuilderConfig _config;
         private readonly BlobServiceClient _privateBlobServiceClient;
         private readonly BlobServiceClient _publicBlobServiceClient;
         private const byte FramesPerLayer = 64;
         private const double FunctionOutboundConnectionLimit = 600;
 
-        public BuilderFunction(IOptions<Connections> options, IAzureClientFactory<BlobServiceClient> azureClientFactory)
+        public BuilderFunction(IOptions<BuilderConfig> options, IAzureClientFactory<BlobServiceClient> azureClientFactory)
         {
-            _connections = options.Value;
+            _config = options.Value;
 
             _privateBlobServiceClient = azureClientFactory.CreateClient("PrivateBlobServiceClient");
             _publicBlobServiceClient = azureClientFactory.CreateClient("PublicBlobServiceClient");
@@ -139,7 +139,7 @@ namespace BuilderFunction
             var standardErrorTask = process.StandardError.ReadToEndAsync();
 
             // function will have a timeout so take away execution so far and 10 secconds margin for error
-            var internalTimeOut = _connections.FunctionTimeOut - TimeSpan.FromSeconds(10);
+            var internalTimeOut = _config.FunctionTimeOut - TimeSpan.FromSeconds(10);
             if (process.WaitForExit((int)internalTimeOut.TotalMilliseconds))
             {
                 var standardError = await standardErrorTask;
@@ -175,7 +175,7 @@ namespace BuilderFunction
             var workingDirectory = assetsDownload.WorkingDirectory;
 
             BlobServiceClient blobServiceClient;
-            if (_connections.Resolution == Resolution.Free.GetBlobPrefixByResolution())
+            if (_config.Resolution == Resolution.Free.GetBlobPrefixByResolution())
             {
                 blobServiceClient = _publicBlobServiceClient;
             }
@@ -187,7 +187,7 @@ namespace BuilderFunction
             var blobClients = new List<(BlobClient blobClient, string filePath)>();
             foreach (var layerId in assetsDownload.LayerIds)
             {
-                var tempImageDirectory = Path.Combine(workingDirectory, layerId, _connections.Resolution);
+                var tempImageDirectory = Path.Combine(workingDirectory, layerId, _config.Resolution);
 
                 log.LogInformation($"Creating directory {tempImageDirectory}");
                 Directory.CreateDirectory(tempImageDirectory);
@@ -197,7 +197,7 @@ namespace BuilderFunction
                 for (int j = 0; j < FramesPerLayer; j++)
                 {
                     var imageName = $"{j}.png";
-                    var blobClient = containerClient.GetBlobClient($"{_connections.Resolution}/{imageName}");
+                    var blobClient = containerClient.GetBlobClient($"{_config.Resolution}/{imageName}");
                     var filePath = Path.Combine(tempImageDirectory, imageName);
                     log.LogInformation($"Will download {imageName} to filepath {filePath}");
                     blobClients.Add((blobClient, filePath));
@@ -213,7 +213,7 @@ namespace BuilderFunction
                 blobClients.Add((blobClient, filePath));
             }
 
-            var batchSize = (int)Math.Floor(FunctionOutboundConnectionLimit / _connections.MaxConcurrentActivityFunctions);
+            var batchSize = (int)Math.Floor(FunctionOutboundConnectionLimit / _config.MaxConcurrentActivityFunctions);
             int numberOfBatches = (int)Math.Ceiling((double)blobClients.Count / batchSize);
             log.LogInformation($"Batch size {batchSize}, number of batches {numberOfBatches}");
 

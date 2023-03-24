@@ -20,7 +20,7 @@ namespace BuilderFunction
             };
 
             builder.Services.AddLogging();
-            builder.Services.AddOptions<Connections>().Configure<IConfiguration>(
+            builder.Services.AddOptions<BuilderConfig>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);

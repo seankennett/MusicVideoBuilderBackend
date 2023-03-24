@@ -11,7 +11,7 @@ namespace DataAccessLayer.Repositories
     {
         private readonly string _sqlConnection;
 
-        public ClipRepository(IOptions<Connections> connections)
+        public ClipRepository(IOptions<SqlConfig> connections)
         {
             _sqlConnection = connections.Value.SqlConnectionString;
         }

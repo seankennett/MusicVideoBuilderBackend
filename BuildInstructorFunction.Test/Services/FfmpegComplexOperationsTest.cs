@@ -34,7 +34,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildInputList(sb, firstClip, video.BPM, null, Resolution.Free);
+            var output = sut.BuildInputList(sb, firstClip, video.BPM, null, Resolution.Free, null);
 
             Assert.AreEqual(colour1, output.Single().id);
             Assert.AreEqual("[0:v]", output.Single().ffmpegReference);
@@ -71,7 +71,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildInputList(sb, firstClip, video.BPM, null, Resolution.Free);
+            var output = sut.BuildInputList(sb, firstClip, video.BPM, null, Resolution.Free, null);
 
             Assert.AreEqual(layer1.ToString(), output.Single().id);
             Assert.AreEqual("[0:v]", output.Single().ffmpegReference);
@@ -84,6 +84,7 @@ namespace BuildInstructorFunction.Test.Services
             var layer1 = Guid.NewGuid();
             var layer2 = Guid.NewGuid();
             var colour = "000000";
+            var watermarkFilePath = "watermark.png";
             var firstClip = new Clip
             {
                 ClipId = 1,
@@ -112,9 +113,9 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildInputList(sb, firstClip, video.BPM, null, Resolution.Free);
+            var output = sut.BuildInputList(sb, firstClip, video.BPM, null, Resolution.Free, watermarkFilePath);
 
-            Assert.AreEqual(3, output.Count);
+            Assert.AreEqual(4, output.Count);
 
             Assert.AreEqual(layer1.ToString(), output[0].id);
             Assert.AreEqual("[0:v]", output[0].ffmpegReference);
@@ -122,8 +123,10 @@ namespace BuildInstructorFunction.Test.Services
             Assert.AreEqual("[1:v]", output[1].ffmpegReference);
             Assert.AreEqual(colour, output[2].id);
             Assert.AreEqual("[2:v]", output[2].ffmpegReference);
+            Assert.AreEqual(watermarkFilePath, output[3].id);
+            Assert.AreEqual("[3:v]", output[3].ffmpegReference);
 
-            Assert.AreEqual($"-framerate 2160/90 -i {layer1}/free/%d.png -framerate 2160/90 -i {layer2}/free/%d.png -f lavfi -i color=0x{colour.ToUpper()}@1:s=384x216:r=2160/90 ", sb.ToString());
+            Assert.AreEqual($"-framerate 2160/90 -i {layer1}/free/%d.png -framerate 2160/90 -i {layer2}/free/%d.png -f lavfi -i color=0x{colour.ToUpper()}@1:s=384x216:r=2160/90 -i \"{watermarkFilePath}\" ", sb.ToString());
         }
 
         [TestMethod]
@@ -194,7 +197,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips);
+            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips, null);
 
             Assert.AreEqual("previous z1trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS,", sb.ToString());
         }
@@ -225,7 +228,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips);
+            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips, null);
 
             Assert.AreEqual("previous z1", sb.ToString());
         }
@@ -252,7 +255,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips);
+            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips, null);
 
             Assert.AreEqual("previous z1", sb.ToString());
         }
@@ -276,7 +279,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips);
+            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips, null);
 
             Assert.AreEqual("previous z1trim=start_frame=32:end_frame=48,setpts=PTS-STARTPTS,", sb.ToString());
         }
@@ -287,6 +290,7 @@ namespace BuildInstructorFunction.Test.Services
             var layer1 = Guid.NewGuid();
             var layer2 = Guid.NewGuid();
             var colour = "000000";
+            var watermarkFilePath = "watermark.png";
             var zeroClip = new Clip
             {
                 ClipId = 0,
@@ -305,16 +309,17 @@ namespace BuildInstructorFunction.Test.Services
             {
                 new (colour, "z1" ),
                 new (layer1.ToString(), "z2" ),
-                new (layer2.ToString(), "z3" )
+                new (layer2.ToString(), "z3" ),
+                new (watermarkFilePath, "z4" )
             };
 
             var sb = new StringBuilder("previous ");
 
             var sut = new FfmpegComplexOperations();
 
-            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips);
+            sut.BuildClipByOverlayAndTrim(sb, zeroClip, splitClips, watermarkFilePath);
 
-            Assert.AreEqual("previous z1z2overlay[o0];[o0]z3overlay,trim=start_frame=32:end_frame=48,setpts=PTS-STARTPTS,", sb.ToString());
+            Assert.AreEqual("previous z1z2overlay[o0];[o0]z3overlay[o1];[o1]z4overlay=0:(main_h-overlay_h),trim=start_frame=32:end_frame=48,setpts=PTS-STARTPTS,", sb.ToString());
         }
     }
 }

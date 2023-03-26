@@ -11,25 +11,26 @@ using System.Diagnostics;
 using System.Linq;
 using BuilderFunction.Models;
 using SharedEntities.Models;
+using System.Net.Http;
 using SharedEntities.Extensions;
-using Microsoft.Extensions.Azure;
+using SharedEntities;
 
 namespace BuilderFunction
 {
     public class BuilderFunction
     {
         private readonly BuilderConfig _config;
-        private readonly BlobServiceClient _privateBlobServiceClient;
-        private readonly BlobServiceClient _publicBlobServiceClient;
+        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private const byte FramesPerLayer = 64;
         private const double FunctionOutboundConnectionLimit = 600;
 
-        public BuilderFunction(IOptions<BuilderConfig> options, IAzureClientFactory<BlobServiceClient> azureClientFactory)
+        public BuilderFunction(IOptions<BuilderConfig> options, BlobServiceClient blobServiceClient, IHttpClientFactory httpClientFactory)
         {
             _config = options.Value;
 
-            _privateBlobServiceClient = azureClientFactory.CreateClient("PrivateBlobServiceClient");
-            _publicBlobServiceClient = azureClientFactory.CreateClient("PublicBlobServiceClient");
+            _blobServiceClient = blobServiceClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         [FunctionName("BuilderExecutor")]
@@ -163,7 +164,7 @@ namespace BuilderFunction
         public async Task AssetsUploadActivity([ActivityTrigger] IDurableActivityContext activityContext, ILogger log)
         {
             var assetUpload = activityContext.GetInput<AssetUpload>();
-            var privateContainerCLient = _privateBlobServiceClient.GetBlobContainerClient(assetUpload.UserContainerName);
+            var privateContainerCLient = _blobServiceClient.GetBlobContainerClient(assetUpload.UserContainerName);
             var outputBlobClient = privateContainerCLient.GetBlobClient($"{assetUpload.OutputBlobPrefix}/{assetUpload.OutputFileName}");
             await outputBlobClient.UploadAsync(Path.Combine(assetUpload.WorkingDirectory, assetUpload.OutputBlobPrefix, assetUpload.OutputFileName), overwrite: true);
         }
@@ -174,41 +175,49 @@ namespace BuilderFunction
             var assetsDownload = activityContext.GetInput<AssetsDownloadDTO>();
             var workingDirectory = assetsDownload.WorkingDirectory;
 
-            BlobServiceClient blobServiceClient;
-            if (_config.Resolution == Resolution.Free.GetBlobPrefixByResolution())
-            {
-                blobServiceClient = _publicBlobServiceClient;
-            }
-            else
-            {
-                blobServiceClient = _privateBlobServiceClient;
-            }
+            var resolution = assetsDownload.ShouldWatermark ? Resolution.Free : Resolution.Hd;
+            var resolutionBlobPrefix = resolution.GetBlobPrefixByResolution();
 
             var blobClients = new List<(BlobClient blobClient, string filePath)>();
             foreach (var layerId in assetsDownload.LayerIds)
             {
-                var tempImageDirectory = Path.Combine(workingDirectory, layerId, _config.Resolution);
+                var tempImageDirectory = Path.Combine(workingDirectory, layerId, resolutionBlobPrefix);
 
                 log.LogInformation($"Creating directory {tempImageDirectory}");
                 Directory.CreateDirectory(tempImageDirectory);
 
-                var containerClient = blobServiceClient.GetBlobContainerClient(layerId);
+                var layerContainerClient = _blobServiceClient.GetBlobContainerClient(layerId);
 
                 for (int j = 0; j < FramesPerLayer; j++)
                 {
                     var imageName = $"{j}.png";
-                    var blobClient = containerClient.GetBlobClient($"{_config.Resolution}/{imageName}");
+                    var blobClient = layerContainerClient.GetBlobClient($"{resolutionBlobPrefix}/{imageName}");
                     var filePath = Path.Combine(tempImageDirectory, imageName);
                     log.LogInformation($"Will download {imageName} to filepath {filePath}");
                     blobClients.Add((blobClient, filePath));
                 }
             }
 
-            var privateContainerClient = _privateBlobServiceClient.GetBlobContainerClient(assetsDownload.UserContainerName);
+            var containerClient = this._blobServiceClient.GetBlobContainerClient(assetsDownload.UserContainerName);
+            var tempFilePath = Path.Combine(workingDirectory, assetsDownload.TemporaryBlobPrefix);
+            
+            // consider putting in common location instead
+            if (assetsDownload.ShouldWatermark)
+            {
+                var httpClient = _httpClientFactory.CreateClient(SharedConstants.WatermarkFileName);
+                using (var stream = await httpClient.GetStreamAsync(SharedConstants.WatermarkFileName))
+                {
+                    using (var fileStream = new FileStream(Path.Combine(tempFilePath, SharedConstants.WatermarkFileName), FileMode.CreateNew))
+                    {
+                        await stream.CopyToAsync(fileStream);
+                    }
+                }
+            }
+
             foreach (var temporaryFile in assetsDownload.TemporaryFiles)
             {
-                var blobClient = privateContainerClient.GetBlobClient($"{assetsDownload.TemporaryBlobPrefix}/{temporaryFile}");
-                var filePath = Path.Combine(workingDirectory, assetsDownload.TemporaryBlobPrefix, temporaryFile);
+                var blobClient = containerClient.GetBlobClient($"{assetsDownload.TemporaryBlobPrefix}/{temporaryFile}");
+                var filePath = Path.Combine(tempFilePath, temporaryFile);
                 log.LogInformation($"Will download {temporaryFile} to filepath {filePath}");
                 blobClients.Add((blobClient, filePath));
             }

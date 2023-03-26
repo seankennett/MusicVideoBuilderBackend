@@ -15,7 +15,7 @@ namespace BuildInstructorFunction.Services
             _ffmpegComplexOperations = ffmpegComplexOperations;
         }
 
-        public string GetClipCode(Clip clip, Resolution resolution, Formats format, byte bpm, bool fromCommandLine, string outputBlobPrefix)
+        public string GetClipCode(Clip clip, Resolution resolution, Formats format, byte bpm, bool fromCommandLine, string outputBlobPrefix, string watermarkFilePath)
         {
             var command = new StringBuilder();
             if (fromCommandLine)
@@ -25,14 +25,14 @@ namespace BuildInstructorFunction.Services
 
             command.Append("-y ");
 
-            var inputList = _ffmpegComplexOperations.BuildInputList(command, clip, bpm, null, resolution);
+            var inputList = _ffmpegComplexOperations.BuildInputList(command, clip, bpm, null, resolution, watermarkFilePath);
 
             command.Append($"-filter_complex \"");
 
-            if (clip.BackgroundColour != null && clip.Layers != null)
+            if ((clip.BackgroundColour != null && clip.Layers != null) || (clip.BackgroundColour != null && watermarkFilePath != null))
             {
                 inputList = _ffmpegComplexOperations.SetBackgroundColourMaxFrames(command, clip.BackgroundColour, inputList, "b");
-                _ffmpegComplexOperations.BuildClipByOverlayAndTrim(command, clip, inputList);
+                _ffmpegComplexOperations.BuildClipByOverlayAndTrim(command, clip, inputList, watermarkFilePath);
             }
             else if (clip.BackgroundColour != null)
             {
@@ -40,7 +40,7 @@ namespace BuildInstructorFunction.Services
             }
             else
             {
-                _ffmpegComplexOperations.BuildClipByOverlayAndTrim(command, clip, inputList);
+                _ffmpegComplexOperations.BuildClipByOverlayAndTrim(command, clip, inputList, watermarkFilePath);
             }
 
             // make all clips same format so demuxer can be used later

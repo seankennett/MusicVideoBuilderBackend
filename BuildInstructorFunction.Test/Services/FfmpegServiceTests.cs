@@ -13,6 +13,8 @@ namespace BuildInstructorFunction.Test.Services
             var layer2 = Guid.NewGuid();
             var layer3 = Guid.NewGuid();
 
+            var watermarkFilePath = "watermark.png";
+
             var clip = new Clip
             {
                 ClipId = 2,
@@ -30,8 +32,8 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix");
-            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -filter_complex \"[3:v]trim=end_frame=64[b];[b][0:v]overlay[o0];[o0][1:v]overlay[o1];[o1][2:v]overlay,format=yuv420p\" ouputprefix/2.api'", result);
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", watermarkFilePath);
+            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -i \"{watermarkFilePath}\" -filter_complex \"[3:v]trim=end_frame=64[b];[b][0:v]overlay[o0];[o0][1:v]overlay[o1];[o1][2:v]overlay[o2];[o2][4:v]overlay=0:(main_h-overlay_h),format=yuv420p\" ouputprefix/2.api'", result);
         }
 
         [TestMethod]
@@ -58,7 +60,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix");
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null);
             Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -filter_complex \"[0:v][1:v]overlay[o0];[o0][2:v]overlay,format=yuv420p\" ouputprefix/2.api'", result);
         }
 
@@ -66,8 +68,6 @@ namespace BuildInstructorFunction.Test.Services
         public void GetClipCodeLayer()
         {
             var layer1 = Guid.NewGuid();
-            var layer2 = Guid.NewGuid();
-            var layer3 = Guid.NewGuid();
 
             var clip = new Clip
             {
@@ -84,7 +84,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix");
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null);
             Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -filter_complex \"[0:v]format=yuv420p\" ouputprefix/2.api'", result);
         }
 
@@ -103,7 +103,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix");
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null);
             Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -filter_complex \"[0:v]trim=end_frame=64,format=yuv420p\" ouputprefix/2.api'", result);
         }
 

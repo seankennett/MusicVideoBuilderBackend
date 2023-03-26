@@ -51,6 +51,7 @@ namespace BuildInstructorFunction.Services
             var tempBlobPrefix = GuidHelper.GetTempBlobPrefix(buildId);
 
             var is4KFormat = build.Resolution == Resolution.FourK;
+            var watermarkFilePath = build.Resolution == Resolution.Free ? $"{tempBlobPrefix}/watermark.png" : null;
             var uniqueClips = video.Clips.DistinctBy(x => x.ClipId).ToList();
             var layerIdsPerClip = new Dictionary<int, IEnumerable<string>>();
             var uniqueLayers = new List<string>();
@@ -63,7 +64,9 @@ namespace BuildInstructorFunction.Services
                     //_ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, true, ".")
                     FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, is4KFormat,
                 // directory will not be created in clipcode's batch case so putting file flat on file system
-                is4KFormat ? "." : tempBlobPrefix),
+                is4KFormat ? "." : tempBlobPrefix,
+                watermarkFilePath
+                ),
                     VideoName = $"{clip.ClipId}.{video.Format}"
                 });
 
@@ -126,7 +129,7 @@ namespace BuildInstructorFunction.Services
             }
             else
             {
-                await _builderFunctionSender.SendBuilderFunctionMessage(userContainerName, hasAudio, resolution, outputBlobPrefix, tempBlobPrefix, uniqueLayers, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
+                await _builderFunctionSender.SendBuilderFunctionMessage(userContainerName, hasAudio, resolution, outputBlobPrefix, tempBlobPrefix, uniqueLayers, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand, watermarkFilePath != null);
             }
         }
     }

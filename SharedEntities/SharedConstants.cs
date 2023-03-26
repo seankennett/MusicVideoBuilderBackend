@@ -10,6 +10,7 @@
         public const string BuildInstructorQueue = "build-instructor";
         public const string TempBlobPrefix = "temp";
         public const string AudioFileName = "audio.mp3";
+        public const string WatermarkFileName = "watermark.png";
         public const int VideoSplitLengthSeconds = 15;
         public const string UploadLayerQueue = "upload-layer";
         public const string BuilderQueueSuffix = "-builder";

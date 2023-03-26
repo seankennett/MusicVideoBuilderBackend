@@ -10,7 +10,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SharedEntities;
 using SharedEntities.Models;
 using UploadLayerFunction.Interfaces;
@@ -123,10 +122,8 @@ namespace UploadLayerFunction
         {
             var input = activityContext.GetInput<ProcessImageDTO>();
             var privateContainerClient = _privateBlobServiceClient.GetBlobContainerClient(input.ContainerName);
-            var publicContainerClient = _publicBlobServiceClient.GetBlobContainerClient(input.ContainerName);
 
             var blobClient = privateContainerClient.GetBlobClient(input.OriginalName);
-            string watermarkFilePath = Path.Combine(context.FunctionAppDirectory, "watermark.png");
 
             using (var memoryStream = new MemoryStream())
             {
@@ -142,7 +139,6 @@ namespace UploadLayerFunction
                     {
                         throw new ArgumentException("Invalid image");
                     }
-                    // AddPixelToNonOpaque(image); doesnt seem to be enough
 
                     var blobClient4k = privateContainerClient.GetBlobClient($"4k/{input.Index}.png");
                     if (!await blobClient4k.ExistsAsync())
@@ -151,7 +147,6 @@ namespace UploadLayerFunction
                     }
 
                     image.Resize(1920, 1080);
-                    // AddPixelToNonOpaque(image); doesnt seem to be enough
 
                     var blobClientHd = privateContainerClient.GetBlobClient($"hd/{input.Index}.png");
                     if (!await blobClientHd.ExistsAsync())
@@ -160,35 +155,18 @@ namespace UploadLayerFunction
                     }
 
                     image.Resize(384, 216);
-                    var blobClientFree = publicContainerClient.GetBlobClient($"free/{input.Index}.png");
+                    var blobClientFree = privateContainerClient.GetBlobClient($"free/{input.Index}.png");
 
-                    using (var watermark = new MagickImage(watermarkFilePath))
+                    var output = image.ToByteArray();
+                    if (!await blobClientFree.ExistsAsync())
                     {
-                        // Draw the watermark in the middle
-                        image.Composite(watermark, Gravity.Southeast, 5, 0, CompositeOperator.Over);
-                        var output = image.ToByteArray();
-                        if (!await blobClientFree.ExistsAsync())
-                        {
-                            await blobClientFree.UploadAsync(new BinaryData(output));
-                        }
-
-                        return output;
+                        await blobClientFree.UploadAsync(new BinaryData(output));
                     }
+
+                    return output;
                 }
             }
 
-        }
-
-        private void AddPixelToNonOpaque(IMagickImage<ushort> image)
-        {
-            // would love to know how to detect fully clear images
-            if (!image.IsOpaque)
-            {
-                new Drawables()
-                    .FillColor(new MagickColor("#007BFF"))
-                    .Rectangle(0, 0, 1, 1)
-                    .Draw(image);
-            }
         }
     }
 }

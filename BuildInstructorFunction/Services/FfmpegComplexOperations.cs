@@ -9,22 +9,31 @@ namespace BuildInstructorFunction.Services
 {
     public class FfmpegComplexOperations : IFfmpegComplexOperations
     {
-        public List<(string id, string ffmpegReference)> BuildInputList(StringBuilder command, Clip clip, byte bpm, string audioFileName, Resolution resolution)
+        public List<(string id, string ffmpegReference)> BuildInputList(StringBuilder command, Clip clip, byte bpm, string audioFileName, Resolution resolution, string watermarkFilePath)
         {
             List<(string id, string ffmpegReference)> inputList = new List<(string id, string ffmpegReference)>();
             var uniqueUserLayers = clip.Layers != null ? clip.Layers.DistinctBy(x => x.LayerId).ToList() : new List<Layer>();
             var framerate = $"{bpm * SharedConstants.OutputFrameRate}/{SharedConstants.MinimumBpm}";
+            var overallIndex = 0;
             for (var i = 0; i < uniqueUserLayers.Count; i++)
             {
                 var userLayer = uniqueUserLayers[i];
                 command.Append($"-framerate {framerate} -i {userLayer.LayerId}/{resolution.GetBlobPrefixByResolution()}/%d.png ");
-                inputList.Add((userLayer.LayerId.ToString(), $"[{i}:v]"));
+                inputList.Add((userLayer.LayerId.ToString(), $"[{overallIndex}:v]"));
+                overallIndex++;
             }
 
             if (clip.BackgroundColour != null)
             {
                 command.Append($"-f lavfi -i color=0x{clip.BackgroundColour.ToUpper()}@1:s={GetFormatedResolution(resolution)}:r={framerate} ");
-                inputList.Add((clip.BackgroundColour, $"[{uniqueUserLayers.Count}:v]"));
+                inputList.Add((clip.BackgroundColour, $"[{overallIndex}:v]"));
+                overallIndex++;
+            }
+
+            if (watermarkFilePath != null)
+            {
+                command.Append($"-i \"{watermarkFilePath}\" ");
+                inputList.Add((watermarkFilePath, $"[{overallIndex}:v]"));
             }
 
             if (audioFileName != null)
@@ -67,7 +76,7 @@ namespace BuildInstructorFunction.Services
             return inputList;
         }
 
-        public void BuildClipByOverlayAndTrim(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> layers)
+        public void BuildClipByOverlayAndTrim(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> inputs, string watermarkFilePath)
         {
             var targetIds = new List<string>();
             if (clip.BackgroundColour != null)
@@ -80,9 +89,14 @@ namespace BuildInstructorFunction.Services
                 targetIds.AddRange(clip.Layers.Select(x => x.LayerId.ToString()));
             }
 
+            if (watermarkFilePath != null)
+            {
+                targetIds.Add(watermarkFilePath);
+            }
+
             if (targetIds.Count == 1)
             {
-                var matchedReference = layers.First(x => x.id == targetIds.First()).ffmpegReference;
+                var matchedReference = inputs.First(x => x.id == targetIds.First()).ffmpegReference;
                 if (clip.BeatLength != SharedConstants.BeatsPerLayer)
                 {
                     var startFrame = (clip.StartingBeat - 1) * SharedConstants.FramesPerBeat;
@@ -102,16 +116,20 @@ namespace BuildInstructorFunction.Services
                     if (j == 0)
                     {
                         var targetId = targetIds[j];
-                        previousOutputReference = layers.First(x => x.id == targetId).ffmpegReference;
+                        previousOutputReference = inputs.First(x => x.id == targetId).ffmpegReference;
                     }
 
                     var nextTargetId = targetIds[j + 1];
-                    var nextUserLayerReference = layers.First(x => x.id == nextTargetId).ffmpegReference;
-
+                    var nextFfmpegReference = inputs.First(x => x.id == nextTargetId).ffmpegReference;
 
                     var outputReference = $"[o{j}]";
 
-                    command.Append($"{previousOutputReference}{nextUserLayerReference}overlay");
+                    command.Append($"{previousOutputReference}{nextFfmpegReference}overlay");
+
+                    if (nextTargetId == watermarkFilePath)
+                    {
+                        command.Append($"=0:(main_h-overlay_h)");
+                    }
 
                     // last
                     if (j == targetIds.Count - 2)

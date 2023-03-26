@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using BuilderFunction;
 using Microsoft.Extensions.Azure;
+using SharedEntities;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BuilderFunction
@@ -30,8 +31,11 @@ namespace BuilderFunction
             builder.Services.AddAzureClients(clientBuilder =>
             {
                 clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
-                clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"])).WithName("PrivateBlobServiceClient");
-                clientBuilder.AddBlobServiceClient(new Uri(configuration["PublicBlobStorageUrl"])).WithName("PublicBlobServiceClient");
+                clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
+            });
+            builder.Services.AddHttpClient(SharedConstants.WatermarkFileName, httpClient =>
+            {
+                httpClient.BaseAddress = new Uri("https://cdn.musicvideobuilder.com/custom-pages/");
             });
         }
 

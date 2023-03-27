@@ -9,7 +9,7 @@ namespace BuilderFunction.Models
         {
             this.LayerIds = assetDownload.LayerIds;
             this.TemporaryFiles= assetDownload.TemporaryFiles;
-            this.ShouldWatermark = assetDownload.ShouldWatermark;
+            this.Resolution = assetDownload.Resolution;
         }
         public string WorkingDirectory { get; set; }
         public string TemporaryBlobPrefix { get; set; }

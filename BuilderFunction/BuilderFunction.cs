@@ -175,7 +175,7 @@ namespace BuilderFunction
             var assetsDownload = activityContext.GetInput<AssetsDownloadDTO>();
             var workingDirectory = assetsDownload.WorkingDirectory;
 
-            var resolution = assetsDownload.ShouldWatermark ? Resolution.Free : Resolution.Hd;
+            var resolution = assetsDownload.Resolution;
             var resolutionBlobPrefix = resolution.GetBlobPrefixByResolution();
 
             var blobClients = new List<(BlobClient blobClient, string filePath)>();
@@ -200,9 +200,9 @@ namespace BuilderFunction
 
             var containerClient = this._blobServiceClient.GetBlobContainerClient(assetsDownload.UserContainerName);
             var tempFilePath = Path.Combine(workingDirectory, assetsDownload.TemporaryBlobPrefix);
-            
+
             // consider putting in common location instead
-            if (assetsDownload.ShouldWatermark)
+            if (assetsDownload.Resolution == Resolution.Free)
             {
                 var httpClient = _httpClientFactory.CreateClient(SharedConstants.WatermarkFileName);
                 using (var stream = await httpClient.GetStreamAsync(SharedConstants.WatermarkFileName))

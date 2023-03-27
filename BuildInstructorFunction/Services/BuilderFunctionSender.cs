@@ -18,7 +18,7 @@ namespace BuildInstructorFunction.Services
         {
             _storageService = storageService;
         }
-        public async Task SendBuilderFunctionMessage(string userContainerName, bool hasAudio, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, List<string> uniqueLayers, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand, bool shouldWatermark)
+        public async Task SendBuilderFunctionMessage(string userContainerName, bool hasAudio, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, List<string> uniqueLayers, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)
         {
             BuilderMessage builderMessage = new BuilderMessage
             {
@@ -33,7 +33,7 @@ namespace BuildInstructorFunction.Services
                 {
                     LayerIds = uniqueLayers,
                     TemporaryFiles = new List<string> { InstructorConstants.AllFramesConcatFileName, InstructorConstants.SplitFramesConcatFileName },
-                    ShouldWatermark = shouldWatermark
+                    Resolution = resolution
                 }
             };
 

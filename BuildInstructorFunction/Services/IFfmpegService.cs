@@ -1,6 +1,7 @@
-﻿using SharedEntities.Models;
+﻿using BuildEntities;
 using System;
 using System.Collections.Generic;
+using VideoDataAccess.Entities;
 
 namespace BuildInstructorFunction.Services
 {

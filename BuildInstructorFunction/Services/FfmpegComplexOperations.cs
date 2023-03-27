@@ -1,9 +1,11 @@
-﻿using SharedEntities;
-using SharedEntities.Extensions;
-using SharedEntities.Models;
+﻿using BuildEntities;
+using BuilderEntities.Extensions;
+using LayerEntities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VideoDataAccess;
+using VideoDataAccess.Entities;
 
 namespace BuildInstructorFunction.Services
 {
@@ -13,7 +15,7 @@ namespace BuildInstructorFunction.Services
         {
             List<(string id, string ffmpegReference)> inputList = new List<(string id, string ffmpegReference)>();
             var uniqueUserLayers = clip.Layers != null ? clip.Layers.DistinctBy(x => x.LayerId).ToList() : new List<Layer>();
-            var framerate = $"{bpm * SharedConstants.OutputFrameRate}/{SharedConstants.MinimumBpm}";
+            var framerate = $"{bpm * InstructorConstants.OutputFrameRate}/{InstructorConstants.MinimumBpm}";
             var overallIndex = 0;
             for (var i = 0; i < uniqueUserLayers.Count; i++)
             {
@@ -49,11 +51,11 @@ namespace BuildInstructorFunction.Services
             switch (resolution)
             {
                 case Resolution.Hd:
-                    return $"{SharedConstants.HdWidth}x{SharedConstants.HdHeight}";
+                    return $"{InstructorConstants.HdWidth}x{InstructorConstants.HdHeight}";
                 case Resolution.FourK:
-                    return $"{SharedConstants.FourKWidth}x{SharedConstants.FourKHeight}";
+                    return $"{InstructorConstants.FourKWidth}x{InstructorConstants.FourKHeight}";
                 default:
-                    return $"{SharedConstants.FreeWidth}x{SharedConstants.FreeHeight}";
+                    return $"{InstructorConstants.FreeWidth}x{InstructorConstants.FreeHeight}";
             }
         }
 
@@ -61,7 +63,7 @@ namespace BuildInstructorFunction.Services
         {
             var matchingInputindex = inputList.FindIndex(x => x.id == backgroundColour);
             var output = $"[{ffmpegOutputPrefix}]";
-            command.Append($"{inputList[matchingInputindex].ffmpegReference}trim=end_frame={SharedConstants.FramesInLayer}");
+            command.Append($"{inputList[matchingInputindex].ffmpegReference}trim=end_frame={InstructorConstants.FramesInLayer}");
             if (ffmpegOutputPrefix != null)
             {
                 command.Append($"{output};");
@@ -97,10 +99,10 @@ namespace BuildInstructorFunction.Services
             if (targetIds.Count == 1)
             {
                 var matchedReference = inputs.First(x => x.id == targetIds.First()).ffmpegReference;
-                if (clip.BeatLength != SharedConstants.BeatsPerLayer)
+                if (clip.BeatLength != VideoDataAccessConstants.BeatsPerLayer)
                 {
-                    var startFrame = (clip.StartingBeat - 1) * SharedConstants.FramesPerBeat;
-                    var endFrame = startFrame + clip.BeatLength * SharedConstants.FramesPerBeat;
+                    var startFrame = (clip.StartingBeat - 1) * InstructorConstants.FramesPerBeat;
+                    var endFrame = startFrame + clip.BeatLength * InstructorConstants.FramesPerBeat;
                     command.Append($"{matchedReference}trim=start_frame={startFrame}:end_frame={endFrame},setpts=PTS-STARTPTS,");
                 }
                 else
@@ -135,10 +137,10 @@ namespace BuildInstructorFunction.Services
                     if (j == targetIds.Count - 2)
                     {
                         // beat length is not standard
-                        if (clip.BeatLength != SharedConstants.BeatsPerLayer)
+                        if (clip.BeatLength != VideoDataAccessConstants.BeatsPerLayer)
                         {
-                            var startFrame = (clip.StartingBeat - 1) * SharedConstants.FramesPerBeat;
-                            var endFrame = startFrame + clip.BeatLength * SharedConstants.FramesPerBeat;
+                            var startFrame = (clip.StartingBeat - 1) * InstructorConstants.FramesPerBeat;
+                            var endFrame = startFrame + clip.BeatLength * InstructorConstants.FramesPerBeat;
                             command.Append($",trim=start_frame={startFrame}:end_frame={endFrame},setpts=PTS-STARTPTS,");
                         }
                         else

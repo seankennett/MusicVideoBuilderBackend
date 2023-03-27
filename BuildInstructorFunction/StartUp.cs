@@ -1,13 +1,14 @@
 ﻿using Azure.Identity;
 using Azure.Storage.Queues;
+using BuildDataAccess.Repositories;
 using BuildInstructorFunction;
 using BuildInstructorFunction.Services;
-using DataAccessLayer.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using VideoDataAccess.Repositories;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BuildInstructorFunction

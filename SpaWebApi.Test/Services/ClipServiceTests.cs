@@ -1,11 +1,13 @@
-using DataAccessLayer.Repositories;
+using LayerEntities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using SharedEntities.Models;
+using SpaWebApi.Repositories;
 using SpaWebApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using VideoDataAccess.Entities;
+using VideoDataAccess.Repositories;
 
 namespace SpaWebApi.Test.Services
 {

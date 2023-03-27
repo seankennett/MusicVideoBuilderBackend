@@ -1,6 +1,5 @@
-﻿using SharedEntities.Models;
-using SpaWebApi.Models;
-using Stripe;
+﻿using SpaWebApi.Models;
+using VideoDataAccess.Entities;
 
 namespace SpaWebApi.Services
 {

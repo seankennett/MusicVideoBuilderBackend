@@ -1,8 +1,8 @@
-﻿using DataAccessLayer.Repositories;
+﻿using LayerDataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using SharedEntities.Models;
+using SpaWebApi.Repositories;
 
 namespace SpaWebApi.Controllers
 {

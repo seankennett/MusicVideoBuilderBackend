@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using SharedEntities.Models;
 using SpaWebApi.Extensions;
 using SpaWebApi.Services;
+using VideoDataAccess.Entities;
 
 namespace SpaWebApi.Controllers
 {

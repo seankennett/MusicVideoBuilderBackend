@@ -3,11 +3,13 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Messaging.EventGrid;
-using DataAccessLayer.Repositories;
+using BuildDataAccess.Repositories;
+using BuildEntities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Microsoft.Extensions.Logging;
 using NewVideoFunction.Interfaces;
+using SharedEntities.Models;
 
 namespace NewVideoFunction
 {
@@ -79,10 +81,10 @@ Content-Length: 1008
                 return;
             }
 
-            build.BuildStatus = SharedEntities.Models.BuildStatus.PaymentChargePending;
+            build.BuildStatus = BuildStatus.PaymentChargePending;
             await _buildRepository.SaveAsync(build, build.UserObjectId);
 
-            if (build.Resolution != SharedEntities.Models.Resolution.Free)
+            if (build.Resolution != Resolution.Free)
             {
                 if (!await _chargeService.Charge(build.PaymentIntentId))
                 {

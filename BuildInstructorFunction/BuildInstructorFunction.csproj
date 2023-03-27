@@ -18,7 +18,9 @@
     <PackageReference Include="Stripe.net" Version="41.9.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+    <ProjectReference Include="..\BuildDataAccess\BuildDataAccess.csproj" />
+    <ProjectReference Include="..\BuilderEntities\BuilderEntities.csproj" />
+    <ProjectReference Include="..\VideoDataAccess\VideoDataAccess.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

@@ -6,34 +6,34 @@ using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ImageMagick;
+using LayerDataAccess.Entities;
+using LayerDataAccess.Repositories;
+using LayerEntities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
-using SharedEntities;
-using SharedEntities.Models;
-using UploadLayerFunction.Interfaces;
 using UploadLayerFunction.Models;
 
 namespace UploadLayerFunction
 {
     public class UploadLayerFunction
     {
-        private readonly IDatabaseWriter _databaseWriter;
         private readonly BlobServiceClient _privateBlobServiceClient;
         private readonly BlobServiceClient _publicBlobServiceClient;
+        private readonly ILayerRepository _layerRepository;
         private const int NumberOfImages = 64;
         private const int SpriteHeight = 216;
         private const int SpriteWidth = 384;
-        public UploadLayerFunction(IDatabaseWriter databaseWriter, IAzureClientFactory<BlobServiceClient> azureClientFactory)
+        public UploadLayerFunction(ILayerRepository layerRepository, IAzureClientFactory<BlobServiceClient> azureClientFactory)
         {
             _privateBlobServiceClient = azureClientFactory.CreateClient("PrivateBlobServiceClient");
             _publicBlobServiceClient = azureClientFactory.CreateClient("PublicBlobServiceClient");
-            _databaseWriter = databaseWriter;
+            _layerRepository = layerRepository;
         }
 
         [FunctionName("UploadLayerFunctionExecutor")]
-        public async Task RunExecutor([QueueTrigger(SharedConstants.UploadLayerQueue, Connection = "ConnectionString")] LayerUploadMessage layerUploadMessage, [DurableClient] IDurableOrchestrationClient starter)
+        public async Task RunExecutor([QueueTrigger("%QueueName%", Connection = "ConnectionString")] LayerUploadMessage layerUploadMessage, [DurableClient] IDurableOrchestrationClient starter)
         {
             await starter.StartNewAsync("UploadLayerFunctionOrchastrator", layerUploadMessage);
         }
@@ -107,7 +107,7 @@ namespace UploadLayerFunction
                 }
             }
 
-            await _databaseWriter.InsertLayer(input.LayerUploadMessage);
+            await _layerRepository.InsertLayer(input.LayerUploadMessage);
 
             var containerClient = _privateBlobServiceClient.GetBlobContainerClient(input.ContainerName);
             foreach (var blobName in input.BlobNames)

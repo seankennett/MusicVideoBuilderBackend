@@ -1,6 +1,7 @@
-﻿using DataAccessLayer.Repositories;
-using SharedEntities;
-using SharedEntities.Models;
+﻿using SpaWebApi.Repositories;
+using VideoDataAccess;
+using VideoDataAccess.Entities;
+using VideoDataAccess.Repositories;
 
 namespace SpaWebApi.Services
 {
@@ -38,7 +39,7 @@ namespace SpaWebApi.Services
 
         public async Task<Clip> SaveAsync(Guid userObjectId, Clip clip)
         {
-            if (SharedConstants.BeatsPerLayer - clip.BeatLength < clip.StartingBeat - 1)
+            if (VideoDataAccessConstants.BeatsPerLayer - clip.BeatLength < clip.StartingBeat - 1)
             {
                 throw new Exception("Invalid starting postion for beat length");
             }

@@ -1,4 +1,4 @@
-﻿using SharedEntities.Models;
+﻿using LayerDataAccess.Entities;
 using System.Collections.Generic;
 
 namespace UploadLayerFunction.Models

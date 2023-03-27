@@ -1,5 +1,5 @@
 ﻿using Azure.Identity;
-using DataAccessLayer.Repositories;
+using BuildDataAccess.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;

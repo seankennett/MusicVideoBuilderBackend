@@ -6,8 +6,12 @@ trigger:
         include:
         - BuildInstructorFunction
         - BuildInstructorFunction.Test
-        - SharedEntities
-        - DataAccessLayer
+        - BuildDataAccess
+        - BuildEntities
+        - BuilderEntities
+        - VideoDataAccess
+        - LayerEntities
+        - SqlConfig
 
 variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'

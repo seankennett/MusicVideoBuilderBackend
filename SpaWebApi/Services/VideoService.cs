@@ -1,5 +1,6 @@
-﻿using DataAccessLayer.Repositories;
-using SharedEntities.Models;
+﻿using SpaWebApi.Repositories;
+using VideoDataAccess.Entities;
+using VideoDataAccess.Repositories;
 
 namespace SpaWebApi.Services
 {

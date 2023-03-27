@@ -1,8 +1,8 @@
-﻿using SharedEntities;
-using SharedEntities.Models;
+﻿using BuildEntities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using VideoDataAccess.Entities;
 
 namespace BuildInstructorFunction.Services
 {
@@ -99,7 +99,7 @@ namespace BuildInstructorFunction.Services
                 command.Append("/bin/bash -c 'ffmpeg ");
             }
 
-            command.Append($"-y -ss {startTime:c} -i {blobPrefix}/{videoToSplit} -t {duration:c} -filter_complex \"fps={SharedConstants.OutputFrameRate}");
+            command.Append($"-y -ss {startTime:c} -i {blobPrefix}/{videoToSplit} -t {duration:c} -filter_complex \"fps={InstructorConstants.OutputFrameRate}");
             if (videoDelayMilliseconds.HasValue)
             {
                 command.Append($",tpad=start_duration={videoDelayMilliseconds.Value}ms:start_mode=clone");

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LayerDataAccess.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using SharedEntities.Models;
 using SpaWebApi.Extensions;
 using SpaWebApi.Models;
 using SpaWebApi.Services;

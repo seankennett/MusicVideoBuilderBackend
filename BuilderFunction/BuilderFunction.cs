@@ -10,10 +10,10 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Linq;
 using BuilderFunction.Models;
-using SharedEntities.Models;
 using System.Net.Http;
-using SharedEntities.Extensions;
-using SharedEntities;
+using BuilderEntities.Entities;
+using BuilderEntities.Extensions;
+using BuildEntities;
 
 namespace BuilderFunction
 {
@@ -204,10 +204,10 @@ namespace BuilderFunction
             // consider putting in common location instead
             if (assetsDownload.Resolution == Resolution.Free)
             {
-                var httpClient = _httpClientFactory.CreateClient(SharedConstants.WatermarkFileName);
-                using (var stream = await httpClient.GetStreamAsync(SharedConstants.WatermarkFileName))
+                var httpClient = _httpClientFactory.CreateClient(BuilderConstants.WatermarkFileName);
+                using (var stream = await httpClient.GetStreamAsync(BuilderConstants.WatermarkFileName))
                 {
-                    using (var fileStream = new FileStream(Path.Combine(tempFilePath, SharedConstants.WatermarkFileName), FileMode.CreateNew))
+                    using (var fileStream = new FileStream(Path.Combine(tempFilePath, BuilderConstants.WatermarkFileName), FileMode.CreateNew))
                     {
                         await stream.CopyToAsync(fileStream);
                     }

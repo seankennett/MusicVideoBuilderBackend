@@ -1,11 +1,12 @@
-﻿using Azure.Storage.Queues;
-using DataAccessLayer.Repositories;
-using Microsoft.Extensions.Options;
-using SharedEntities;
-using SharedEntities.Extensions;
+﻿using BuildDataAccess;
+using BuildDataAccess.Entities;
+using BuildDataAccess.Extensions;
+using BuildDataAccess.Repositories;
+using BuildEntities;
 using SharedEntities.Models;
 using SpaWebApi.Models;
-using System.Text.Json;
+using VideoDataAccess.Entities;
+using VideoDataAccess.Repositories;
 
 namespace SpaWebApi.Services
 {
@@ -16,7 +17,7 @@ namespace SpaWebApi.Services
         private readonly IBuildRepository _buildRepository;
         private readonly IPaymentService _paymentService;
 
-        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IOptions<SqlConfig> connections, IBuildRepository buildRepository, ILogger<VideoAssetService> logger, IPaymentService paymentService, IUserLayerRepository userLayerRepository)
+        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IBuildRepository buildRepository, IPaymentService paymentService, IUserLayerRepository userLayerRepository)
         {
             _videoRepository = videoRepository;
             _storageService = storageService;
@@ -36,7 +37,7 @@ namespace SpaWebApi.Services
                 Uri? downloadLink = null;
                 if (build.BuildStatus == BuildStatus.Complete)
                 {
-                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{SharedConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(7));
+                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{BuildDataAccessConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(7));
                 }
 
                 result.Add(new VideoAsset

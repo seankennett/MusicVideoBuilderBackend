@@ -1,11 +1,14 @@
-﻿using DataAccessLayer.Repositories;
-using SharedEntities;
-using SharedEntities.Extensions;
+﻿using BuildDataAccess;
+using BuildDataAccess.Extensions;
+using BuildDataAccess.Repositories;
+using BuildEntities;
+using BuilderEntities.Entities;
 using SharedEntities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VideoDataAccess.Repositories;
 
 namespace BuildInstructorFunction.Services
 {
@@ -100,20 +103,20 @@ namespace BuildInstructorFunction.Services
 
             var splitFrameCommands = new List<FfmpegIOCommand>();
             var videoLengthSeconds = video.Clips.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
-            var splitVideoTotal = (int)Math.Ceiling(videoLengthSeconds / SharedConstants.VideoSplitLengthSeconds);
+            var splitVideoTotal = (int)Math.Ceiling(videoLengthSeconds / InstructorConstants.VideoSplitLengthSeconds);
             for (var i = 0; i < splitVideoTotal; i++)
             {
                 var splitFrameVideoName = $"s{i}.{video.Format}";
                 splitFrameCommands.Add(new FfmpegIOCommand
                 {
-                    FfmpegCode = _ffmpegService.GetSplitFrameCommand(is4KFormat, tempBlobPrefix, TimeSpan.FromSeconds(SharedConstants.VideoSplitLengthSeconds * i), TimeSpan.FromSeconds(SharedConstants.VideoSplitLengthSeconds), allFrameVideoFileName, splitFrameVideoName, i == 0 ? video.VideoDelayMilliseconds : null),
+                    FfmpegCode = _ffmpegService.GetSplitFrameCommand(is4KFormat, tempBlobPrefix, TimeSpan.FromSeconds(InstructorConstants.VideoSplitLengthSeconds * i), TimeSpan.FromSeconds(InstructorConstants.VideoSplitLengthSeconds), allFrameVideoFileName, splitFrameVideoName, i == 0 ? video.VideoDelayMilliseconds : null),
                     VideoName = splitFrameVideoName
                 });
             }
 
             var splitFrameMergeCommand = new FfmpegIOCommand
             {
-                FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? SharedConstants.AudioFileName : null, InstructorConstants.SplitFramesConcatFileName),
+                FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? BuildDataAccessConstants.AudioFileName : null, InstructorConstants.SplitFramesConcatFileName),
                 VideoName = videoFileName
             };
 

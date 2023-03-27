@@ -1,11 +1,11 @@
 ﻿using Azure.Identity;
+using LayerDataAccess.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using UploadLayerFunction;
-using UploadLayerFunction.Interfaces;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace UploadLayerFunction
@@ -33,7 +33,7 @@ namespace UploadLayerFunction
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PublicBlobStorageUrl"])).WithName("PublicBlobServiceClient");
             });
 
-            builder.Services.AddSingleton<IDatabaseWriter, DatabaseWriter>();
+            builder.Services.AddSingleton<ILayerRepository, LayerRepository>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

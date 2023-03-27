@@ -1,11 +1,7 @@
-﻿using Azure.Storage.Queues;
-using Microsoft.Extensions.Options;
-using SharedEntities;
-using SharedEntities.Extensions;
-using SharedEntities.Models;
-using System;
+﻿using BuildDataAccess;
+using BuildEntities;
+using BuilderEntities.Entities;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BuildInstructorFunction.Services
@@ -39,7 +35,7 @@ namespace BuildInstructorFunction.Services
 
             if (hasAudio)
             {
-                builderMessage.AssetsDownload.TemporaryFiles.Add(SharedConstants.AudioFileName);
+                builderMessage.AssetsDownload.TemporaryFiles.Add(BuildDataAccessConstants.AudioFileName);
             }
 
             if (resolution == Resolution.Free)

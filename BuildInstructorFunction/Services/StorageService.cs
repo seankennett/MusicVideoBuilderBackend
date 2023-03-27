@@ -1,13 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Queues;
-using Azure.Storage.Sas;
 using Microsoft.Extensions.Options;
-using SharedEntities.Extensions;
-using SharedEntities;
-using SharedEntities.Models;
 using System;
 using System.Threading.Tasks;
 using System.Text.Json;
+using BuilderEntities.Entities;
 
 namespace BuildInstructorFunction.Services
 {
@@ -17,11 +14,11 @@ namespace BuildInstructorFunction.Services
         private readonly QueueClient _queueClientFree;
         private readonly QueueClient _queueClientHd;
 
-        public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient)
+        public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient, IOptions<InstructorConfig> config)
         {
             _blobServiceClient = blobServiceClient;
-            _queueClientFree = queueServiceClient.GetQueueClient(Resolution.Free.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix);
-            _queueClientHd = queueServiceClient.GetQueueClient(Resolution.Hd.GetBlobPrefixByResolution() + SharedConstants.BuilderQueueSuffix);
+            _queueClientFree = queueServiceClient.GetQueueClient(config.Value.FreeBuilderQueueName);
+            _queueClientHd = queueServiceClient.GetQueueClient(config.Value.HdBuilderQueueName);
         }
 
         public Uri GetContainerUri(string containerName)

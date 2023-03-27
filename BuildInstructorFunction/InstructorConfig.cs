@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BuildInstructorFunction
+﻿namespace BuildInstructorFunction
 {
     public class InstructorConfig
     {
@@ -14,5 +8,7 @@ namespace BuildInstructorFunction
         public string BatchServiceKey { get; set; }
         public string PoolName { get; set; }
         public string ManagedIdentityIdReference { get; set; }
+        public string FreeBuilderQueueName { get; set; }
+        public string HdBuilderQueueName { get; set; }
     }
 }

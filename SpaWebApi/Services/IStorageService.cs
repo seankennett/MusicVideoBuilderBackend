@@ -1,4 +1,4 @@
-﻿using SharedEntities.Models;
+﻿using LayerDataAccess.Entities;
 
 namespace SpaWebApi.Services
 {

@@ -1,4 +1,4 @@
-﻿using SharedEntities.Models;
+﻿using VideoDataAccess.Entities;
 
 namespace SpaWebApi.Services
 {

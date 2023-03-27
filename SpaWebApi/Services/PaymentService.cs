@@ -1,8 +1,11 @@
-﻿using DataAccessLayer.Repositories;
+﻿using BuildDataAccess.Entities;
+using BuildDataAccess.Repositories;
+using BuildEntities;
 using SharedEntities.Models;
 using SpaWebApi.Models;
 using SpaWebApi.Services;
 using Stripe;
+using VideoDataAccess.Entities;
 
 public class PaymentService : IPaymentService
 {
@@ -10,11 +13,10 @@ public class PaymentService : IPaymentService
     private readonly IBuildRepository _buildRepository;
     private readonly ILogger<PaymentService> _logger;
 
-    public PaymentService(IUserLayerRepository userLayerRepository, IBuildRepository buildRepository, ILogger<PaymentService> logger)
+    public PaymentService(IUserLayerRepository userLayerRepository, IBuildRepository buildRepository)
     {
         _userLayerRepository = userLayerRepository;
         _buildRepository = buildRepository;
-        _logger = logger;
     }
 
     public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)

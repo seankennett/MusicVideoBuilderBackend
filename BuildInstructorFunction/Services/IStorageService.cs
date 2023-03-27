@@ -1,4 +1,4 @@
-﻿using SharedEntities.Models;
+﻿using BuilderEntities.Entities;
 using System;
 using System.Threading.Tasks;
 

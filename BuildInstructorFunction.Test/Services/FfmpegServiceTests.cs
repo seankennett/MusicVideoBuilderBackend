@@ -1,5 +1,7 @@
+using BuildEntities;
 using BuildInstructorFunction.Services;
-using SharedEntities.Models;
+using LayerEntities;
+using VideoDataAccess.Entities;
 
 namespace BuildInstructorFunction.Test.Services
 {

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Stripe;
 using Microsoft.Extensions.Options;
-using SharedEntities;
 using BuildInstructorFunction.Services;
 
 namespace BuildInstructorFunction
@@ -25,7 +24,7 @@ namespace BuildInstructorFunction
         }
 
         [FunctionName("BuildInstructorFunction")]
-        public async Task RunQueue([QueueTrigger(SharedConstants.BuildInstructorQueue, Connection = "ConnectionString")] UserBuild userBuild)
+        public async Task RunQueue([QueueTrigger("%QueueName%", Connection = "ConnectionString")] UserBuild userBuild)
         {
             await _buildService.InstructBuildAsync(userBuild);
         }

@@ -1,4 +1,5 @@
-﻿using SharedEntities.Models;
+﻿using BuildDataAccess.Entities;
+using BuildEntities;
 using SpaWebApi.Models;
 
 namespace SpaWebApi.Services

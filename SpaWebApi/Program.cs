@@ -1,12 +1,15 @@
 using Azure.Identity;
 using Azure.Storage.Queues;
-using DataAccessLayer.Repositories;
+using BuildDataAccess.Repositories;
+using LayerDataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
-using SharedEntities;
+using SpaWebApi;
+using SpaWebApi.Repositories;
 using SpaWebApi.Services;
 using Stripe;
+using VideoDataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -55,6 +58,11 @@ builder.Services.AddAzureClients(clientBuilder =>
 });
 
 builder.Services.AddOptions<SqlConfig>().Configure<IConfiguration>(
+                (settings, configuration) =>
+                {
+                    configuration.Bind(settings);
+                });
+builder.Services.AddOptions<SpaWebApiConfig>().Configure<IConfiguration>(
                 (settings, configuration) =>
                 {
                     configuration.Bind(settings);

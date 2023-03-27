@@ -6,8 +6,12 @@ trigger:
         include:
         - SpaWebApi
         - SpaWebApi.Test
-        - SharedEntities
-        - DataAccessLayer
+        - BuildDataAccess
+        - BuildEntities
+        - LayerDataAccess
+        - LayerEntities
+        - VideoDataAccess
+        - SqlConfig
 
 pool:
   vmImage: 'windows-2022'

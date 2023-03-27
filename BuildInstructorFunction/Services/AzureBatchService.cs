@@ -1,14 +1,15 @@
 ﻿using Microsoft.Azure.Batch.Auth;
 using Microsoft.Azure.Batch;
-using SharedEntities.Extensions;
-using SharedEntities;
-using SharedEntities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Batch.Common;
 using Microsoft.Extensions.Options;
+using BuilderEntities.Entities;
+using BuilderEntities.Extensions;
+using BuildEntities;
+using BuildDataAccess;
 
 namespace BuildInstructorFunction.Services
 {
@@ -69,7 +70,7 @@ namespace BuildInstructorFunction.Services
             List<ResourceFile> splitFrameMergeInputs = new List<ResourceFile> { ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{InstructorConstants.SplitFramesConcatFileName}") };
             if (hasAudio)
             {
-                splitFrameMergeInputs.Add(ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{SharedConstants.AudioFileName}"));
+                splitFrameMergeInputs.Add(ResourceFile.FromAutoStorageContainer(userContainerName, null, $"{tempBlobPrefix}/{BuildDataAccessConstants.AudioFileName}"));
             }
 
             var splitFramesTasks = new List<CloudTask>();

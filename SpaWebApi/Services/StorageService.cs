@@ -2,11 +2,8 @@
 using Azure.Storage.Queues;
 using System.Text.Json;
 using Azure.Storage.Sas;
-using Azure.Storage.Blobs.Models;
-using SharedEntities;
-using SharedEntities.Models;
-using System.Reflection.Metadata;
-using static System.Reflection.Metadata.BlobBuilder;
+using LayerDataAccess.Entities;
+using Microsoft.Extensions.Options;
 
 namespace SpaWebApi.Services
 {
@@ -15,11 +12,11 @@ namespace SpaWebApi.Services
         private readonly BlobServiceClient _blobServiceClient;
         private readonly QueueClient _queueClientUploadLayer;
         private readonly QueueClient _queueClientBuildInstructor;
-        public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient)
+        public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient, IOptions<SpaWebApiConfig> config)
         {
             _blobServiceClient = blobServiceClient;
-            _queueClientUploadLayer = queueServiceClient.GetQueueClient(SharedConstants.UploadLayerQueue);
-            _queueClientBuildInstructor = queueServiceClient.GetQueueClient(SharedConstants.BuildInstructorQueue);
+            _queueClientUploadLayer = queueServiceClient.GetQueueClient(config.Value.UploadLayerQueueName);
+            _queueClientBuildInstructor = queueServiceClient.GetQueueClient(config.Value.BuildInstructorQueueName);
         }
 
         public async Task<bool> ValidateAudioBlob(string containerName, string blobName)

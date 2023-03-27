@@ -1,7 +1,7 @@
-﻿using DataAccessLayer.Repositories;
+﻿using LayerDataAccess.Entities;
+using LayerDataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using SharedEntities.Models;
 
 namespace SpaWebApi.Controllers
 {

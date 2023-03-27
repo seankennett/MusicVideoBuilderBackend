@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SharedEntities.Models;
+using BuildEntities;
 
 namespace SpaWebApi.Models
 {

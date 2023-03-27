@@ -1,4 +1,4 @@
-﻿using SharedEntities.Models;
+﻿using BuilderEntities.Entities;
 
 namespace BuilderFunction.Models
 {

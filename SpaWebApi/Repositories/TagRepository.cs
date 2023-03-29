@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using LayerDataAccess.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using System.Data.SqlClient;
 
 namespace SpaWebApi.Repositories
 {
@@ -11,7 +11,7 @@ namespace SpaWebApi.Repositories
 
         public TagRepository(IOptions<SqlConfig> connections)
         {
-            _sqlConnection = connections.Value.SqlConnectionString;
+            _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
         public IEnumerable<Tag> GetAll()

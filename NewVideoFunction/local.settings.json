@@ -6,6 +6,7 @@
     "AzureWebJobsStorage__tableServiceUri": "https://127.0.0.1:10002/devstoreaccount1",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureKeyVaultEndpoint": "https://musicvideobuilder.vault.azure.net/",
-    "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1"
+    "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
+    "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;"
   }
 }

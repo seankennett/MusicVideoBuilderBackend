@@ -1,5 +1,4 @@
 ﻿
-using System.Data.SqlClient;
 using System.Data;
 using Dapper;
 using SharedEntities.Models;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Options;
 using BuildDataAccess.DTOEntities;
 using BuildDataAccess.Entities;
 using BuildEntities;
+using Microsoft.Data.SqlClient;
 
 namespace BuildDataAccess.Repositories
 {
@@ -16,7 +16,7 @@ namespace BuildDataAccess.Repositories
 
         public BuildRepository(IOptions<SqlConfig> connections)
         {
-            _sqlConnection = connections.Value.SqlConnectionString;
+            _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
         public async Task<IEnumerable<Build>> GetAllAsync(Guid userObjectId)

@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using LayerEntities;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using System.Data;
-using System.Data.SqlClient;
 using VideoDataAccess.DTOEntities;
 using VideoDataAccess.Entities;
 
@@ -14,7 +14,7 @@ namespace SpaWebApi.Repositories
 
         public ClipRepository(IOptions<SqlConfig> connections)
         {
-            _sqlConnection = connections.Value.SqlConnectionString;
+            _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
         public async Task<IEnumerable<Clip>> GetAllAsync(Guid userObjectId)

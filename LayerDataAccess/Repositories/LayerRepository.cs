@@ -2,9 +2,9 @@
 using LayerDataAccess.DTOEntities;
 using LayerDataAccess.Entities;
 using LayerEntities;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace LayerDataAccess.Repositories
 {
@@ -14,7 +14,7 @@ namespace LayerDataAccess.Repositories
 
         public LayerRepository(IOptions<SqlConfig> connections)
         {
-            _sqlConnection = connections.Value.SqlConnectionString;
+            _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
         public async Task<IEnumerable<LayerFinder>> GetAllLayerFinderAsync()

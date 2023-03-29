@@ -2,9 +2,9 @@
 using BuildDataAccess.Entities;
 using BuildEntities;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace BuildDataAccess.Repositories
 {
@@ -14,7 +14,7 @@ namespace BuildDataAccess.Repositories
 
         public UserLayerRepository(IOptions<SqlConfig> connections)
         {
-            _sqlConnection = connections.Value.SqlConnectionString;
+            _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
         public async Task<IEnumerable<UserLayer>> GetAllAsync(Guid userObjectId)

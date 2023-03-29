@@ -9,6 +9,7 @@
     "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
     "PublicBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
     "ConnectionString__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",
-    "QueueName": "upload-layer"
+    "QueueName": "upload-layer",
+    "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;"
   }
 }

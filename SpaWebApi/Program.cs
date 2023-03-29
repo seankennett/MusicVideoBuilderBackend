@@ -3,6 +3,7 @@ using Azure.Storage.Queues;
 using BuildDataAccess.Repositories;
 using LayerDataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
 using SpaWebApi;
@@ -80,7 +81,10 @@ builder.Services.AddSingleton<ILayerUploadService, LayerUploadService>();
 builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.OutputFormatters.RemoveType<StringOutputFormatter>();
+});
 
 var app = builder.Build();
 

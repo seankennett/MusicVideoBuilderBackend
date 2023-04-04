@@ -13,10 +13,6 @@ namespace BuildCleanFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var configuration = builder.GetContext().Configuration;
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-            };
 
             builder.Services.AddLogging();
             builder.Services.AddOptions<SqlConfig>().Configure<IConfiguration>(
@@ -28,14 +24,6 @@ namespace BuildCleanFunction
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            var configuration = builder.ConfigurationBuilder.Build();
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-            };
-
-            var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
-
             builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
                         .AddJsonFile("local.settings.json", true)

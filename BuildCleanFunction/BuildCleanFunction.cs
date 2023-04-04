@@ -18,7 +18,7 @@ namespace BuildCleanFunction
         }
 
         [FunctionName("BuildCleanFunction")]
-        public async Task Run([TimerTrigger("0 0 3 * * *", RunOnStartup = true)]TimerInfo myTimer)
+        public async Task Run([TimerTrigger("0 0 3 * * *")]TimerInfo myTimer)
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {

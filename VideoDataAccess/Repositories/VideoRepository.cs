@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using VideoDataAccess.DTOEntities;
 using VideoDataAccess.Entities;
+using VideoEntities.Entities;
 
 namespace VideoDataAccess.Repositories
 {

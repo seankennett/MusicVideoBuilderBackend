@@ -10,6 +10,7 @@ trigger:
         - BuildEntities
         - BuilderEntities
         - VideoDataAccess
+        - VideoEntities
         - LayerEntities
         - SqlConfig
 

@@ -15,25 +15,16 @@ namespace SpaWebApi.Controllers
     public class VideosController : ControllerBase
     {
         private readonly IVideoService _videoService;
-        private readonly IVideoAssetService _videoAssetService;
 
-        public VideosController(IVideoService videoService, IVideoAssetService videoAssetService)
+        public VideosController(IVideoService videoService)
         {
             _videoService = videoService;
-            _videoAssetService = videoAssetService;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Video>> Get()
         {
             return await _videoService.GetAllAsync(User.GetUserObjectId());
-        }
-
-        [HttpGet]
-        [Route("Assets")]
-        public async Task<IEnumerable<VideoAsset>> GetAllAssets()
-        {
-            return await _videoAssetService.GetAllAsync(User.GetUserObjectId());
         }
 
         [HttpPost]

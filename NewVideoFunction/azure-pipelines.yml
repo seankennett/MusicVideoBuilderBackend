@@ -7,6 +7,7 @@ trigger:
         - NewVideoFunction
         - BuildDataAccess
         - BuildEntities
+        - VideoEntities
         - SqlConfig
 
 variables:

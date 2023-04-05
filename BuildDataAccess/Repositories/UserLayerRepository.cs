@@ -17,12 +17,21 @@ namespace BuildDataAccess.Repositories
             _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
+        public async Task ConfirmPendingUserLayers(Guid buildId)
+        {
+            using (var connection = new SqlConnection(_sqlConnection))
+            {
+                await connection.ExecuteAsync("ConfirmPendingUserLayers", new { BuildId = buildId }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task<IEnumerable<UserLayer>> GetAllAsync(Guid userObjectId)
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {
                 var userLayers = await connection.QueryAsync<UserLayerDTO>("GetUserLayers", new { userObjectId }, commandType: CommandType.StoredProcedure);
-                return userLayers.Select(ul => new UserLayer
+                var pendingUserLayers = await connection.QueryAsync<UserLayerDTO>("GetPendingUserLayers", new { userObjectId }, commandType: CommandType.StoredProcedure);
+                return userLayers.Concat(pendingUserLayers).Select(ul => new UserLayer
                 {
                     LayerId = ul.LayerId,
                     UserLayerId = ul.UserLayerId,
@@ -33,7 +42,7 @@ namespace BuildDataAccess.Repositories
             }
         }
 
-        public async Task SaveUserLayersAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId)
+        public async Task SavePendingUserLayersAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId)
         {
             var dataTable = new DataTable();
             dataTable.Columns.Add("ForeignId");
@@ -45,7 +54,7 @@ namespace BuildDataAccess.Repositories
 
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                await connection.ExecuteAsync("InsertUserLayers", new
+                await connection.ExecuteAsync("InsertPendingUserLayers", new
                 {
                     userObjectId,
                     BuildId = buildId,

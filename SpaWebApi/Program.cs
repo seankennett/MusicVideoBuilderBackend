@@ -73,7 +73,7 @@ builder.Services.AddSingleton<ILayerRepository, LayerRepository>();
 builder.Services.AddSingleton<IUserLayerRepository, UserLayerRepository>();
 builder.Services.AddSingleton<IClipRepository, ClipRepository>();
 builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
-builder.Services.AddSingleton<IVideoAssetService, VideoAssetService>();
+builder.Services.AddSingleton<IBuildService, BuildService>();
 builder.Services.AddSingleton<IStorageService, StorageService>();
 builder.Services.AddSingleton<IClipService, ClipService>();
 builder.Services.AddSingleton<IVideoService, VideoService>();

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VideoDataAccess.Entities;
 using VideoDataAccess.Repositories;
+using VideoEntities.Entities;
 
 namespace SpaWebApi.Test.Services
 {

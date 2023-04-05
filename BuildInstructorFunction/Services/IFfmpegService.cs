@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using VideoDataAccess.Entities;
+using VideoEntities.Entities;
 
 namespace BuildInstructorFunction.Services
 {

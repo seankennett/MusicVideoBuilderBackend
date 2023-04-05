@@ -11,18 +11,25 @@ namespace SpaWebApi.Controllers
 {
     [Authorize]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
-    [Route("api/Videos/{videoId}")]
+    [Route("api/Videos/{videoId}/[controller]")]
     [ApiController]
-    public class VideoController : ControllerBase
+    public class BuildsController : ControllerBase
     {
-        private readonly IVideoAssetService _videoAssetService;
-        public VideoController(IVideoAssetService videoAssetService)
+        private readonly IBuildService _videoAssetService;
+        public BuildsController(IBuildService videoAssetService)
         {
             _videoAssetService = videoAssetService;
         }
 
-        [HttpPost("Assets")]
-        public async Task<VideoAsset> Post(int videoId, VideoBuildRequest videoAssetRequest)
+        [HttpGet]
+        [Route("~/api/Videos/[controller]")]
+        public async Task<IEnumerable<BuildAsset>> GetAllAssets()
+        {
+            return await _videoAssetService.GetAllAsync(User.GetUserObjectId());
+        }
+
+        [HttpPost]
+        public async Task Post(int videoId, VideoBuildRequest videoAssetRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -34,10 +41,10 @@ namespace SpaWebApi.Controllers
                 throw new Exception("Resolution must be free to call this route");
             }
 
-            return await _videoAssetService.BuildFreeVideoAsync(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId);
+            await _videoAssetService.BuildFreeVideoAsync(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId);
         }
 
-        [HttpPost("Assets/CreateAudioBlobUri")]
+        [HttpPost("CreateAudioBlobUri")]
         public async Task<Uri> CreateAudioBlobUri(int videoId, VideoBuildRequest videoAssetRequest)
         {
             if (!ModelState.IsValid)
@@ -48,7 +55,7 @@ namespace SpaWebApi.Controllers
             return await _videoAssetService.CreateUserAudioBlobUri(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId, videoAssetRequest.Resolution);
         }
 
-        [HttpPost("Assets/ValidateAudioBlob")]
+        [HttpPost("ValidateAudioBlob")]
         public async Task ValidateAudioBlob(int videoId, VideoBuildRequest videoAssetRequest)
         {
             if (!ModelState.IsValid)

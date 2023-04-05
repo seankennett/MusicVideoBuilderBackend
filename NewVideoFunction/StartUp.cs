@@ -46,6 +46,7 @@ namespace NewVideoFunction
                 new EnvironmentCredential()));
 
             builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
+            builder.Services.AddSingleton<IUserLayerRepository, UserLayerRepository>();
             builder.Services.AddSingleton<IMailer, Mailer>();
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IBlobService, BlobService>();

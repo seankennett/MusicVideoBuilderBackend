@@ -64,9 +64,7 @@ namespace BuildInstructorFunction.Services
                 var clip = uniqueClips[i];
                 clipCommands.Add(new FfmpegIOCommand
                 {
-                    //_ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, true, ".")
                     FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, is4KFormat,
-                // directory will not be created in clipcode's batch case so putting file flat on file system
                 is4KFormat ? "." : tempBlobPrefix,
                 watermarkFilePath
                 ),
@@ -83,7 +81,7 @@ namespace BuildInstructorFunction.Services
 
             if (resolution != Resolution.Free)
             {
-                await _userLayerRepository.SaveUserLayersAsync(uniqueLayers.Select(u => Guid.Parse(u)), build.UserObjectId, build.BuildId);
+                await _userLayerRepository.SavePendingUserLayersAsync(uniqueLayers.Select(u => Guid.Parse(u)), build.UserObjectId, build.BuildId);
             }
 
             var userContainerName = GuidHelper.GetUserContainerName(build.UserObjectId);

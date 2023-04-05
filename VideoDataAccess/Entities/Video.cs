@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using VideoDataAccess.Attributes;
+using VideoEntities.Entities;
 
 namespace VideoDataAccess.Entities
 {

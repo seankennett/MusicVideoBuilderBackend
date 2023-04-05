@@ -7,17 +7,18 @@ using SharedEntities.Models;
 using SpaWebApi.Models;
 using VideoDataAccess.Entities;
 using VideoDataAccess.Repositories;
+using VideoEntities.Entities;
 
 namespace SpaWebApi.Services
 {
-    public class VideoAssetService : IVideoAssetService
+    public class BuildService : IBuildService
     {
         private readonly IVideoRepository _videoRepository;
         private readonly IStorageService _storageService;
         private readonly IBuildRepository _buildRepository;
         private readonly IPaymentService _paymentService;
 
-        public VideoAssetService(IVideoRepository videoRepository, IStorageService storageService, IBuildRepository buildRepository, IPaymentService paymentService, IUserLayerRepository userLayerRepository)
+        public BuildService(IVideoRepository videoRepository, IStorageService storageService, IBuildRepository buildRepository, IPaymentService paymentService)
         {
             _videoRepository = videoRepository;
             _storageService = storageService;
@@ -25,13 +26,13 @@ namespace SpaWebApi.Services
             _paymentService = paymentService;
         }
 
-        public async Task<IEnumerable<VideoAsset>> GetAllAsync(Guid userObjectId)
+        public async Task<IEnumerable<BuildAsset>> GetAllAsync(Guid userObjectId)
         {
             var builds = await _buildRepository.GetAllAsync(userObjectId);
 
             var userContainerName = GuidHelper.GetUserContainerName(userObjectId);
 
-            var result = new List<VideoAsset>();
+            var result = new List<BuildAsset>();
             foreach (var build in builds.Where(x => x.BuildStatus != BuildStatus.Failed && x.BuildStatus != BuildStatus.PaymentAuthorisationPending))
             {
                 Uri? downloadLink = null;
@@ -40,21 +41,22 @@ namespace SpaWebApi.Services
                     downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{BuildDataAccessConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(7));
                 }
 
-                result.Add(new VideoAsset
+                result.Add(new BuildAsset
                 {
                     BuildStatus = build.BuildStatus,
                     DateCreated = build.DateUpdated,
                     DownloadLink = downloadLink,
-                    VideoId = build.VideoId
+                    VideoId = build.VideoId,
+                    Format = build.Format,
+                    VideoName = build.VideoName
                 });
             }
             return result;
         }
 
-        public async Task<VideoAsset> BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId)
+        public async Task BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId)
         {            
             var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
-
             if (currentBuild != null)
             {
                 currentBuild.BuildStatus = BuildStatus.BuildingPending;
@@ -62,9 +64,9 @@ namespace SpaWebApi.Services
             }
             else
             {
-                await GetAndValidateVideo(userObjectId, videoId);
+                var video = await GetAndValidateVideo(userObjectId, videoId);
 
-                currentBuild = new Build { BuildId = buildId, BuildStatus = BuildStatus.BuildingPending, HasAudio = false, License = License.Personal, Resolution = Resolution.Free, VideoId = videoId };
+                currentBuild = new Build { BuildId = buildId, BuildStatus = BuildStatus.BuildingPending, HasAudio = false, License = License.Personal, Resolution = Resolution.Free, VideoId = videoId, VideoName = video.VideoName, Format = video.Format };
                 await _buildRepository.SaveAsync(currentBuild, userObjectId);
             }
 
@@ -72,8 +74,6 @@ namespace SpaWebApi.Services
             userBuild.UserObjectId = userObjectId;
 
             await _storageService.SendToBuildInstructorQueueAsync(userBuild);
-
-            return new VideoAsset { BuildStatus = currentBuild.BuildStatus, DateCreated = DateTimeOffset.UtcNow, DownloadLink = null, VideoId = videoId };
         }
 
         private async Task<Video> GetAndValidateVideo(Guid userObjectId, int videoId)
@@ -133,8 +133,8 @@ namespace SpaWebApi.Services
 
             if (resolution == Resolution.Free)
             {
-                await GetAndValidateVideo(userObjectId, videoId);
-                await _buildRepository.SaveAsync(new Build { BuildId = buildId, BuildStatus = BuildStatus.PaymentAuthorisationPending, HasAudio = true, License = License.Personal, Resolution = resolution, PaymentIntentId = null, VideoId = videoId }, userObjectId);
+                var video = await GetAndValidateVideo(userObjectId, videoId);
+                await _buildRepository.SaveAsync(new Build { BuildId = buildId, BuildStatus = BuildStatus.PaymentAuthorisationPending, HasAudio = true, License = License.Personal, Resolution = resolution, PaymentIntentId = null, VideoId = videoId, VideoName = video.VideoName, Format = video.Format }, userObjectId);
             }
             else if (currentBuild != null)
             {

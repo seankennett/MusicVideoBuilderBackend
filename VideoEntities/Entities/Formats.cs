@@ -1,4 +1,4 @@
-﻿namespace VideoDataAccess.Entities
+﻿namespace VideoEntities.Entities
 {
     public enum Formats
     {

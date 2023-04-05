@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BuildEntities\BuildEntities.csproj" />
     <ProjectReference Include="..\SqlConfig\SqlConfig.csproj" />
+    <ProjectReference Include="..\VideoEntities\VideoEntities.csproj" />
   </ItemGroup>
 
 </Project>

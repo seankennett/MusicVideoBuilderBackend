@@ -4,12 +4,12 @@ using SpaWebApi.Models;
 
 namespace SpaWebApi.Services
 {
-    public interface IVideoAssetService
+    public interface IBuildService
     {
-        Task<VideoAsset> BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId);
+        Task BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId);
         Task<string> CreatePaymentIntent(Guid userObjectId, int videoId, PaymentIntentRequest paymentIntent);
         Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, Guid buildId, Resolution resolution);
-        Task<IEnumerable<VideoAsset>> GetAllAsync(Guid userObjectId);
+        Task<IEnumerable<BuildAsset>> GetAllAsync(Guid userObjectId);
         Task ValidateAudioBlob(Guid userObjectId, int videoId, Guid buildId, Resolution resolution);
     }
 }

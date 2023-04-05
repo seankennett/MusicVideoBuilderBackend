@@ -11,6 +11,7 @@ trigger:
         - LayerDataAccess
         - LayerEntities
         - VideoDataAccess
+        - VideoEntities
         - SqlConfig
 
 pool:

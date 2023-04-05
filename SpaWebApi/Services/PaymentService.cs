@@ -48,7 +48,9 @@ public class PaymentService : IPaymentService
             License = paymentIntentRequest.License, 
             Resolution = paymentIntentRequest.Resolution, 
             PaymentIntentId = paymentIntent.Id, 
-            VideoId = video.VideoId 
+            VideoId = video.VideoId,
+            VideoName = video.VideoName,
+            Format = video.Format
         }, userObjectId);
 
         return paymentIntent.ClientSecret;

@@ -2,6 +2,7 @@ using BuildEntities;
 using BuildInstructorFunction.Services;
 using LayerEntities;
 using VideoDataAccess.Entities;
+using VideoEntities.Entities;
 
 namespace BuildInstructorFunction.Test.Services
 {

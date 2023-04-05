@@ -20,14 +20,16 @@ namespace NewVideoFunction
         private readonly IBlobService _blobService;
         private readonly IBuildRepository _buildRepository;
         private readonly IChargeService _chargeService;
+        private readonly IUserLayerRepository _userLayerRepository;
 
-        public NewVideoFunction(IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService)
+        public NewVideoFunction(IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService, IUserLayerRepository userLayerRepository)
         {
             _mailer = mailer;
             _userService = userService;
             _blobService = blobService;
             _buildRepository = buildRepository;
             _chargeService = chargeService;
+            _userLayerRepository = userLayerRepository;
         }
         /*
          https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-grid-trigger?tabs=in-process%2Cextensionv3&pivots=programming-language-csharp
@@ -74,7 +76,8 @@ Content-Length: 1008
 
             log.LogInformation($"Container {containerName} buildId {buildId} subject {blobPath}");
 
-            var build = await _buildRepository.GetAsync(Guid.Parse(buildId));
+            var buildGuid = Guid.Parse(buildId);
+            var build = await _buildRepository.GetAsync(buildGuid);
             if (build == null)
             {
                 log.LogError($"Build {buildId} not in database");
@@ -86,6 +89,7 @@ Content-Length: 1008
 
             if (build.Resolution != Resolution.Free)
             {
+                await _userLayerRepository.ConfirmPendingUserLayers(buildGuid);
                 if (!await _chargeService.Charge(build.PaymentIntentId))
                 {
                     return;

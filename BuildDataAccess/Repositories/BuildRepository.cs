@@ -7,6 +7,8 @@ using BuildDataAccess.DTOEntities;
 using BuildDataAccess.Entities;
 using BuildEntities;
 using Microsoft.Data.SqlClient;
+using Microsoft.SqlServer.Server;
+using VideoEntities.Entities;
 
 namespace BuildDataAccess.Repositories
 {
@@ -31,6 +33,8 @@ namespace BuildDataAccess.Repositories
                     BuildId = b.BuildId,
                     BuildStatus = (BuildStatus)b.BuildStatusId,
                     VideoId = b.VideoId,
+                    VideoName = b.VideoName,
+                    Format = (Formats)b.FormatId,
                     HasAudio = b.HasAudio,
                     PaymentIntentId = b.PaymentIntentId,
                     DateUpdated = b.DateUpdated
@@ -50,6 +54,8 @@ namespace BuildDataAccess.Repositories
                     BuildId = buildDto.BuildId,
                     BuildStatus = (BuildStatus)buildDto.BuildStatusId,
                     VideoId = buildDto.VideoId,
+                    VideoName = buildDto.VideoName,
+                    Format = (Formats)buildDto.FormatId,
                     HasAudio = buildDto.HasAudio,
                     PaymentIntentId = buildDto.PaymentIntentId,
                     DateUpdated = buildDto.DateUpdated,
@@ -70,6 +76,8 @@ namespace BuildDataAccess.Repositories
                     BuildId = buildDto.BuildId,
                     BuildStatus = (BuildStatus)buildDto.BuildStatusId,
                     VideoId = buildDto.VideoId,
+                    VideoName = buildDto.VideoName,
+                    Format = (Formats)buildDto.FormatId,
                     HasAudio = buildDto.HasAudio,
                     PaymentIntentId = buildDto.PaymentIntentId,
                     DateUpdated = buildDto.DateUpdated,
@@ -86,12 +94,14 @@ namespace BuildDataAccess.Repositories
                 {
                     build.BuildId,
                     build.VideoId,
+                    build.VideoName,
+                    FormatId = (short)build.Format,
                     BuildStatusId = (short)build.BuildStatus,
                     ResolutionId = (short)build.Resolution,
                     LicenseId = (short)build.License,
                     UserObjectId = userObjectId,
                     build.PaymentIntentId,
-                    build.HasAudio
+                    build.HasAudio,
                 }, commandType: CommandType.StoredProcedure);
             }
         }

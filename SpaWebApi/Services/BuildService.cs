@@ -38,7 +38,7 @@ namespace SpaWebApi.Services
                 Uri? downloadLink = null;
                 if (build.BuildStatus == BuildStatus.Complete)
                 {
-                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{BuildDataAccessConstants.TempBlobPrefix}/", build.DateUpdated.AddDays(7));
+                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{BuildDataAccessConstants.TempBlobPrefix}/", build.DateUpdated.ToUniversalTime().AddDays(7));
                 }
 
                 result.Add(new BuildAsset
@@ -48,7 +48,9 @@ namespace SpaWebApi.Services
                     DownloadLink = downloadLink,
                     VideoId = build.VideoId,
                     Format = build.Format,
-                    VideoName = build.VideoName
+                    VideoName = build.VideoName,
+                    License = build.License,
+                    Resolution = build.Resolution
                 });
             }
             return result;

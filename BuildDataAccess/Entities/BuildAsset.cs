@@ -1,4 +1,5 @@
-﻿using SharedEntities.Models;
+﻿using BuildEntities;
+using SharedEntities.Models;
 using VideoEntities.Entities;
 
 namespace BuildDataAccess.Entities
@@ -11,5 +12,7 @@ namespace BuildDataAccess.Entities
         public DateTimeOffset DateCreated { get; set; }
         public Uri? DownloadLink { get; set; }
         public BuildStatus BuildStatus { get; set; }
+        public Resolution Resolution { get; set; }
+        public License License { get; set; }
     }
 }

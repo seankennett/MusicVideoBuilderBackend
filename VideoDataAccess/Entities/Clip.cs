@@ -1,4 +1,5 @@
-﻿using LayerEntities;
+﻿using LayerDataAccess.Entities;
+using LayerEntities;
 using System.ComponentModel.DataAnnotations;
 using VideoDataAccess.Attributes;
 
@@ -12,18 +13,18 @@ namespace VideoDataAccess.Entities
         public string ClipName { get; set; }
         public int ClipId { get; set; }
 
-        [MaxLength(VideoDataAccessConstants.MaximumLayerPerClip)]
-        [UniqueList("LayerId")]
-        public IEnumerable<Layer>? Layers { get; set; }
+        [MaxLength(VideoDataAccessConstants.MaximumDisplayLayerPerClip)]
+        [UniqueList("DisplayLayerId")]
+        public IEnumerable<ClipDisplayLayer>? ClipDisplayLayers { get; set; }
 
         [MinLength(6)]
         [MaxLength(6)]
         public string? BackgroundColour { get; set; }
 
-        [Range(1, VideoDataAccessConstants.BeatsPerLayer)]
+        [Range(1, VideoDataAccessConstants.BeatsPerDisplayLayer)]
         public byte BeatLength { get; set; }
 
-        [Range(1, VideoDataAccessConstants.BeatsPerLayer)]
+        [Range(1, VideoDataAccessConstants.BeatsPerDisplayLayer)]
         public byte StartingBeat { get; set; }
     }
 }

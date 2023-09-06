@@ -73,18 +73,6 @@ namespace SpaWebApi.Services
             await blobClient.DeleteIfExistsAsync();
 
             return await GenerateUserDelegateSas(BlobAccountSasPermissions.Write, containerClient, blobClient, tokenLength);
-        }
-
-        public async Task RemoveContainerPolicySendToUploadLayerQueueAsync(LayerUploadMessage layerUpload)
-        {
-            // with identities this is not supported https://learn.microsoft.com/en-us/rest/api/storageservices/set-container-acl
-            //var containerClient = _blobServiceClient.GetBlobContainerClient(layerUpload.LayerId.ToString());
-            //if (await containerClient.ExistsAsync())
-            //{
-            //    await containerClient.SetAccessPolicyAsync(PublicAccessType.None, null);
-            //}
-
-            await _queueClientUploadLayer.SendMessageAsync(JsonSerializer.Serialize(layerUpload));
         }       
 
         public async Task<Uri?> GetSASLink(string userContainerName, string blobPrefix, string excludePrefix, DateTimeOffset tokenLength)

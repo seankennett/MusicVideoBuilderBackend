@@ -5,8 +5,9 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using VideoDataAccess.DTOEntities;
 using VideoDataAccess.Entities;
+using VideoDataAccess.Helpers;
 
-namespace SpaWebApi.Repositories
+namespace VideoDataAccess.Repositories
 {
     public class ClipRepository : IClipRepository
     {
@@ -23,34 +24,39 @@ namespace SpaWebApi.Repositories
             {
                 var reader = await connection.QueryMultipleAsync("GetClips", new { userObjectId }, commandType: CommandType.StoredProcedure);
                 var clips = await reader.ReadAsync<Clip>();
-                var userLayers = await reader.ReadAsync<ClipLayerDTO>();
+                var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
+                var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
 
-                var groupedUserLayers = userLayers.GroupBy(x => x.ClipId);
+                var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
+                var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
 
                 return clips.Select(x =>
                 {
-                    var groupedUserLayer = groupedUserLayers.FirstOrDefault(gu => gu.Key == x.ClipId);
-                    if (groupedUserLayer != null)
-                    {
-                        x.Layers = groupedUserLayer.OrderBy(x => x.Order).Select(x => new Layer
-                        {
-                            LayerId = x.LayerId,
-                            LayerName = x.LayerName
-                        });
-                    }
-                    return x;
+                    return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, x);
                 });
             }
         }
 
         public async Task<Clip> SaveAsync(Guid userObjectId, Clip clip)
         {
-            var dataTable = new DataTable();
-            dataTable.Columns.Add("ForeignId");
-            dataTable.Columns.Add("Order");
-            for (short i = 0; i < clip.Layers.Count(); i++)
+            var clipDisplayLayerDataTable = new DataTable();
+            clipDisplayLayerDataTable.Columns.Add("TempId");
+            clipDisplayLayerDataTable.Columns.Add("DisplayLayerId");
+            clipDisplayLayerDataTable.Columns.Add("Order");
+
+            var layerClipDisplayLayerDataTable = new DataTable();
+            layerClipDisplayLayerDataTable.Columns.Add("ClipDisplayLayerId");
+            layerClipDisplayLayerDataTable.Columns.Add("LayerId");
+            layerClipDisplayLayerDataTable.Columns.Add("ColourOverride");
+
+            for (short i = 0; i < clip.ClipDisplayLayers.Count(); i++)
             {
-                dataTable.Rows.Add(clip.Layers.ElementAt(i).LayerId, i);
+                var clipDisplayLayer = clip.ClipDisplayLayers.ElementAt(i);
+                clipDisplayLayerDataTable.Rows.Add(i, clipDisplayLayer.DisplayLayerId, i);
+                foreach (var layerClipDisplayLayer in clipDisplayLayer.LayerClipDisplayLayers)
+                {
+                    layerClipDisplayLayerDataTable.Rows.Add(i, layerClipDisplayLayer.LayerId, layerClipDisplayLayer.ColourOverride);
+                }
             }
 
             using (var connection = new SqlConnection(_sqlConnection))
@@ -63,7 +69,8 @@ namespace SpaWebApi.Repositories
                     clip.BackgroundColour,
                     clip.BeatLength,
                     clip.StartingBeat,
-                    Layers = dataTable.AsTableValuedParameter("GuidOrderType")
+                    ClipDisplayLayers = clipDisplayLayerDataTable.AsTableValuedParameter("ClipDisplayLayerType"),
+                    LayerClipDisplayLayers = layerClipDisplayLayerDataTable.AsTableValuedParameter("LayerClipDisplayLayerType")
                 }, commandType: CommandType.StoredProcedure);
                 return clip;
             }
@@ -78,18 +85,12 @@ namespace SpaWebApi.Repositories
 
                 if (clip != null)
                 {
-                    var userLayers = await reader.ReadAsync<ClipLayerDTO>();
+                    var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
+                    var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
 
-                    if (userLayers != null)
-                    {
-                        clip.Layers = userLayers.Select(x => new Layer
-                        {
-                            LayerId = x.LayerId,
-                            LayerName = x.LayerName
-                        });
-                    }
-
-                    return clip;
+                    var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
+                    var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
+                    return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, clip);                   
                 }
 
                 return null;

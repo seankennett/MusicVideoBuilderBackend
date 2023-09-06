@@ -49,7 +49,7 @@ namespace BuildInstructorFunction
             builder.Services.AddSingleton<IBuildService, BuildService>();
             builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
             builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
-            builder.Services.AddSingleton<IUserLayerRepository, UserLayerRepository>();
+            builder.Services.AddSingleton<IUserDisplayLayerRepository, UserDisplayLayerRepository>();
             builder.Services.AddSingleton<IFfmpegComplexOperations, FfmpegComplexOperations>();
             builder.Services.AddSingleton<IFfmpegService, FfmpegService>();
             builder.Services.AddSingleton<IStorageService, StorageService>();

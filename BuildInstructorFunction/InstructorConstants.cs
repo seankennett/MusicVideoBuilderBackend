@@ -11,7 +11,7 @@ namespace BuildInstructorFunction
         public const byte MinimumBpm = 90;
         public const byte OutputFrameRate = 24;
         public const byte FramesInLayer = 64;
-        public static readonly byte FramesPerBeat = FramesInLayer / VideoDataAccessConstants.BeatsPerLayer;
+        public static readonly byte FramesPerBeat = FramesInLayer / VideoDataAccessConstants.BeatsPerDisplayLayer;
         public const int VideoSplitLengthSeconds = 15;
         public const short FourKWidth = 3840;
         public const short FourKHeight = 2160;

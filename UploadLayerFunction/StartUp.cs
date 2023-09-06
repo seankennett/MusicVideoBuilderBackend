@@ -33,7 +33,7 @@ namespace UploadLayerFunction
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PublicBlobStorageUrl"])).WithName("PublicBlobServiceClient");
             });
 
-            builder.Services.AddSingleton<ILayerRepository, LayerRepository>();
+            builder.Services.AddSingleton<ILayerRepository, CollectionRepository>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

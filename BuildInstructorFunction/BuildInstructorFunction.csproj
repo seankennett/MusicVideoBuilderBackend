@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BuildDataAccess\BuildDataAccess.csproj" />
     <ProjectReference Include="..\BuilderEntities\BuilderEntities.csproj" />
+    <ProjectReference Include="..\LayerDataAccess\LayerDataAccess.csproj" />
     <ProjectReference Include="..\VideoDataAccess\VideoDataAccess.csproj" />
   </ItemGroup>
   <ItemGroup>

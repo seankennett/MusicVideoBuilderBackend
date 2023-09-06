@@ -20,9 +20,9 @@ namespace NewVideoFunction
         private readonly IBlobService _blobService;
         private readonly IBuildRepository _buildRepository;
         private readonly IChargeService _chargeService;
-        private readonly IUserLayerRepository _userLayerRepository;
+        private readonly IUserDisplayLayerRepository _userLayerRepository;
 
-        public NewVideoFunction(IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService, IUserLayerRepository userLayerRepository)
+        public NewVideoFunction(IMailer mailer, IUserService userService, IBlobService blobService, IBuildRepository buildRepository, IChargeService chargeService, IUserDisplayLayerRepository userLayerRepository)
         {
             _mailer = mailer;
             _userService = userService;

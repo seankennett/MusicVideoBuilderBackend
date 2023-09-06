@@ -9,11 +9,11 @@ using VideoDataAccess.Entities;
 
 public class PaymentService : IPaymentService
 {
-    private readonly IUserLayerRepository _userLayerRepository;
+    private readonly IUserDisplayLayerRepository _userLayerRepository;
     private readonly IBuildRepository _buildRepository;
     private readonly ILogger<PaymentService> _logger;
 
-    public PaymentService(IUserLayerRepository userLayerRepository, IBuildRepository buildRepository)
+    public PaymentService(IUserDisplayLayerRepository userLayerRepository, IBuildRepository buildRepository)
     {
         _userLayerRepository = userLayerRepository;
         _buildRepository = buildRepository;
@@ -22,7 +22,7 @@ public class PaymentService : IPaymentService
     public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)
     {
         var userLayers = await _userLayerRepository.GetAllAsync(userObjectId);
-        int serverCalculatedCost = GetVideoCost(video.Clips.Where(c => c.Layers != null).SelectMany(c => c.Layers).Select(l => l.LayerId).Distinct(), userLayers, paymentIntentRequest.Resolution, paymentIntentRequest.License);
+        int serverCalculatedCost = GetVideoCost(video.Clips.Where(c => c.ClipDisplayLayers != null).SelectMany(c => c.ClipDisplayLayers).Select(l => l.DisplayLayerId).Distinct(), userLayers, paymentIntentRequest.Resolution, paymentIntentRequest.License);
         if (serverCalculatedCost != paymentIntentRequest.Cost) {
             throw new Exception($"Client cost {paymentIntentRequest.Cost} not the same as server cost {serverCalculatedCost} for video {video.VideoId}");
         }
@@ -56,10 +56,10 @@ public class PaymentService : IPaymentService
         return paymentIntent.ClientSecret;
     }
 
-    private int GetVideoCost(IEnumerable<Guid> uniqueVideoLayers, IEnumerable<UserLayer> userLayers, Resolution resolution, License license)
+    private int GetVideoCost(IEnumerable<Guid> uniqueVideoLayers, IEnumerable<UserDisplayLayer> userLayers, Resolution resolution, License license)
     {
         var resolutionLicensedUserLayers = userLayers.Where(u => u.Resolution == resolution && u.License == license);
-        return GetBuildCost(resolution) + GetLayerLicenseCost(uniqueVideoLayers.Except(resolutionLicensedUserLayers.Select(x => x.LayerId)).Count(), license, resolution);
+        return GetBuildCost(resolution) + GetLayerLicenseCost(uniqueVideoLayers.Except(resolutionLicensedUserLayers.Select(x => x.DisplayLayerId)).Count(), license, resolution);
     }
 
     private int GetLayerLicenseCost(int numberOfLicenses, License license, Resolution resolution)

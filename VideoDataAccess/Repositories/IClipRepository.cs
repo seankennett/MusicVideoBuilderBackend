@@ -1,6 +1,6 @@
 ﻿using VideoDataAccess.Entities;
 
-namespace SpaWebApi.Repositories
+namespace VideoDataAccess.Repositories
 {
     public interface IClipRepository
     {

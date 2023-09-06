@@ -2,7 +2,7 @@
 {
     public class VideoDataAccessConstants
     {
-        public const short MaximumLayerPerClip = 9;
-        public const byte BeatsPerLayer = 4;
+        public const short MaximumDisplayLayerPerClip = 5;
+        public const byte BeatsPerDisplayLayer = 4;
     }
 }

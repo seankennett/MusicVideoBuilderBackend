@@ -2,9 +2,9 @@
 
 namespace BuildDataAccess.Repositories
 {
-    public interface IUserLayerRepository
+    public interface IUserDisplayLayerRepository
     {
-        Task<IEnumerable<UserLayer>> GetAllAsync(Guid userObjectId);
+        Task<IEnumerable<UserDisplayLayer>> GetAllAsync(Guid userObjectId);
         Task SavePendingUserLayersAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId);
         Task ConfirmPendingUserLayers(Guid buildId);
     }

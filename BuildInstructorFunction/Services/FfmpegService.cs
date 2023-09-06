@@ -1,6 +1,8 @@
 ﻿using BuildEntities;
+using LayerEntities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using VideoDataAccess.Entities;
 using VideoEntities.Entities;
@@ -16,7 +18,7 @@ namespace BuildInstructorFunction.Services
             _ffmpegComplexOperations = ffmpegComplexOperations;
         }
 
-        public string GetClipCode(Clip clip, Resolution resolution, Formats format, byte bpm, bool fromCommandLine, string outputBlobPrefix, string watermarkFilePath)
+        public string GetClipCode(Clip clip, Resolution resolution, Formats format, byte bpm, bool fromCommandLine, string outputBlobPrefix, string watermarkFilePath, List<Layer> orderedLayers)
         {
             var command = new StringBuilder();
             if (fromCommandLine)
@@ -26,26 +28,16 @@ namespace BuildInstructorFunction.Services
 
             command.Append("-y ");
 
-            var inputList = _ffmpegComplexOperations.BuildInputList(command, clip, bpm, null, resolution, watermarkFilePath);
+            var inputList = _ffmpegComplexOperations.BuildInputList(command, clip.BackgroundColour, bpm, null, resolution, watermarkFilePath, orderedLayers);
 
             command.Append($"-filter_complex \"");
 
-            if ((clip.BackgroundColour != null && clip.Layers != null) || (clip.BackgroundColour != null && watermarkFilePath != null))
-            {
-                inputList = _ffmpegComplexOperations.SetBackgroundColourMaxFrames(command, clip.BackgroundColour, inputList, "b");
-                _ffmpegComplexOperations.BuildClipByOverlayAndTrim(command, clip, inputList, watermarkFilePath);
-            }
-            else if (clip.BackgroundColour != null)
-            {
-                _ffmpegComplexOperations.SetBackgroundColourMaxFrames(command, clip.BackgroundColour, inputList, null);
-            }
-            else
-            {
-                _ffmpegComplexOperations.BuildClipByOverlayAndTrim(command, clip, inputList, watermarkFilePath);
-            }
+            inputList = _ffmpegComplexOperations.BuildLayerCommand(command, clip, inputList, orderedLayers, watermarkFilePath);
+            _ffmpegComplexOperations.BuildClipCommand(command, clip.BackgroundColour, inputList, watermarkFilePath, orderedLayers);
+            _ffmpegComplexOperations.BuildClipFilterCommand(command, clip);
 
             // make all clips same format so demuxer can be used later
-            command.Append($"format=yuv420p\" {outputBlobPrefix}/{clip.ClipId}.{format}");
+            command.Append($"\" {outputBlobPrefix}/{clip.ClipId}.{format}");
             if (fromCommandLine)
             {
                 command.Append("'");

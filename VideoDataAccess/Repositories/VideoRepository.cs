@@ -2,9 +2,11 @@
 using LayerEntities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
+using System;
 using System.Data;
 using VideoDataAccess.DTOEntities;
 using VideoDataAccess.Entities;
+using VideoDataAccess.Helpers;
 using VideoEntities.Entities;
 
 namespace VideoDataAccess.Repositories
@@ -25,35 +27,18 @@ namespace VideoDataAccess.Repositories
                 var reader = await connection.QueryMultipleAsync("GetVideos", new { userObjectId }, commandType: CommandType.StoredProcedure);
                 var videos = await reader.ReadAsync<VideoDTO>();
                 var clips = await reader.ReadAsync<VideoClipDTO>();
-                var userLayers = await reader.ReadAsync<ClipLayerDTO>();
+                var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
+                var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
 
                 var groupedClips = clips.GroupBy(x => x.VideoId);
-                var groupedLayers = userLayers.GroupBy(x => x.ClipId);
+                var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
+                var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
 
                 return videos.Select(v => new Video
                 {
                     Clips = groupedClips.First(gc => gc.Key == v.VideoId).OrderBy(gc => gc.Order).Select(gc =>
                     {
-                        var clip = new Clip
-                        {
-                            ClipId = gc.ClipId,
-                            ClipName = gc.ClipName,
-                            BackgroundColour = gc.BackgroundColour,
-                            BeatLength = gc.BeatLength,
-                            StartingBeat = gc.StartingBeat
-                        };
-
-                        var groupedLayer = groupedLayers.FirstOrDefault(gu => gu.Key == gc.ClipId);
-                        if (groupedLayer != null)
-                        {
-                            clip.Layers = groupedLayer.OrderBy(gu => gu.Order).Select(gu => new Layer
-                            {
-                                LayerId = gu.LayerId,
-                                LayerName = gu.LayerName
-                            });
-                        }
-
-                        return clip;
+                        return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, gc);
                     }),
                     BPM = v.BPM,
                     Format = (Formats)v.FormatId,
@@ -101,8 +86,12 @@ namespace VideoDataAccess.Repositories
                 if (video != null)
                 {
                     var clips = await reader.ReadAsync<VideoClipDTO>();
-                    var layers = await reader.ReadAsync<ClipLayerDTO>();
-                    var groupedLayers = layers.GroupBy(x => x.ClipId);
+                    var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
+                    var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
+
+                    var groupedClips = clips.GroupBy(x => x.VideoId);
+                    var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
+                    var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
 
                     return new Video
                     {
@@ -117,16 +106,7 @@ namespace VideoDataAccess.Repositories
                                 StartingBeat = c.StartingBeat
                             };
 
-                            var groupedLayer = groupedLayers.FirstOrDefault(gu => gu.Key == c.ClipId);
-                            if (groupedLayer != null)
-                            {
-                                clip.Layers = groupedLayer.OrderBy(gu => gu.Order).Select(gu => new Layer
-                                {
-                                    LayerId = gu.LayerId,
-                                    LayerName = gu.LayerName
-                                });
-                            }
-                            return clip;
+                            return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, clip);
                         }),
                         BPM = video.BPM,
                         Format = (Formats)video.FormatId,
@@ -138,7 +118,7 @@ namespace VideoDataAccess.Repositories
 
                 return null;
             }
-        }
+        }       
 
         public async Task DeleteAsync(int videoId)
         {

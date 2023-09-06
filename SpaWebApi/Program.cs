@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
 using SpaWebApi;
-using SpaWebApi.Repositories;
 using SpaWebApi.Services;
 using Stripe;
 using VideoDataAccess.Repositories;
@@ -37,13 +36,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         },
 options => { configuration.Bind("AzureAdB2C", options); });
 
-// Creating policies that wraps the authorization requirements
-builder.Services.AddAuthorization(options => {
-    options.AddPolicy("AuthorRolePolicy", policy =>
-    {
-        policy.RequireClaim("extension_IsLayerAuthor", "true");
-    });
-});
 builder.Services.AddMemoryCache();
 
 builder.Services.AddAzureClients(clientBuilder =>
@@ -68,16 +60,16 @@ builder.Services.AddOptions<SpaWebApiConfig>().Configure<IConfiguration>(
                 {
                     configuration.Bind(settings);
                 });
-builder.Services.AddSingleton<ITagRepository, TagRepository>();
-builder.Services.AddSingleton<ILayerRepository, LayerRepository>();
-builder.Services.AddSingleton<IUserLayerRepository, UserLayerRepository>();
+
+builder.Services.AddSingleton<ICollectionRepository, CollectionRepository>();
+builder.Services.AddSingleton<IDirectionRepository, DirectionRepository>();
+builder.Services.AddSingleton<IUserDisplayLayerRepository, UserDisplayLayerRepository>();
 builder.Services.AddSingleton<IClipRepository, ClipRepository>();
 builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
 builder.Services.AddSingleton<IBuildService, BuildService>();
 builder.Services.AddSingleton<IStorageService, StorageService>();
 builder.Services.AddSingleton<IClipService, ClipService>();
 builder.Services.AddSingleton<IVideoService, VideoService>();
-builder.Services.AddSingleton<ILayerUploadService, LayerUploadService>();
 builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
 

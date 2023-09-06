@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewVideoFunction", "NewVide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuilderFunction", "BuilderFunction\BuilderFunction.csproj", "{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UploadLayerFunction", "UploadLayerFunction\UploadLayerFunction.csproj", "{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoDataAccess", "VideoDataAccess\VideoDataAccess.csproj", "{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlConfig", "SqlConfig\SqlConfig.csproj", "{383E50B1-6288-4239-B508-63ADABEC2A53}"
@@ -33,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerEntities", "LayerEntit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildCleanFunction", "BuildCleanFunction\BuildCleanFunction.csproj", "{85946DDE-5F58-4649-9082-8F612026576A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoEntities", "VideoEntities\VideoEntities.csproj", "{0C205B45-D0CC-4454-96CA-0FF26764EBE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoEntities", "VideoEntities\VideoEntities.csproj", "{0C205B45-D0CC-4454-96CA-0FF26764EBE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,10 +55,6 @@ Global
 		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C00AE140-CCCA-4A3E-808E-C8542EA07DDD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B942354B-B9B3-4E3C-95DA-D8A7F1E2EC05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7493AD1F-F665-461E-ADA2-EBA6CF51FE6D}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -3,6 +3,7 @@ using BuildDataAccess.Extensions;
 using BuildDataAccess.Repositories;
 using BuildEntities;
 using BuilderEntities.Entities;
+using LayerDataAccess.Repositories;
 using SharedEntities.Models;
 using System;
 using System.Collections.Generic;
@@ -16,16 +17,18 @@ namespace BuildInstructorFunction.Services
     {
         private readonly IBuildRepository _buildRepository;
         private readonly IVideoRepository _videoRepository;
+        private readonly ICollectionRepository _collectionRepository;
         private readonly IFfmpegService _ffmpegService;
         private readonly IStorageService _storageService;
         private readonly IBuilderFunctionSender _builderFunctionSender;
         private readonly IAzureBatchService _azureBatchService;
-        private readonly IUserLayerRepository _userLayerRepository;
+        private readonly IUserDisplayLayerRepository _userLayerRepository;
 
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserLayerRepository userLayerRepository)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserDisplayLayerRepository userLayerRepository, ICollectionRepository collectionRepository)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;
+            _collectionRepository = collectionRepository;
             _ffmpegService = ffmpegService;
             _storageService = storageService;
             _builderFunctionSender = builderFunctionSender;
@@ -48,6 +51,7 @@ namespace BuildInstructorFunction.Services
         public async Task InstructBuildAsync(UserBuild build)
         {
             var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId);
+            var collections = await _collectionRepository.GetAllCollectionsAsync();
 
             var buildId = build.BuildId;
             var resolution = build.Resolution;
@@ -62,18 +66,24 @@ namespace BuildInstructorFunction.Services
             for (var i = 0; i < uniqueClips.Count(); i++)
             {
                 var clip = uniqueClips[i];
+                // looks complicated but should preserve order in clip
+                var orderedClipLayers = clip.ClipDisplayLayers.SelectMany(cdl => {
+                    return collections.SelectMany(c => c.DisplayLayers).Where(d => cdl.DisplayLayerId == d.DisplayLayerId).SelectMany(d => d.Layers);
+                }).ToList();
+
                 clipCommands.Add(new FfmpegIOCommand
                 {
                     FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, is4KFormat,
                 is4KFormat ? "." : tempBlobPrefix,
-                watermarkFilePath
+                watermarkFilePath,
+                orderedClipLayers
                 ),
                     VideoName = $"{clip.ClipId}.{video.Format}"
                 });
 
-                if (clip.Layers != null)
+                if (clip.ClipDisplayLayers != null)
                 {
-                    var layerIds = clip.Layers.Select(l => l.LayerId.ToString());
+                    var layerIds = orderedClipLayers.Select(x => x.LayerId.ToString());                    
                     layerIdsPerClip[i] = layerIds;
                     uniqueLayers = uniqueLayers.Union(layerIds).ToList();
                 }

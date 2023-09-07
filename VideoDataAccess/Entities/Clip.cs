@@ -1,6 +1,4 @@
-﻿using LayerDataAccess.Entities;
-using LayerEntities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using VideoDataAccess.Attributes;
 
 namespace VideoDataAccess.Entities

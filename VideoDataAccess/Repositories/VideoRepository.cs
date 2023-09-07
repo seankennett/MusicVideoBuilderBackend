@@ -1,8 +1,6 @@
 ﻿using Dapper;
-using LayerEntities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using System;
 using System.Data;
 using VideoDataAccess.DTOEntities;
 using VideoDataAccess.Entities;

@@ -17,11 +17,7 @@ namespace BuildInstructorFunction
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            var configuration = builder.GetContext().Configuration;
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-            };
+            var configuration = builder.GetContext().Configuration;           ;
 
             builder.Services.AddLogging();
             builder.Services.AddOptions<InstructorConfig>().Configure<IConfiguration>(
@@ -37,7 +33,7 @@ namespace BuildInstructorFunction
 
             builder.Services.AddAzureClients(clientBuilder =>
             {
-                clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
+                clientBuilder.UseCredential(new DefaultAzureCredential());
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
                 clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"])).ConfigureOptions(queueClientOptions =>
                 {
@@ -69,11 +65,10 @@ namespace BuildInstructorFunction
 
             builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
-                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential(defaultAzureCredentialOptions))
+                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
                         .AddJsonFile("local.settings.json", true)
                         .AddEnvironmentVariables()
                     .Build();
-
         }
     }
 }

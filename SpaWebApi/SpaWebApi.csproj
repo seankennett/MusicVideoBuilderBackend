@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildDataAccess\BuildDataAccess.csproj" />
-    <ProjectReference Include="..\LayerDataAccess\LayerDataAccess.csproj" />
+    <ProjectReference Include="..\CollectionDataAccess\CollectionDataAccess.csproj" />
     <ProjectReference Include="..\VideoDataAccess\VideoDataAccess.csproj" />
   </ItemGroup>
 

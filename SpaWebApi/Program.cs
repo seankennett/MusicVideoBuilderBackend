@@ -14,14 +14,9 @@ using VideoDataAccess.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-{
-    ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-};
-
 if (!builder.Environment.IsDevelopment())
 {
-    configuration.AddAzureKeyVault(new Uri(configuration["AzureKeyVaultEndpoint"]), new DefaultAzureCredential(defaultAzureCredentialOptions));
+    configuration.AddAzureKeyVault(new Uri(configuration["AzureKeyVaultEndpoint"]), new DefaultAzureCredential());
 }
 
 // Add services to the container.
@@ -41,7 +36,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddAzureClients(clientBuilder =>
 {
     
-    clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
+    clientBuilder.UseCredential(new DefaultAzureCredential());
     clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
     clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"])).ConfigureOptions(queueClientOptions =>
     {

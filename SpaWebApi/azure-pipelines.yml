@@ -8,8 +8,7 @@ trigger:
         - SpaWebApi.Test
         - BuildDataAccess
         - BuildEntities
-        - LayerDataAccess
-        - LayerEntities
+        - CollectionDataAccess
         - VideoDataAccess
         - VideoEntities
         - SqlConfig

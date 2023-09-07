@@ -14,10 +14,6 @@ namespace BuilderFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var configuration = builder.GetContext().Configuration;
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-            };
 
             builder.Services.AddLogging();
             builder.Services.AddOptions<BuilderConfig>().Configure<IConfiguration>(
@@ -29,7 +25,7 @@ namespace BuilderFunction
                 });
             builder.Services.AddAzureClients(clientBuilder =>
             {
-                clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
+                clientBuilder.UseCredential(new DefaultAzureCredential());
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
             });
             builder.Services.AddHttpClient(BuilderConstants.WatermarkFileName, httpClient =>

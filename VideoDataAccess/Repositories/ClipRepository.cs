@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using LayerEntities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using System.Data;

@@ -11,7 +11,7 @@ trigger:
         - BuilderEntities
         - VideoDataAccess
         - VideoEntities
-        - LayerEntities
+        - CollectionDataAccess
         - SqlConfig
 
 variables:

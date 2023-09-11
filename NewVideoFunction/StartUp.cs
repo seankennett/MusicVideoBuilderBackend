@@ -17,7 +17,6 @@ namespace NewVideoFunction
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var configuration = builder.GetContext().Configuration;
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions();
 
             builder.Services.AddLogging();
             
@@ -34,7 +33,7 @@ namespace NewVideoFunction
                 });
             builder.Services.AddAzureClients(clientBuilder =>
             {
-                clientBuilder.UseCredential(new DefaultAzureCredential(defaultAzureCredentialOptions));
+                clientBuilder.UseCredential(new DefaultAzureCredential());
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
             });
             builder.Services.AddSingleton(new ChainedTokenCredential(
@@ -52,16 +51,12 @@ namespace NewVideoFunction
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
             var configuration = builder.ConfigurationBuilder.Build();
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-            };
 
             var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
 
             configuration = builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
-                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential(defaultAzureCredentialOptions))
+                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
                         .AddJsonFile("local.settings.json", true)
                         .AddEnvironmentVariables()
                     .Build();

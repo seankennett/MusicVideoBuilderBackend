@@ -1,7 +1,6 @@
 ﻿using BuildEntities;
 using BuilderEntities.Extensions;
-using LayerDataAccess.Entities;
-using LayerEntities;
+using CollectionEntities.Entities;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;

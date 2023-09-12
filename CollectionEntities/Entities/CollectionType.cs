@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LayerDataAccess.Entities
+namespace CollectionEntities.Entities
 {
     public enum CollectionType
     {

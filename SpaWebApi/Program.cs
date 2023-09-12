@@ -1,7 +1,7 @@
 using Azure.Identity;
 using Azure.Storage.Queues;
 using BuildDataAccess.Repositories;
-using LayerDataAccess.Repositories;
+using CollectionDataAccess.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Azure;
@@ -31,8 +31,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         },
 options => { configuration.Bind("AzureAdB2C", options); });
 
-builder.Services.AddMemoryCache();
-
 builder.Services.AddAzureClients(clientBuilder =>
 {
     
@@ -55,9 +53,12 @@ builder.Services.AddOptions<SpaWebApiConfig>().Configure<IConfiguration>(
                 {
                     configuration.Bind(settings);
                 });
+builder.Services.AddHttpClient("PublicApi", client =>
+{
+    client.BaseAddress = new Uri(configuration["PublicApi"]);
+});
 
-builder.Services.AddSingleton<ICollectionRepository, CollectionRepository>();
-builder.Services.AddSingleton<IDirectionRepository, DirectionRepository>();
+builder.Services.AddSingleton<ICollectionService, CollectionService>();
 builder.Services.AddSingleton<IUserDisplayLayerRepository, UserDisplayLayerRepository>();
 builder.Services.AddSingleton<IClipRepository, ClipRepository>();
 builder.Services.AddSingleton<IVideoRepository, VideoRepository>();

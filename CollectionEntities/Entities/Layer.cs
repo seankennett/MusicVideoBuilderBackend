@@ -1,4 +1,4 @@
-﻿namespace LayerEntities
+﻿namespace CollectionEntities.Entities
 {
     public class Layer
     {

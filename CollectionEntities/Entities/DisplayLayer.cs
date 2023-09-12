@@ -1,6 +1,4 @@
-﻿using LayerEntities;
-
-namespace LayerDataAccess.Entities
+﻿namespace CollectionEntities.Entities
 {
     public class DisplayLayer
     {

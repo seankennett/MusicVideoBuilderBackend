@@ -1,6 +1,6 @@
-﻿using LayerDataAccess.Entities;
+﻿using CollectionEntities.Entities;
 
-namespace LayerDataAccess.DTOEntities
+namespace PublicDataApiFunction.DTOEntities
 {
     public class CollectionDTO : Collection
     {

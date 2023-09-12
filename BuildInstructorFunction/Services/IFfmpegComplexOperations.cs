@@ -1,6 +1,5 @@
 ﻿using BuildEntities;
-using LayerDataAccess.Entities;
-using LayerEntities;
+using CollectionEntities.Entities;
 using System.Collections.Generic;
 using System.Text;
 using VideoDataAccess.Entities;

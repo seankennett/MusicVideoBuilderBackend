@@ -31,6 +31,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoEntities", "VideoEntit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionDataAccess", "CollectionDataAccess\CollectionDataAccess.csproj", "{735B0C02-BFEF-4E0C-B0FB-8C06D5B57DBD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1BE5C06-92A7-4AF4-AE3A-A71D2349357B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicDataApiFunction", "PublicDataApiFunction\PublicDataApiFunction.csproj", "{8396FD61-E73E-4B9F-BB72-05EE12F50E56}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionEntities", "CollectionEntities\CollectionEntities.csproj", "{19DCFC06-9875-4FA1-B456-D0DEB02856DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +99,14 @@ Global
 		{735B0C02-BFEF-4E0C-B0FB-8C06D5B57DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{735B0C02-BFEF-4E0C-B0FB-8C06D5B57DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{735B0C02-BFEF-4E0C-B0FB-8C06D5B57DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8396FD61-E73E-4B9F-BB72-05EE12F50E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8396FD61-E73E-4B9F-BB72-05EE12F50E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8396FD61-E73E-4B9F-BB72-05EE12F50E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8396FD61-E73E-4B9F-BB72-05EE12F50E56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

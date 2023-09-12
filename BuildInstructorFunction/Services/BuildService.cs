@@ -3,7 +3,7 @@ using BuildDataAccess.Extensions;
 using BuildDataAccess.Repositories;
 using BuildEntities;
 using BuilderEntities.Entities;
-using LayerDataAccess.Repositories;
+using CollectionDataAccess.Services;
 using SharedEntities.Models;
 using System;
 using System.Collections.Generic;
@@ -17,18 +17,18 @@ namespace BuildInstructorFunction.Services
     {
         private readonly IBuildRepository _buildRepository;
         private readonly IVideoRepository _videoRepository;
-        private readonly ICollectionRepository _collectionRepository;
+        private readonly ICollectionService _collectionService;
         private readonly IFfmpegService _ffmpegService;
         private readonly IStorageService _storageService;
         private readonly IBuilderFunctionSender _builderFunctionSender;
         private readonly IAzureBatchService _azureBatchService;
         private readonly IUserDisplayLayerRepository _userLayerRepository;
 
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserDisplayLayerRepository userLayerRepository, ICollectionRepository collectionRepository)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserDisplayLayerRepository userLayerRepository, ICollectionService collectionService)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;
-            _collectionRepository = collectionRepository;
+            _collectionService = collectionService;
             _ffmpegService = ffmpegService;
             _storageService = storageService;
             _builderFunctionSender = builderFunctionSender;
@@ -51,7 +51,7 @@ namespace BuildInstructorFunction.Services
         public async Task InstructBuildAsync(UserBuild build)
         {
             var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId);
-            var collections = await _collectionRepository.GetAllCollectionsAsync();
+            var collections = await _collectionService.GetAllCollectionsAsync();
 
             var buildId = build.BuildId;
             var resolution = build.Resolution;

@@ -1,6 +1,7 @@
-﻿using LayerDataAccess.Entities;
+﻿using CollectionEntities.Entities;
+using System;
 
-namespace LayerDataAccess.DTOEntities
+namespace PublicDataApiFunction.DTOEntities
 {
     public class DisplayLayerDTO : DisplayLayer
     {

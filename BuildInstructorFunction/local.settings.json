@@ -13,6 +13,7 @@
     "QueueName": "build-instructor",
     "FreeBuilderQueueName": "free-builder",
     "HdBuilderQueueName": "hd-builder",
-    "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;"
+    "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;",
+    "PublicApi": "https://public.musicvideobuilder.com"
   }
 }

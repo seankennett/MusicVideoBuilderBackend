@@ -41,6 +41,10 @@ namespace BuildInstructorFunction
 
                 });
             });
+            builder.Services.AddHttpClient("PublicApi", client =>
+            {
+                client.BaseAddress = new Uri(configuration["PublicApi"]);
+            });
 
             builder.Services.AddSingleton<IBuildService, BuildService>();
             builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
@@ -56,10 +60,6 @@ namespace BuildInstructorFunction
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
             var configuration = builder.ConfigurationBuilder.Build();
-            var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions
-            {
-                ManagedIdentityClientId = configuration["ManagedIdentityClientId"]
-            };
 
             var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
 

@@ -1,10 +1,8 @@
 using BuildEntities;
 using BuildInstructorFunction.Services;
-using LayerEntities;
-using System.Drawing;
+using CollectionEntities.Entities;
 using System.Text;
 using VideoDataAccess.Entities;
-using VideoEntities.Entities;
 
 namespace BuildInstructorFunction.Test.Services
 {

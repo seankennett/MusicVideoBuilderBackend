@@ -1,4 +1,3 @@
-using LayerEntities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SpaWebApi.Services;

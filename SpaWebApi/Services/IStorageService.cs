@@ -1,6 +1,4 @@
-﻿using LayerDataAccess.Entities;
-
-namespace SpaWebApi.Services
+﻿namespace SpaWebApi.Services
 {
     public interface IStorageService
     {

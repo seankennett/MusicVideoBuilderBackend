@@ -2,7 +2,6 @@
 using Azure.Storage.Queues;
 using System.Text.Json;
 using Azure.Storage.Sas;
-using LayerDataAccess.Entities;
 using Microsoft.Extensions.Options;
 
 namespace SpaWebApi.Services

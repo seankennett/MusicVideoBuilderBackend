@@ -1,12 +1,14 @@
-﻿using Dapper;
-using LayerDataAccess.DTOEntities;
-using LayerDataAccess.Entities;
-using LayerEntities;
+﻿using CollectionEntities.Entities;
+using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
+using PublicDataApiFunction.DTOEntities;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace LayerDataAccess.Repositories
+namespace PublicDataApiFunction.Repositories
 {
     public class CollectionRepository : ICollectionRepository
     {
@@ -24,7 +26,7 @@ namespace LayerDataAccess.Repositories
             var directions = await _directionRepository.GetAllDirections();
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                var reader = await connection.QueryMultipleAsync("GetCollections", commandType: System.Data.CommandType.StoredProcedure);
+                var reader = await connection.QueryMultipleAsync("GetCollections", commandType: CommandType.StoredProcedure);
                 var collections = await reader.ReadAsync<CollectionDTO>();
                 var displayLayers = await reader.ReadAsync<DisplayLayerDTO>();
                 var layers = await reader.ReadAsync<LayerDTO>();

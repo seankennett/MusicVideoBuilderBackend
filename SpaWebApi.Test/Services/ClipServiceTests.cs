@@ -1,6 +1,5 @@
-using LayerDataAccess.Entities;
-using LayerDataAccess.Repositories;
-using LayerEntities;
+using CollectionDataAccess.Services;
+using CollectionEntities.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SpaWebApi.Services;
@@ -18,7 +17,7 @@ namespace SpaWebApi.Test.Services
     {
         private Mock<IVideoRepository> _videoRepositoryMock;
         private Mock<IClipRepository> _clipRepositoryMock;
-        private Mock<ICollectionRepository> _collectionRepositoryMock;
+        private Mock<ICollectionService> _collectionServiceMock;
         private ClipService _sut;
         private Guid _userId;
         private Clip _firstClip;
@@ -97,13 +96,13 @@ namespace SpaWebApi.Test.Services
 
             _videoRepositoryMock = new Mock<IVideoRepository>();
             _clipRepositoryMock = new Mock<IClipRepository>();
-            _collectionRepositoryMock = new Mock<ICollectionRepository>();
-            _collectionRepositoryMock.Setup(x => x.GetAllCollectionsAsync()).ReturnsAsync(collections);
+            _collectionServiceMock = new Mock<ICollectionService>();
+            _collectionServiceMock.Setup(x => x.GetAllCollectionsAsync()).ReturnsAsync(collections);
             _clipRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(new List<Clip> { _firstClip, secondClip });
             _clipRepositoryMock.Setup(x => x.SaveAsync(_userId, _firstClip)).ReturnsAsync(_firstClip);
             _clipRepositoryMock.Setup(x => x.GetAsync(_userId, _firstClip.ClipId)).ReturnsAsync(new Clip());
 
-            _sut = new ClipService(_clipRepositoryMock.Object, _videoRepositoryMock.Object, _collectionRepositoryMock.Object);
+            _sut = new ClipService(_clipRepositoryMock.Object, _videoRepositoryMock.Object, _collectionServiceMock.Object);
         }
 
         [TestMethod]

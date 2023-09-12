@@ -1,4 +1,4 @@
-﻿using LayerDataAccess.Repositories;
+﻿using CollectionDataAccess.Services;
 using VideoDataAccess;
 using VideoDataAccess.Entities;
 using VideoDataAccess.Repositories;
@@ -9,13 +9,13 @@ namespace SpaWebApi.Services
     {
         private readonly IClipRepository _clipRepository;
         private readonly IVideoRepository _videoRepository;
-        private readonly ICollectionRepository _collectionRepository;
+        private readonly ICollectionService _collectionService;
 
-        public ClipService(IClipRepository clipRepository, IVideoRepository videoRepository, ICollectionRepository collectionRepository)
+        public ClipService(IClipRepository clipRepository, IVideoRepository videoRepository, ICollectionService collectionService)
         {
             _clipRepository = clipRepository;
             _videoRepository = videoRepository;
-            _collectionRepository = collectionRepository;
+            _collectionService = collectionService;
         }
         public async Task DeleteAsync(Guid userObjectId, int clipId)
         {
@@ -83,7 +83,7 @@ namespace SpaWebApi.Services
         {
             if (clipDisplayLayers != null)
             {
-                var collections = await _collectionRepository.GetAllCollectionsAsync();
+                var collections = await _collectionService.GetAllCollectionsAsync();
                 foreach (var clipDisplayLayer in clipDisplayLayers)
                 {
                     var displayLayer = collections.SelectMany(c => c.DisplayLayers).FirstOrDefault(d => d.DisplayLayerId == clipDisplayLayer.DisplayLayerId);

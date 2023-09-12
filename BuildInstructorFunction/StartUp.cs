@@ -3,6 +3,7 @@ using Azure.Storage.Queues;
 using BuildDataAccess.Repositories;
 using BuildInstructorFunction;
 using BuildInstructorFunction.Services;
+using CollectionDataAccess.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
@@ -55,6 +56,7 @@ namespace BuildInstructorFunction
             builder.Services.AddSingleton<IStorageService, StorageService>();
             builder.Services.AddSingleton<IAzureBatchService, AzureBatchService>();
             builder.Services.AddSingleton<IBuilderFunctionSender, BuilderFunctionSender>();
+            builder.Services.AddSingleton<ICollectionService, CollectionService>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

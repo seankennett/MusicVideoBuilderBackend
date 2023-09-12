@@ -67,7 +67,7 @@ namespace BuildInstructorFunction.Services
             {
                 var clip = uniqueClips[i];
                 // looks complicated but should preserve order in clip
-                var orderedClipLayers = clip.ClipDisplayLayers.SelectMany(cdl => {
+                var orderedClipLayers = clip.ClipDisplayLayers?.Where(cdl => cdl != null).SelectMany(cdl => {
                     return collections.SelectMany(c => c.DisplayLayers).Where(d => cdl.DisplayLayerId == d.DisplayLayerId).SelectMany(d => d.Layers);
                 }).ToList();
 

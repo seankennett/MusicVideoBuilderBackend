@@ -21,7 +21,7 @@ namespace CollectionDataAccess.Services
         public async Task<IEnumerable<Collection>> GetAllCollectionsAsync()
         {
             var httpClient = _httpClientFactory.CreateClient("PublicApi");
-            var collections = await httpClient.GetFromJsonAsync<IEnumerable<Collection>>("Collections");
+            var collections = await httpClient.GetFromJsonAsync<IEnumerable<Collection>>("api/Collections");
             return collections ?? new List<Collection>();
         }
     }

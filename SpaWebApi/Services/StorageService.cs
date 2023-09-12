@@ -9,12 +9,10 @@ namespace SpaWebApi.Services
     public class StorageService : IStorageService
     {
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly QueueClient _queueClientUploadLayer;
         private readonly QueueClient _queueClientBuildInstructor;
         public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient, IOptions<SpaWebApiConfig> config)
         {
             _blobServiceClient = blobServiceClient;
-            _queueClientUploadLayer = queueServiceClient.GetQueueClient(config.Value.UploadLayerQueueName);
             _queueClientBuildInstructor = queueServiceClient.GetQueueClient(config.Value.BuildInstructorQueueName);
         }
 

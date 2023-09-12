@@ -43,5 +43,4 @@ steps:
     appType: 'functionApp'
     appName: '$(functioNamespace)'
     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-    deploymentMethod : 'zipDeploy'
   displayName: Deploy Azure Function

@@ -37,7 +37,7 @@ namespace NewVideoFunction
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
             });
             builder.Services.AddSingleton(new ChainedTokenCredential(
-                new ManagedIdentityCredential(),
+                new ManagedIdentityCredential(configuration["AZURE_CLIENT_ID"]),
                 new EnvironmentCredential()));
 
             builder.Services.AddSingleton<IBuildRepository, BuildRepository>();

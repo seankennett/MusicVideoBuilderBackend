@@ -24,7 +24,7 @@ namespace PublicDataApiFunction
         }
 
         [FunctionName("PublicDataApiFunction")]
-        public async Task<IEnumerable<Collection>> Run([HttpTrigger(authLevel:AuthorizationLevel.Anonymous)] HttpRequest req)
+        public async Task<IEnumerable<Collection>> Run([HttpTrigger(authLevel:AuthorizationLevel.Anonymous, Route = "Collections")] HttpRequest req)
         {
             // Try to get the item from the cache
             if (!_memoryCache.TryGetValue(CacheKey, out IEnumerable<Collection> collections))

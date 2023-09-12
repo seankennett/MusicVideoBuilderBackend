@@ -27,13 +27,8 @@ namespace PublicDataApiFunction
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            var configuration = builder.ConfigurationBuilder.Build();
-
-            var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
-
             builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
-                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
                         .AddJsonFile("local.settings.json", true)
                         .AddEnvironmentVariables()
                     .Build();

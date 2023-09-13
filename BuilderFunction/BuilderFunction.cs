@@ -207,7 +207,7 @@ namespace BuilderFunction
                 var httpClient = _httpClientFactory.CreateClient(BuilderConstants.WatermarkFileName);
                 using (var stream = await httpClient.GetStreamAsync(BuilderConstants.WatermarkFileName))
                 {
-                    using (var fileStream = new FileStream(Path.Combine(tempFilePath, BuilderConstants.WatermarkFileName), FileMode.CreateNew))
+                    using (var fileStream = new FileStream(Path.Combine(tempFilePath, BuilderConstants.WatermarkFileName), FileMode.Create))
                     {
                         await stream.CopyToAsync(fileStream);
                     }

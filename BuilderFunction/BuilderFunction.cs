@@ -188,7 +188,7 @@ namespace BuilderFunction
 
                 var layerContainerClient = _blobServiceClient.GetBlobContainerClient(layerId);
 
-                for (int j = 0; j < FramesPerLayer; j++)
+                for (int j = 1; j <= FramesPerLayer; j++)
                 {
                     var imageName = $"{j}.png";
                     var blobClient = layerContainerClient.GetBlobClient($"{resolutionBlobPrefix}/{imageName}");

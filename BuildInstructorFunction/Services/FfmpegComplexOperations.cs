@@ -92,12 +92,13 @@ namespace BuildInstructorFunction.Services
                     else
                     {
                         command.Append($"{previousOutputReference}{nextFfmpegReference}overlay");
+                        if (nextTargetId == watermarkFilePath)
+                        {
+                            command.Append($"=0:(main_h-overlay_h)");
+                        }
                     }
 
-                    if (nextTargetId == watermarkFilePath)
-                    {
-                        command.Append($"=0:(main_h-overlay_h)");
-                    }
+                    command.Append(",format=gbrp");
 
                     // if not last iteration
                     if (j != targetIds.Count - 2)
@@ -122,7 +123,7 @@ namespace BuildInstructorFunction.Services
             {
                 targetIds.AddRange(uniqueLayers.Select(x => x.LayerId.ToString()));
             }
-            
+
             if (watermark != null)
             {
                 targetIds.Add(watermark);
@@ -135,7 +136,7 @@ namespace BuildInstructorFunction.Services
         {
             ColorConverter converter = new ColorConverter();
             Color color = (Color)converter.ConvertFromString("#" + hexCode);
-            return $"{(double)color.R / byte.MaxValue}:0:0:0:{(double)color.G / byte.MaxValue}:0:0:0:{(double)color.B / byte.MaxValue}:0:0:0";
+            return $"rr={(double)color.R / byte.MaxValue}:gg={(double)color.G / byte.MaxValue}:bb={(double)color.B / byte.MaxValue}";
         }
 
         public List<(string id, string ffmpegReference)> BuildLayerCommand(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> splitLayers, List<Layer> uniqueLayers, string watermarkFilePath)
@@ -147,7 +148,7 @@ namespace BuildInstructorFunction.Services
                 var matchingInputindex = splitLayers.FindIndex(x => x.id == targetId);
                 var matchedReference = splitLayers[matchingInputindex].ffmpegReference;
                 var matchedLayer = uniqueLayers?.FirstOrDefault(x => x.LayerId.ToString() == targetId);
-                if (matchedLayer != null)
+                if (matchedLayer != null && !matchedLayer.IsOverlay)
                 {
                     var matchedOverrideLayer = clip.ClipDisplayLayers?.Where(x => x.LayerClipDisplayLayers != null).SelectMany(x => x.LayerClipDisplayLayers).FirstOrDefault(x => x.LayerId.ToString() == targetId);
                     var hexCode = matchedOverrideLayer?.ColourOverride ?? matchedLayer.DefaultColour;

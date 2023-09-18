@@ -149,7 +149,7 @@ namespace BuildInstructorFunction.Test.Services
 
             Assert.AreEqual("[v:0]", output.Single().ffmpegReference);
 
-            Assert.AreEqual($"previous[v:0]colorchannelmixer=1:0:0:0:1:0:0:0:1:0:0:0,format=gbrp", sb.ToString());
+            Assert.AreEqual($"previous[v:0]colorchannelmixer=rr=1:gg=1:bb=1,format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -194,7 +194,7 @@ namespace BuildInstructorFunction.Test.Services
 
             Assert.AreEqual("[v:0]", output.Single().ffmpegReference);
 
-            Assert.AreEqual($"previous[v:0]colorchannelmixer=0:0:0:0:0:0:0:0:0:0:0:0,format=gbrp", sb.ToString());
+            Assert.AreEqual($"previous[v:0]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -226,7 +226,7 @@ namespace BuildInstructorFunction.Test.Services
             Assert.AreEqual("[l0]", output[0].ffmpegReference);
             Assert.AreEqual("[v:1]", output[1].ffmpegReference);
 
-            Assert.AreEqual($"previous[v:0]colorchannelmixer=1:0:0:0:1:0:0:0:1:0:0:0,format=gbrp[l0];", sb.ToString());
+            Assert.AreEqual($"previous[v:0]colorchannelmixer=rr=1:gg=1:bb=1,format=gbrp[l0];", sb.ToString());
         }
 
         [TestMethod]
@@ -282,7 +282,7 @@ namespace BuildInstructorFunction.Test.Services
             Assert.AreEqual("[l1]", output[1].ffmpegReference);
             Assert.AreEqual("[v:3]", output[2].ffmpegReference);
 
-            Assert.AreEqual($"previous[v:0]colorchannelmixer=1:0:0:0:1:0:0:0:1:0:0:0,format=gbrp[l0];[v:1]colorchannelmixer=0:0:0:0:0.6:0:0:0:0.06666666666666667:0:0:0,format=gbrp[l1];", sb.ToString());
+            Assert.AreEqual($"previous[v:0]colorchannelmixer=rr=1:gg=1:bb=1,format=gbrp[l0];[v:1]colorchannelmixer=rr=0:gg=0.6:bb=0.06666666666666667,format=gbrp[l1];", sb.ToString());
         }
 
         [TestMethod]
@@ -316,7 +316,7 @@ namespace BuildInstructorFunction.Test.Services
             Assert.AreEqual(layerId.ToString(), output[1].id);
             Assert.AreEqual("[l1]", output[1].ffmpegReference);
 
-            Assert.AreEqual($"previous[v:1]trim=end_frame=64,format=gbrp[l0];[v:0]colorchannelmixer=1:0:0:0:1:0:0:0:1:0:0:0,format=gbrp[l1];", sb.ToString());
+            Assert.AreEqual($"previous[v:1]trim=end_frame=64,format=gbrp[l0];[v:0]colorchannelmixer=rr=1:gg=1:bb=1,format=gbrp[l1];", sb.ToString());
         }
 
         [TestMethod]
@@ -384,7 +384,7 @@ namespace BuildInstructorFunction.Test.Services
 
             sut.BuildClipCommand(sb, null, splitClips, watermark, layers);
 
-            Assert.AreEqual("previous [z1][y1]overlay=0:(main_h-overlay_h)", sb.ToString());
+            Assert.AreEqual("previous [z1][y1]overlay=0:(main_h-overlay_h),format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -404,7 +404,7 @@ namespace BuildInstructorFunction.Test.Services
 
             sut.BuildClipCommand(sb, colour, splitClips, watermark, null);
 
-            Assert.AreEqual("previous [z1][y1]overlay=0:(main_h-overlay_h)", sb.ToString());
+            Assert.AreEqual("previous [z1][y1]overlay=0:(main_h-overlay_h),format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -431,7 +431,7 @@ namespace BuildInstructorFunction.Test.Services
 
             sut.BuildClipCommand(sb, null, splitClips, null, layers);
 
-            Assert.AreEqual("previous [z1][y1]overlay", sb.ToString());
+            Assert.AreEqual("previous [z1][y1]overlay,format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -458,7 +458,7 @@ namespace BuildInstructorFunction.Test.Services
 
             sut.BuildClipCommand(sb, null, splitClips, null, layers);
 
-            Assert.AreEqual("previous [z1][y1]blend=all_mode=screen", sb.ToString());
+            Assert.AreEqual("previous [z1][y1]blend=all_mode=screen,format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -487,7 +487,7 @@ namespace BuildInstructorFunction.Test.Services
 
             sut.BuildClipCommand(sb, null, splitClips, watermark, layers);
 
-            Assert.AreEqual("previous [z1][y1]blend=all_mode=screen[o0];[o0][x1]overlay=0:(main_h-overlay_h)", sb.ToString());
+            Assert.AreEqual("previous [z1][y1]blend=all_mode=screen,format=gbrp[o0];[o0][x1]overlay=0:(main_h-overlay_h),format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -519,7 +519,7 @@ namespace BuildInstructorFunction.Test.Services
 
             sut.BuildClipCommand(sb, colour, splitClips, null, layers);
 
-            Assert.AreEqual("previous [x1][z1]overlay[o0];[o0][y1]blend=all_mode=screen[o1];[o1][w1]blend=all_mode=screen", sb.ToString());
+            Assert.AreEqual("previous [x1][z1]overlay,format=gbrp[o0];[o0][y1]blend=all_mode=screen,format=gbrp[o1];[o1][w1]blend=all_mode=screen,format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -614,7 +614,7 @@ namespace BuildInstructorFunction.Test.Services
             sut.BuildLayerCommand(sb, clip, splitClips, layers, null);
             sut.BuildClipFilterCommand(sb, clip);
 
-            Assert.AreEqual("[z1]colorchannelmixer=0:0:0:0:0:0:0:0:0:0:0:0,format=gbrp,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
+            Assert.AreEqual("[z1]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
         }
     }
 }

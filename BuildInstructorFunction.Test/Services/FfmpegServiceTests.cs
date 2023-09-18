@@ -49,7 +49,7 @@ namespace BuildInstructorFunction.Test.Services
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
             var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", watermarkFilePath, layers);
-            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -i \"{watermarkFilePath}\" -filter_complex \"[3:v]trim=end_frame=64,format=gbrp[l0];[0:v]colorchannelmixer=0:0:0:0:0:0:0:0:0:0:0:0,format=gbrp[l1];[1:v]colorchannelmixer=1:0:0:0:0:0:0:0:0:0:0:0,format=gbrp[l2];[2:v]colorchannelmixer=0:0:0:0:0:0:0:0:1:0:0:0,format=gbrp[l3];[l0][l1]blend=all_mode=screen[o0];[o0][l2]blend=all_mode=screen[o1];[o1][l3]overlay[o2];[o2][4:v]overlay=0:(main_h-overlay_h)\" ouputprefix/2.api'", result);
+            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -i \"{watermarkFilePath}\" -filter_complex \"[3:v]trim=end_frame=64,format=gbrp[l0];[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l1];[1:v]colorchannelmixer=rr=1:gg=0:bb=0,format=gbrp[l2];[l0][l1]blend=all_mode=screen,format=gbrp[o0];[o0][l2]blend=all_mode=screen,format=gbrp[o1];[o1][2:v]overlay,format=gbrp[o2];[o2][4:v]overlay=0:(main_h-overlay_h),format=gbrp\" ouputprefix/2.api'", result);
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace BuildInstructorFunction.Test.Services
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
             var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, layers);
-            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=0:0:0:0:0:0:0:0:0:0:0:0,format=gbrp[l0];[1:v]colorchannelmixer=0:0:0:0:0.06666666666666667:0:0:0:0:0:0:0,format=gbrp[l1];[2:v]colorchannelmixer=0:0:0:0:0:0:0:0:1:0:0:0,format=gbrp[l2];[l0][l1]blend=all_mode=screen[o0];[o0][l2]overlay,trim=start_frame=16:end_frame=64,setpts=PTS-STARTPTS\" ouputprefix/2.api'", result);
+            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l0];[1:v]colorchannelmixer=rr=0:gg=0.06666666666666667:bb=0,format=gbrp[l1];[l0][l1]blend=all_mode=screen,format=gbrp[o0];[o0][2:v]overlay,format=gbrp,trim=start_frame=16:end_frame=64,setpts=PTS-STARTPTS\" ouputprefix/2.api'", result);
         }
 
         [TestMethod]
@@ -100,7 +100,7 @@ namespace BuildInstructorFunction.Test.Services
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
             var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, layers);
-            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=0:0:0:0:0:0:0:0:0:0:0:0,format=gbrp\" ouputprefix/2.api'", result);
+            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp\" ouputprefix/2.api'", result);
         }
 
         [TestMethod]

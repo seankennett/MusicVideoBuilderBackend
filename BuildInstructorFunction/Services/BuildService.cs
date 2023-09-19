@@ -62,6 +62,7 @@ namespace BuildInstructorFunction.Services
             var uniqueClips = video.Clips.DistinctBy(x => x.ClipId).ToList();
             var layerIdsPerClip = new Dictionary<int, IEnumerable<string>>();
             var uniqueLayers = new List<string>();
+            var uniqueDisplayLayers = new List<Guid>();
             var clipCommands = new List<FfmpegIOCommand>();
             for (var i = 0; i < uniqueClips.Count(); i++)
             {
@@ -83,6 +84,7 @@ namespace BuildInstructorFunction.Services
 
                 if (clip.ClipDisplayLayers != null)
                 {
+                    uniqueDisplayLayers = uniqueDisplayLayers.Union(clip.ClipDisplayLayers.Select(x => x.DisplayLayerId)).ToList();
                     var layerIds = orderedClipLayers.Select(x => x.LayerId.ToString());                    
                     layerIdsPerClip[i] = layerIds;
                     uniqueLayers = uniqueLayers.Union(layerIds).ToList();
@@ -91,7 +93,7 @@ namespace BuildInstructorFunction.Services
 
             if (resolution != Resolution.Free)
             {
-                await _userLayerRepository.SavePendingUserLayersAsync(uniqueLayers.Select(u => Guid.Parse(u)), build.UserObjectId, build.BuildId);
+                await _userLayerRepository.SavePendingUserLayersAsync(uniqueDisplayLayers, build.UserObjectId, build.BuildId);
             }
 
             var userContainerName = GuidHelper.GetUserContainerName(build.UserObjectId);

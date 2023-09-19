@@ -9,6 +9,7 @@ trigger:
         - BuildDataAccess
         - BuildEntities
         - CollectionDataAccess
+        - CollectionEntities
         - VideoDataAccess
         - VideoEntities
         - SqlConfig

@@ -12,6 +12,7 @@ trigger:
         - VideoDataAccess
         - VideoEntities
         - CollectionDataAccess
+        - CollectionEntities
         - SqlConfig
 
 variables:

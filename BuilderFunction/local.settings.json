@@ -5,12 +5,10 @@
     "AzureWebJobsStorage__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",
     "AzureWebJobsStorage__tableServiceUri": "https://127.0.0.1:10002/devstoreaccount1",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "AzureKeyVaultEndpoint": "https://musicvideobuilder.vault.azure.net/",
     "QueueName": "free-builder",
     "AzureFunctionsJobHost:extensions:durableTask:maxConcurrentActivityFunctions": 4,
     "AzureFunctionsJobHost:functionTimeout": "00:05:00",
     "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
-    "ConnectionString__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",
-    "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;"
+    "ConnectionString__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1"
   }
 }

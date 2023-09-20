@@ -7,7 +7,7 @@
         public string BatchServiceName { get; set; }
         public string BatchServiceKey { get; set; }
         public string PoolName { get; set; }
-        public string AZURE_CLIENT_ID { get; set; }
+        public string ManagedIdentityIdReference { get; set; }
         public string FreeBuilderQueueName { get; set; }
     }
 }

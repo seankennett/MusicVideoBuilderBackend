@@ -5,7 +5,7 @@
     "AzureKeyVaultEndpoint": "https://musicvideobuilder.vault.azure.net/",
     "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
     "PrivateQueueStorageUrl": "https://127.0.0.1:10001/devstoreaccount1",
-    "AZURE_CLIENT_ID": "/subscriptions/285ec89b-c6b0-46a6-9758-a0bce37bd2da/resourcegroups/music-video-builder/providers/Microsoft.ManagedIdentity/userAssignedIdentities/musicvideobuilder",
+    "ManagedIdentityIdReference": "/subscriptions/285ec89b-c6b0-46a6-9758-a0bce37bd2da/resourcegroups/music-video-builder/providers/Microsoft.ManagedIdentity/userAssignedIdentities/musicvideobuilder",
     "ConnectionString__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",
     "AzureWebJobsStorage__blobServiceUri": "https://127.0.0.1:10000/devstoreaccount1",
     "AzureWebJobsStorage__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",

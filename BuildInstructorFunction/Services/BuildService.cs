@@ -57,7 +57,7 @@ namespace BuildInstructorFunction.Services
             var resolution = build.Resolution;
             var tempBlobPrefix = GuidHelper.GetTempBlobPrefix(buildId);
 
-            var is4KFormat = build.Resolution == Resolution.FourK;
+            var isForBatchService = build.Resolution == Resolution.FourK || build.Resolution == Resolution.Hd;
             var watermarkFilePath = build.Resolution == Resolution.Free ? $"{tempBlobPrefix}/watermark.png" : null;
             var uniqueClips = video.Clips.DistinctBy(x => x.ClipId).ToList();
             var layerIdsPerClip = new Dictionary<int, IEnumerable<string>>();
@@ -74,8 +74,8 @@ namespace BuildInstructorFunction.Services
 
                 clipCommands.Add(new FfmpegIOCommand
                 {
-                    FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, is4KFormat,
-                is4KFormat ? "." : tempBlobPrefix,
+                    FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, isForBatchService,
+                isForBatchService ? "." : tempBlobPrefix,
                 watermarkFilePath,
                 orderedClipLayers
                 ),
@@ -103,11 +103,9 @@ namespace BuildInstructorFunction.Services
             var videoFileName = $"{video.VideoName}.{video.Format}";
             var allFrameVideoFileName = $"{InstructorConstants.AllFramesVideoName}.{video.Format}";
 
-
-            //_ffmpegService.GetMergeCode(true, tempBlobPrefix, allFrameVideoFileName, null, AllFramesConcatFileName)
             var clipMergeCommand = new FfmpegIOCommand
             {
-                FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, allFrameVideoFileName, null, InstructorConstants.AllFramesConcatFileName),
+                FfmpegCode = _ffmpegService.GetMergeCode(isForBatchService, tempBlobPrefix, allFrameVideoFileName, null, InstructorConstants.AllFramesConcatFileName),
                 VideoName = allFrameVideoFileName
             };
 
@@ -119,14 +117,14 @@ namespace BuildInstructorFunction.Services
                 var splitFrameVideoName = $"s{i}.{video.Format}";
                 splitFrameCommands.Add(new FfmpegIOCommand
                 {
-                    FfmpegCode = _ffmpegService.GetSplitFrameCommand(is4KFormat, tempBlobPrefix, TimeSpan.FromSeconds(InstructorConstants.VideoSplitLengthSeconds * i), TimeSpan.FromSeconds(InstructorConstants.VideoSplitLengthSeconds), allFrameVideoFileName, splitFrameVideoName, i == 0 ? video.VideoDelayMilliseconds : null),
+                    FfmpegCode = _ffmpegService.GetSplitFrameCommand(isForBatchService, tempBlobPrefix, TimeSpan.FromSeconds(InstructorConstants.VideoSplitLengthSeconds * i), TimeSpan.FromSeconds(InstructorConstants.VideoSplitLengthSeconds), allFrameVideoFileName, splitFrameVideoName, i == 0 ? video.VideoDelayMilliseconds : null),
                     VideoName = splitFrameVideoName
                 });
             }
 
             var splitFrameMergeCommand = new FfmpegIOCommand
             {
-                FfmpegCode = _ffmpegService.GetMergeCode(is4KFormat, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? BuildDataAccessConstants.AudioFileName : null, InstructorConstants.SplitFramesConcatFileName),
+                FfmpegCode = _ffmpegService.GetMergeCode(isForBatchService, tempBlobPrefix, outputBlobPrefix, videoFileName, hasAudio ? BuildDataAccessConstants.AudioFileName : null, InstructorConstants.SplitFramesConcatFileName),
                 VideoName = videoFileName
             };
 
@@ -136,7 +134,7 @@ namespace BuildInstructorFunction.Services
             var concatSplitFrameFileContents = _ffmpegService.GetConcatCode(splitFrameCommands.Select(x => x.VideoName));
             await _storageService.UploadTextFile(userContainerName, tempBlobPrefix, InstructorConstants.SplitFramesConcatFileName, concatSplitFrameFileContents, false);
 
-            if (is4KFormat)
+            if (isForBatchService)
             {
                 await _azureBatchService.SendBatchRequest(userContainerName, hasAudio, buildId, resolution, outputBlobPrefix, tempBlobPrefix, layerIdsPerClip, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
             }

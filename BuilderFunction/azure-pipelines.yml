@@ -11,7 +11,6 @@ trigger:
 variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
   freeFunctioNamespace: 'freebuilderfunction'
-  hdFunctioNamespace: 'hdbuilderfunction'
   projectPath: 'BuilderFunction/BuilderFunction.csproj'
   buildConfiguration: 'Release'
 
@@ -46,11 +45,3 @@ steps:
     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     deploymentMethod : 'zipDeploy'
   displayName: Deploy Free Azure Function
-- task: AzureFunctionApp@1
-  inputs:
-    azureSubscription: '$(azureServiceConnection)'
-    appType: 'functionApp'
-    appName: '$(hdFunctioNamespace)'
-    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-    deploymentMethod : 'zipDeploy'
-  displayName: Deploy HD Azure Function

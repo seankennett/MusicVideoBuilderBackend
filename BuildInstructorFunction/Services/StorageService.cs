@@ -12,13 +12,11 @@ namespace BuildInstructorFunction.Services
     {
         private readonly BlobServiceClient _blobServiceClient;
         private readonly QueueClient _queueClientFree;
-        private readonly QueueClient _queueClientHd;
 
         public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient, IOptions<InstructorConfig> config)
         {
             _blobServiceClient = blobServiceClient;
             _queueClientFree = queueServiceClient.GetQueueClient(config.Value.FreeBuilderQueueName);
-            _queueClientHd = queueServiceClient.GetQueueClient(config.Value.HdBuilderQueueName);
         }
 
         public Uri GetContainerUri(string containerName)
@@ -30,11 +28,6 @@ namespace BuildInstructorFunction.Services
         public async Task SendFreeBuilderMessageAsync(BuilderMessage builderMessage)
         {
             await _queueClientFree.SendMessageAsync(JsonSerializer.Serialize(builderMessage));
-        }
-
-        public async Task SendHdBuilderMessageAsync(BuilderMessage builderMessage)
-        {
-            await _queueClientHd.SendMessageAsync(JsonSerializer.Serialize(builderMessage));
         }
 
         public async Task UploadTextFile(string containerName, string blobPrefix, string fileName, string contents, bool createContainer)

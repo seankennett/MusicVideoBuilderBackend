@@ -9,6 +9,5 @@
         public string PoolName { get; set; }
         public string ManagedIdentityIdReference { get; set; }
         public string FreeBuilderQueueName { get; set; }
-        public string HdBuilderQueueName { get; set; }
     }
 }

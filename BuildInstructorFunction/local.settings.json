@@ -12,7 +12,6 @@
     "AzureWebJobsStorage__tableServiceUri": "https://127.0.0.1:10002/devstoreaccount1",
     "QueueName": "build-instructor",
     "FreeBuilderQueueName": "free-builder",
-    "HdBuilderQueueName": "hd-builder",
     "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;",
     "PublicApi": "http://localhost:7207"
   }

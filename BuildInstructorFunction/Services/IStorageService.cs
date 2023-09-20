@@ -8,7 +8,6 @@ namespace BuildInstructorFunction.Services
     {
         Uri GetContainerUri(string userContainerName);
         Task SendFreeBuilderMessageAsync(BuilderMessage builderMessage);
-        Task SendHdBuilderMessageAsync(BuilderMessage builderMessage);
         Task UploadTextFile(string containerName, string blobPrefix, string fileName, string contents, bool createContainer);
     }
 }

@@ -140,7 +140,7 @@ namespace BuildInstructorFunction.Services
             }
             else
             {
-                await _builderFunctionSender.SendBuilderFunctionMessage(userContainerName, hasAudio, resolution, outputBlobPrefix, tempBlobPrefix, uniqueLayers, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
+                await _builderFunctionSender.SendFreeBuilderFunctionMessage(userContainerName, hasAudio, resolution, outputBlobPrefix, tempBlobPrefix, uniqueLayers, clipCommands, clipMergeCommand, splitFrameCommands, splitFrameMergeCommand);
             }
         }
     }

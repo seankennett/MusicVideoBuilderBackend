@@ -14,7 +14,7 @@ namespace BuildInstructorFunction.Services
         {
             _storageService = storageService;
         }
-        public async Task SendBuilderFunctionMessage(string userContainerName, bool hasAudio, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, List<string> uniqueLayers, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)
+        public async Task SendFreeBuilderFunctionMessage(string userContainerName, bool hasAudio, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, List<string> uniqueLayers, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)
         {
             BuilderMessage builderMessage = new BuilderMessage
             {
@@ -37,15 +37,8 @@ namespace BuildInstructorFunction.Services
             {
                 builderMessage.AssetsDownload.TemporaryFiles.Add(BuildDataAccessConstants.AudioFileName);
             }
-
-            if (resolution == Resolution.Free)
-            {
-                await _storageService.SendFreeBuilderMessageAsync(builderMessage);
-            }
-            else
-            {
-                await _storageService.SendHdBuilderMessageAsync(builderMessage);
-            }
+            
+            await _storageService.SendFreeBuilderMessageAsync(builderMessage);
         }
     }
 }

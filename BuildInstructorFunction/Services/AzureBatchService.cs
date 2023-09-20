@@ -27,7 +27,7 @@ namespace BuildInstructorFunction.Services
             // waiting on MS to allow identity stuff here :(
             _batchCredentials = new BatchSharedKeyCredentials(config.Value.BatchServiceEndpoint, config.Value.BatchServiceName, config.Value.BatchServiceKey);
             _poolId = config.Value.PoolName;
-            _computeNodeIdentityReference =new ComputeNodeIdentityReference { ResourceId = config.Value.ManagedIdentityIdReference };
+            _computeNodeIdentityReference =new ComputeNodeIdentityReference { ResourceId = config.Value.AZURE_CLIENT_ID };
         }
 
         public async Task SendBatchRequest(string userContainerName, bool hasAudio, Guid buildId, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, Dictionary<int, IEnumerable<string>> layerIdsPerClip, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)

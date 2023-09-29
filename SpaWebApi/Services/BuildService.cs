@@ -28,7 +28,7 @@ namespace SpaWebApi.Services
 
         public async Task<IEnumerable<BuildAsset>> GetAllAsync(Guid userObjectId)
         {
-            var builds = await _buildRepository.GetAllAsync(userObjectId);
+            IEnumerable<Build> builds = await GetValidBuilds(userObjectId);
 
             var userContainerName = GuidHelper.GetUserContainerName(userObjectId);
 
@@ -38,7 +38,7 @@ namespace SpaWebApi.Services
                 Uri? downloadLink = null;
                 if (build.BuildStatus == BuildStatus.Complete)
                 {
-                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{BuildDataAccessConstants.TempBlobPrefix}/", build.DateUpdated.ToUniversalTime().AddDays(7));
+                    downloadLink = await _storageService.GetSASLink(userContainerName, build.BuildId.ToString(), $"/{BuildDataAccessConstants.TempBlobPrefix}/", DateTimeOffset.UtcNow.AddDays(0.5));
                 }
 
                 result.Add(new BuildAsset
@@ -54,7 +54,7 @@ namespace SpaWebApi.Services
                 });
             }
             return result;
-        }
+        }        
 
         public async Task BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId)
         {            
@@ -91,7 +91,7 @@ namespace SpaWebApi.Services
 
         private async Task<Build?> GetAndValidateBuild(Guid userObjectId, int videoId, Guid buildId)
         {
-            var builds = await _buildRepository.GetAllAsync(userObjectId);
+            var builds = await GetValidBuilds(userObjectId);
             if (builds != null && builds.Any(b => b.VideoId == videoId && b.BuildStatus != BuildStatus.Complete && b.BuildStatus != BuildStatus.Failed && b.BuildStatus != BuildStatus.PaymentAuthorisationPending))
             {
                 throw new Exception($"User is already building video {videoId}");
@@ -155,6 +155,11 @@ namespace SpaWebApi.Services
             }
 
             return await _paymentService.CreatePaymentIntent(video, paymentIntentRequest, userObjectId);
+        }
+
+        private async Task<IEnumerable<Build>> GetValidBuilds(Guid userObjectId)
+        {
+            return (await _buildRepository.GetAllAsync(userObjectId)).Where(b => b.DateUpdated.ToUniversalTime().AddDays(7) < DateTimeOffset.UtcNow);
         }
     }
 }

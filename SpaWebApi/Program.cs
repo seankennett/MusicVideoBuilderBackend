@@ -57,6 +57,7 @@ builder.Services.AddHttpClient("PublicApi", client =>
 {
     client.BaseAddress = new Uri(configuration["PublicApi"]);
 });
+builder.Services.AddMemoryCache();
 
 builder.Services.AddSingleton<ICollectionService, CollectionService>();
 builder.Services.AddSingleton<IUserDisplayLayerRepository, UserDisplayLayerRepository>();

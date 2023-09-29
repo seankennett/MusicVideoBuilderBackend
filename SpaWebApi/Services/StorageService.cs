@@ -3,6 +3,8 @@ using Azure.Storage.Queues;
 using System.Text.Json;
 using Azure.Storage.Sas;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Caching.Memory;
+using Azure.Storage.Blobs.Models;
 
 namespace SpaWebApi.Services
 {
@@ -10,10 +12,14 @@ namespace SpaWebApi.Services
     {
         private readonly BlobServiceClient _blobServiceClient;
         private readonly QueueClient _queueClientBuildInstructor;
-        public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient, IOptions<SpaWebApiConfig> config)
+        private readonly IMemoryCache _memoryCache;
+        private const string CacheKeyUserDelegationKey = "UserDelegationKey";
+
+        public StorageService(BlobServiceClient blobServiceClient, QueueServiceClient queueServiceClient, IOptions<SpaWebApiConfig> config, IMemoryCache memoryCache)
         {
             _blobServiceClient = blobServiceClient;
             _queueClientBuildInstructor = queueServiceClient.GetQueueClient(config.Value.BuildInstructorQueueName);
+            _memoryCache = memoryCache;
         }
 
         public async Task<bool> ValidateAudioBlob(string containerName, string blobName)
@@ -33,28 +39,6 @@ namespace SpaWebApi.Services
             }
 
             return true;
-        }
-
-        public async Task<Uri> CreateUploadContainerAsync(Guid layerId)
-        {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(layerId.ToString());
-            await containerClient.CreateAsync();
-
-            // not supported with identities https://learn.microsoft.com/en-us/rest/api/storageservices/set-container-acl
-            //BlobSignedIdentifier identifier = new BlobSignedIdentifier
-            //{
-            //    Id = layerId.ToString(),
-            //    AccessPolicy = new BlobAccessPolicy
-            //    {
-            //        PolicyExpiresOn = DateTime.UtcNow.AddHours(2),
-            //        Permissions = "w"
-            //    }
-            //};
-            //await containerClient.SetAccessPolicyAsync(PublicAccessType.None, new List<BlobSignedIdentifier> { identifier });
-
-            //BlobSasBuilder builder = new BlobSasBuilder { Identifier = layerId.ToString() };
-
-            return await GenerateUserDelegateSas(BlobAccountSasPermissions.Write, containerClient, null, DateTimeOffset.UtcNow.AddMinutes(10));
         }
 
         public async Task<Uri> CreateBlobAsync(string containerName, string blobName, bool isNewContainer, DateTimeOffset tokenLength)
@@ -96,7 +80,15 @@ namespace SpaWebApi.Services
         private async Task<Uri> GenerateUserDelegateSas(BlobAccountSasPermissions permission, BlobContainerClient containerClient, BlobClient? blobClient, DateTimeOffset expiresOn)
         {
             var startsOn = DateTimeOffset.UtcNow;
-            var userDelegationKey = await _blobServiceClient.GetUserDelegationKeyAsync(startsOn, expiresOn);
+
+            if (!_memoryCache.TryGetValue(CacheKeyUserDelegationKey, out UserDelegationKey userDelegationKey)) 
+            {
+                // max 7 day span for user key
+                userDelegationKey = await _blobServiceClient.GetUserDelegationKeyAsync(startsOn, startsOn.AddDays(7));
+                // set cache earlier so this is never in threat of being stale whilst call happens
+                _memoryCache.Set(CacheKeyUserDelegationKey, userDelegationKey, startsOn.AddDays(6));
+            }
+
             var sasBuilder = new BlobSasBuilder
             {
                 BlobContainerName = containerClient.Name,                

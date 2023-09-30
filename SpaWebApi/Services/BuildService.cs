@@ -159,7 +159,7 @@ namespace SpaWebApi.Services
 
         private async Task<IEnumerable<Build>> GetValidBuilds(Guid userObjectId)
         {
-            return (await _buildRepository.GetAllAsync(userObjectId)).Where(b => b.DateUpdated.ToUniversalTime().AddDays(7) < DateTimeOffset.UtcNow);
+            return (await _buildRepository.GetAllAsync(userObjectId)).Where(b => b.DateUpdated.ToUniversalTime().AddDays(7) > DateTimeOffset.UtcNow);
         }
     }
 }

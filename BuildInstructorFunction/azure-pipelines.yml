@@ -19,7 +19,7 @@ variables:
   azureServiceConnection: 'Dev(285ec89b-c6b0-46a6-9758-a0bce37bd2da)'
   functioNamespace: 'buildinstructorfunction'
   projectPath: 'BuildInstructorFunction/BuildInstructorFunction.csproj'
-  testProjectPath: 'SpaWebApi.Test/SpaWebApi.Test.csproj'
+  testProjectPath: 'BuildInstructorFunction.Test/BuildInstructorFunction.Test.csproj'
   buildConfiguration: 'Release'
 
 pool:

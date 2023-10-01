@@ -177,14 +177,22 @@ namespace BuildInstructorFunction.Services
 
         public void BuildClipFilterCommand(StringBuilder command, Clip clip)
         {
-            // more widely playable also helps tpad
-            command.Append("[c0];[c0]format=yuv420p");
             if (clip.BeatLength != VideoDataAccessConstants.BeatsPerDisplayLayer)
             {
+                // for plain background no watermark or layers as using commas and trim
+                if (command.ToString().Contains("trim=end_frame="))
+                {
+                    command.Append("[c0];[c0]");
+                }
+                else
+                {
+                    command.Append(",");
+                }
+
                 var startFrame = (clip.StartingBeat - 1) * InstructorConstants.FramesPerBeat;
                 var endFrame = startFrame + clip.BeatLength * InstructorConstants.FramesPerBeat;
                 // when adding more filters then need to think about [c0] or , (using [c0] for safe just backgound)
-                command.Append($",trim=start_frame={startFrame}:end_frame={endFrame},setpts=PTS-STARTPTS");
+                command.Append($"trim=start_frame={startFrame}:end_frame={endFrame},setpts=PTS-STARTPTS");
             }
         }
     }

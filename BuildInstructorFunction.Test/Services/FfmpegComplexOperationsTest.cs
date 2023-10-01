@@ -522,99 +522,100 @@ namespace BuildInstructorFunction.Test.Services
             Assert.AreEqual("previous [x1][z1]overlay,format=gbrp[o0];[o0][y1]blend=all_mode=screen,format=gbrp[o1];[o1][w1]blend=all_mode=screen,format=gbrp", sb.ToString());
         }
 
-        //[TestMethod]
-        //public void BuildClipFilterCommandNormalLength()
-        //{
-        //    var clip = new Clip {
-        //        BeatLength = 4,
-        //        StartingBeat = 1
-        //    };
+        [TestMethod]
+        public void BuildClipFilterCommandNormalLength()
+        {
+            var clip = new Clip
+            {
+                BeatLength = 4,
+                StartingBeat = 1
+            };
 
-        //    var sb = new StringBuilder("previous ");
+            var sb = new StringBuilder("previous ");
 
-        //    var sut = new FfmpegComplexOperations();
+            var sut = new FfmpegComplexOperations();
 
-        //    sut.BuildClipFilterCommand(sb, clip);
+            sut.BuildClipFilterCommand(sb, clip);
 
-        //    Assert.AreEqual("previous ", sb.ToString());
-        //}
+            Assert.AreEqual("previous ", sb.ToString());
+        }
 
-        //[TestMethod]
-        //public void BuildClipFilterCommandShortLength()
-        //{
-        //    var clip = new Clip
-        //    {
-        //        BeatLength = 2,
-        //        StartingBeat = 3
-        //    };
+        [TestMethod]
+        public void BuildClipFilterCommandShortLength()
+        {
+            var clip = new Clip
+            {
+                BeatLength = 2,
+                StartingBeat = 3
+            };
 
-        //    var sb = new StringBuilder("previous ");
+            var sb = new StringBuilder("previous ");
 
-        //    var sut = new FfmpegComplexOperations();
+            var sut = new FfmpegComplexOperations();
 
-        //    sut.BuildClipFilterCommand(sb, clip);
+            sut.BuildClipFilterCommand(sb, clip);
 
-        //    Assert.AreEqual("previous ,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
-        //}
+            Assert.AreEqual("previous ,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
+        }
 
-        //[TestMethod]
-        //public void BuildClipFilterCommandShortLengthBackgroundException()
-        //{
-        //    var colour = "000000";
-        //    var clip = new Clip
-        //    {
-        //        BackgroundColour = colour,
-        //        BeatLength = 2,
-        //        StartingBeat = 3
-        //    };
+        [TestMethod]
+        public void BuildClipFilterCommandShortLengthBackgroundException()
+        {
+            var colour = "000000";
+            var clip = new Clip
+            {
+                BackgroundColour = colour,
+                BeatLength = 2,
+                StartingBeat = 3
+            };
 
-        //    var splitClips = new List<(string id, string ffmpegReference)>
-        //        {
-        //            new (colour, "[z1]")
-        //        };
+            var splitClips = new List<(string id, string ffmpegReference)>
+                {
+                    new (colour, "[z1]")
+                };
 
-        //    var sb = new StringBuilder("");
+            var sb = new StringBuilder("");
 
-        //    var sut = new FfmpegComplexOperations();
+            var sut = new FfmpegComplexOperations();
 
-        //    sut.BuildLayerCommand(sb, clip, splitClips, null, null);
-        //    sut.BuildClipFilterCommand(sb, clip);
+            sut.BuildLayerCommand(sb, clip, splitClips, null, null);
+            sut.BuildClipFilterCommand(sb, clip);
 
-        //    Assert.AreEqual("[z1]trim=end_frame=64,format=gbrp[c0];[c0]trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
-        //}
+            Assert.AreEqual("[z1]trim=end_frame=64,format=gbrp[c0];[c0]trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
+        }
 
-        //[TestMethod]
-        //public void BuildClipFilterCommandShortLengthNormal()
-        //{
-        //    var layerId = Guid.NewGuid();
-        //    var clip = new Clip
-        //    {
-        //        BeatLength = 2,
-        //        StartingBeat = 3
-        //    };
+        [TestMethod]
+        public void BuildClipFilterCommandShortLengthNormal()
+        {
+            var layerId = Guid.NewGuid();
+            var clip = new Clip
+            {
+                BeatLength = 2,
+                StartingBeat = 3
+            };
 
-        //    var layers = new List<Layer>
-        //    {
-        //        new Layer
-        //        {
-        //            LayerId = layerId,
-        //            DefaultColour = "000000"
-        //        }
-        //    };
+            var layers = new List<Layer>
+            {
+                new Layer
+                {
+                    LayerId = layerId,
+                    DefaultColour = "000000"
+                }
+            };
 
-        //    var splitClips = new List<(string id, string ffmpegReference)>
-        //        {
-        //            new (layerId.ToString(), "[z1]")
-        //        };
+            var splitClips = new List<(string id, string ffmpegReference)>
+                {
+                    new (layerId.ToString(), "[z1]")
+                };
 
-        //    var sb = new StringBuilder("");
+            var sb = new StringBuilder("");
 
-        //    var sut = new FfmpegComplexOperations();
+            var sut = new FfmpegComplexOperations();
 
-        //    sut.BuildLayerCommand(sb, clip, splitClips, layers, null);
-        //    sut.BuildClipFilterCommand(sb, clip);
+            sut.BuildLayerCommand(sb, clip, splitClips, layers, null);
+            sut.BuildClipFilterCommand(sb, clip);
 
-        //    Assert.AreEqual("[z1]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
-        //}
+            Assert.AreEqual("[z1]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());
+        }
     }
 }

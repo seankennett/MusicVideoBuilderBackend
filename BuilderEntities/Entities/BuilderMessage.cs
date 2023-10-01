@@ -10,5 +10,4 @@ public class BuilderMessage
     public string TemporaryBlobPrefix { get; set; }
     public IEnumerable<FfmpegIOCommand> SplitFrameCommands { get; set; }
     public FfmpegIOCommand SplitFrameMergeCommand { get; set; }
-    public string? AudioFileName { get; set; }
 }

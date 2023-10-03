@@ -91,7 +91,7 @@ namespace BuildInstructorFunction.Services
                 command.Append("/bin/bash -c 'ffmpeg ");
             }
 
-            command.Append($"-y -ss {startTime:c} -t {duration:c} -i {blobPrefix}/{videoToSplit} -filter_complex \"fps={InstructorConstants.OutputFrameRate}");
+            command.Append($"-y -ss {startTime:c} -t {duration:c} -i {blobPrefix}/{videoToSplit} -filter_complex \"fps={InstructorConstants.OutputFrameRate},format=yuv420p");
             if (videoDelayMilliseconds.HasValue)
             {
                 command.Append($",tpad=start_duration={videoDelayMilliseconds.Value}ms:start_mode=clone");

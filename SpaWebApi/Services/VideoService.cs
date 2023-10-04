@@ -43,9 +43,24 @@ namespace SpaWebApi.Services
                 throw new Exception("Video contains clips user does not have");
             }
 
+            IEnumerable<Video>? videos = null;
+            if (video.VideoId == 0)
+            {
+                videos = await _videoRepository.GetAllAsync(userObjectId);
+                if (videos.Count() >= 2)
+                {
+                    throw new Exception("Maximum of 2 videos");
+                }
+            }
+
             if (video.VideoId != 0)
             {
-                var databaseVideo = await _videoRepository.GetAsync(userObjectId, video.VideoId);
+                var databaseVideo = videos?.FirstOrDefault(v => v.VideoId == video.VideoId);
+                if (databaseVideo == null)
+                {
+                    databaseVideo = await _videoRepository.GetAsync(userObjectId, video.VideoId);
+                }
+
                 if (databaseVideo == null)
                 {
                     throw new Exception($"User doesn't own video id {video.VideoId}");

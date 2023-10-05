@@ -19,6 +19,8 @@ namespace BuildInstructorFunction.Services
         private readonly BatchSharedKeyCredentials _batchCredentials;
         private readonly string _poolId;
         private readonly ComputeNodeIdentityReference _computeNodeIdentityReference;
+        private const int TopPriority = 1000;
+        private const int BottomPriority = -1000;
 
         public AzureBatchService(IStorageService storageService, IOptions<InstructorConfig> config)
         {
@@ -94,11 +96,34 @@ namespace BuildInstructorFunction.Services
 
             var allTasks = clipTasks.Union(splitFramesTasks).Union(new List<CloudTask> { allFramesTask, splitMergeTask });
             using (var batchClient = BatchClient.Open(_batchCredentials))
-            {
+            {                              
                 var job = batchClient.JobOperations.CreateJob(splitMergeTaskId, new PoolInformation { PoolId = _poolId }); // get pool from config
+                job.Priority = TopPriority;
                 job.OnAllTasksComplete = OnAllTasksComplete.TerminateJob;
                 job.UsesTaskDependencies = true;
                 job.Constraints = new JobConstraints { MaxTaskRetryCount = 1, MaxWallClockTime = TimeSpan.FromDays(1) };
+
+                var detailLevel = new ODATADetailLevel
+                {
+                    SelectClause = "id, priority",
+                    FilterClause = "state eq 'active'"
+                };
+                var existingJobs = await batchClient.JobOperations.ListJobs(detailLevel).ToListAsync();
+                if (existingJobs != null && existingJobs.Any())
+                {
+                    job.Priority = existingJobs.Min(j => j.Priority.HasValue ? j.Priority.Value : 0) - 1;
+                    if (job.Priority < BottomPriority)
+                    {
+                        var priority = TopPriority;
+                        foreach (var existingJob in existingJobs.OrderByDescending(e => e.Priority.HasValue ? e.Priority.Value : 0))
+                        {
+                            existingJob.Priority = priority;
+                            await existingJob.CommitChangesAsync();
+                            priority--;
+                        }
+                        job.Priority = priority;
+                    }
+                }
 
                 await job.CommitAsync();
                 await batchClient.JobOperations.AddTaskAsync(job.Id, allTasks);

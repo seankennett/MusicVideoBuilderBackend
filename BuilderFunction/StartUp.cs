@@ -27,6 +27,7 @@ namespace BuilderFunction
             {
                 clientBuilder.UseCredential(new DefaultAzureCredential());
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
+                clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"]));
             });
             builder.Services.AddHttpClient(BuilderConstants.WatermarkFileName, httpClient =>
             {

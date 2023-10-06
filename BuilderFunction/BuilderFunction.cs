@@ -14,6 +14,7 @@ using System.Net.Http;
 using BuilderEntities.Entities;
 using BuilderEntities.Extensions;
 using BuildEntities;
+using Azure.Storage.Queues;
 
 namespace BuilderFunction
 {
@@ -22,15 +23,17 @@ namespace BuilderFunction
         private readonly BuilderConfig _config;
         private readonly BlobServiceClient _blobServiceClient;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly QueueClient _queueClient;
         private const byte FramesPerLayer = 64;
         private const double FunctionOutboundConnectionLimit = 600;
 
-        public BuilderFunction(IOptions<BuilderConfig> options, BlobServiceClient blobServiceClient, IHttpClientFactory httpClientFactory)
+        public BuilderFunction(IOptions<BuilderConfig> options, BlobServiceClient blobServiceClient, IHttpClientFactory httpClientFactory, QueueServiceClient queueServiceClient)
         {
             _config = options.Value;
 
             _blobServiceClient = blobServiceClient;
             _httpClientFactory = httpClientFactory;
+            _queueClient = queueServiceClient.GetQueueClient(_config.NewVideoQueueName);
         }
 
         [FunctionName("BuilderExecutor")]
@@ -167,6 +170,7 @@ namespace BuilderFunction
             var privateContainerCLient = _blobServiceClient.GetBlobContainerClient(assetUpload.UserContainerName);
             var outputBlobClient = privateContainerCLient.GetBlobClient($"{assetUpload.OutputBlobPrefix}/{assetUpload.OutputFileName}");
             await outputBlobClient.UploadAsync(Path.Combine(assetUpload.WorkingDirectory, assetUpload.OutputBlobPrefix, assetUpload.OutputFileName), overwrite: true);
+            await _queueClient.SendMessageAsync(assetUpload.OutputBlobPrefix);
         }
 
         [FunctionName("AssetsDownloadActivity")]

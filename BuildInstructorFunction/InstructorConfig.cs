@@ -9,5 +9,7 @@
         public string PoolName { get; set; }
         public string ManagedIdentityIdReference { get; set; }
         public string FreeBuilderQueueName { get; set; }
+        public string NewVideoQueueName { get; set; }
+        public string PrivateAccountName { get; set; }
     }
 }

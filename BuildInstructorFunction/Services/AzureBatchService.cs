@@ -19,6 +19,7 @@ namespace BuildInstructorFunction.Services
         private readonly BatchSharedKeyCredentials _batchCredentials;
         private readonly string _poolId;
         private readonly ComputeNodeIdentityReference _computeNodeIdentityReference;
+        private readonly InstructorConfig _instructorConfig;
         private const int TopPriority = 1000;
         private const int BottomPriority = -1000;
 
@@ -30,6 +31,7 @@ namespace BuildInstructorFunction.Services
             _batchCredentials = new BatchSharedKeyCredentials(config.Value.BatchServiceEndpoint, config.Value.BatchServiceName, config.Value.BatchServiceKey);
             _poolId = config.Value.PoolName;
             _computeNodeIdentityReference =new ComputeNodeIdentityReference { ResourceId = config.Value.ManagedIdentityIdReference };
+            _instructorConfig = config.Value;
         }
 
         public async Task SendBatchRequest(string userContainerName, bool hasAudio, Guid buildId, Resolution resolution, string outputBlobPrefix, string tempBlobPrefix, Dictionary<int, IEnumerable<string>> layerIdsPerClip, List<FfmpegIOCommand> clipCommands, FfmpegIOCommand clipMergeCommand, List<FfmpegIOCommand> splitFrameCommands, FfmpegIOCommand splitFrameMergeCommand)
@@ -94,7 +96,12 @@ namespace BuildInstructorFunction.Services
             var splitMergeTask = SetUpTask(splitMergeBlobName, outputContainerUri, tempBlobPrefix, splitFrameMergeVideoCommand, splitMergeTaskId, splitFrameMergeInputs, splitMergeBlobName);
             splitMergeTask.DependsOn = TaskDependencies.OnTasks(splitFramesTasks);
 
-            var allTasks = clipTasks.Union(splitFramesTasks).Union(new List<CloudTask> { allFramesTask, splitMergeTask });
+            var newVideoMessageTaskId = $"m-{buildId}";
+            var newVideoMessageCommand = $"/bin/bash -c 'az login --identity -u {_instructorConfig.ManagedIdentityIdReference};az storage message put --content {buildId} --queue-name {_instructorConfig.NewVideoQueueName} --account-name {_instructorConfig.PrivateAccountName} --auth-mode login'";
+            var sendNewVideoMessageTask = SetupTaskBase(newVideoMessageTaskId, newVideoMessageCommand, new List<OutputFile>(), outputContainerUri, tempBlobPrefix);
+            sendNewVideoMessageTask.DependsOn = TaskDependencies.OnTasks(splitMergeTask);
+
+            var allTasks = clipTasks.Union(splitFramesTasks).Union(new List<CloudTask> { allFramesTask, splitMergeTask, sendNewVideoMessageTask });
             using (var batchClient = BatchClient.Open(_batchCredentials))
             {                              
                 var job = batchClient.JobOperations.CreateJob(splitMergeTaskId, new PoolInformation { PoolId = _poolId }); // get pool from config
@@ -130,22 +137,28 @@ namespace BuildInstructorFunction.Services
             }
         }
 
-        public CloudTask SetUpTask(string outputBlobName, Uri outputContainerUri, string errorBlobPrefix, string command, string taskId, List<ResourceFile> inputFiles, string filePath)
+        private CloudTask SetUpTask(string outputBlobName, Uri outputContainerUri, string errorBlobPrefix, string command, string taskId, List<ResourceFile> inputFiles, string filePath)
         {
-            CloudTask cloudTask = new CloudTask(taskId, command);
-            cloudTask.ResourceFiles = inputFiles;
-            cloudTask.Constraints = new TaskConstraints { MaxWallClockTime = TimeSpan.FromHours(1), RetentionTime = TimeSpan.Zero };
-
             List<OutputFile> outputFileList = new List<OutputFile>();
             OutputFileBlobContainerDestination outputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerUri.ToString(), _computeNodeIdentityReference, outputBlobName);
-            OutputFileBlobContainerDestination errorOutputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerUri.ToString(), _computeNodeIdentityReference, errorBlobPrefix);
             outputFileList.Add(new OutputFile(filePath,
                                                    new OutputFileDestination(outputFileBlobContainerDestination),
                                                    new OutputFileUploadOptions(OutputFileUploadCondition.TaskSuccess)));
+
+            var cloudTask = SetupTaskBase(taskId, command, outputFileList, outputContainerUri, errorBlobPrefix);
+            cloudTask.ResourceFiles = inputFiles;
+
+            return cloudTask;
+        }
+
+        private CloudTask SetupTaskBase(string taskId, string command, List<OutputFile> outputFileList, Uri outputContainerUri, string errorBlobPrefix)
+        {
+            CloudTask cloudTask = new CloudTask(taskId, command);
+            cloudTask.Constraints = new TaskConstraints { MaxWallClockTime = TimeSpan.FromHours(1), RetentionTime = TimeSpan.Zero };
+            OutputFileBlobContainerDestination errorOutputFileBlobContainerDestination = new OutputFileBlobContainerDestination(outputContainerUri.ToString(), _computeNodeIdentityReference, errorBlobPrefix);
             outputFileList.Add(new OutputFile(@"../std*.txt",
                                                    new OutputFileDestination(errorOutputFileBlobContainerDestination),
                                                    new OutputFileUploadOptions(OutputFileUploadCondition.TaskFailure)));
-
             cloudTask.OutputFiles = outputFileList;
             return cloudTask;
         }

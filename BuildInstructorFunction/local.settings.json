@@ -3,6 +3,7 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureKeyVaultEndpoint": "https://musicvideobuilder.vault.azure.net/",
+    "PrivateAccountName": "musicvideobuilderprivate",
     "PrivateBlobStorageUrl": "https://127.0.0.1:10000/devstoreaccount1",
     "PrivateQueueStorageUrl": "https://127.0.0.1:10001/devstoreaccount1",
     "ManagedIdentityIdReference": "/subscriptions/285ec89b-c6b0-46a6-9758-a0bce37bd2da/resourcegroups/music-video-builder/providers/Microsoft.ManagedIdentity/userAssignedIdentities/musicvideobuilder",
@@ -11,6 +12,7 @@
     "AzureWebJobsStorage__queueServiceUri": "https://127.0.0.1:10001/devstoreaccount1",
     "AzureWebJobsStorage__tableServiceUri": "https://127.0.0.1:10002/devstoreaccount1",
     "QueueName": "build-instructor",
+    "NewVideoQueueName": "new-video",
     "FreeBuilderQueueName": "free-builder",
     "DatabaseConnectionString": "Server=(localdb)\\mssqllocaldb;Database=musicvideobuilderlocal;Trusted_Connection=True;",
     "PublicApi": "http://localhost:7207"

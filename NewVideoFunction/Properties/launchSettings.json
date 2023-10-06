@@ -2,7 +2,7 @@
   "profiles": {
     "VideoNotifyFunction": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7207",
+      "commandLineArgs": "--port 7267",
       "launchBrowser": false
     }
   }

@@ -50,7 +50,7 @@ namespace BuildInstructorFunction.Services
 
         public async Task InstructBuildAsync(UserBuild build)
         {
-            var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId);
+            var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId.Value);
             var collections = await _collectionService.GetAllCollectionsAsync();
 
             var buildId = build.BuildId;

@@ -7,7 +7,7 @@ namespace BuildDataAccess.Entities
     public class Build
     {
         public Guid BuildId { get; set; }
-        public int VideoId { get; set; }
+        public int? VideoId { get; set; }
         public string VideoName { get; set; }
         public BuildStatus BuildStatus { get; set; }
         public Resolution Resolution { get; set; }

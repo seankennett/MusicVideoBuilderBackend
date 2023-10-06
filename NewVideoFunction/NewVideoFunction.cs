@@ -30,12 +30,13 @@ namespace NewVideoFunction
         }
         
         [FunctionName("NewVideoFunction")]
-        public async Task Run([QueueTrigger("%QueueName%", Connection = "ConnectionString")] Guid buildId, ILogger log)
+        public async Task Run([QueueTrigger("%QueueName%", Connection = "ConnectionString")] string buildIdString, ILogger log)
         {
+            var buildId = Guid.Parse(buildIdString);
             var userBuild = await _buildRepository.GetAsync(buildId);
             if (userBuild == null)
             {
-                log.LogError($"Build {buildId} not in database");
+                log.LogError($"Build {buildIdString} not in database");
                 return;
             }
 
@@ -52,12 +53,12 @@ namespace NewVideoFunction
             }
 
             var videoName = $"{userBuild.VideoName}.{userBuild.Format}";
-            var blobName = $"{buildId}/{videoName}";
+            var blobName = $"{buildIdString}/{videoName}";
             var containerName = GuidHelper.GetUserContainerName(userBuild.UserObjectId);
 
             var userDetails = await _userService.GetDetails(userBuild.UserObjectId.ToString());
 
-            await _blobService.CleanTempFiles(containerName, buildId.ToString());
+            await _blobService.CleanTempFiles(containerName, buildIdString);
 
             var blobSasUri = await _blobService.GetBlobSas(containerName, blobName);
 

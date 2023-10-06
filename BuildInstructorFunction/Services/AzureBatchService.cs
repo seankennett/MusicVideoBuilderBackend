@@ -10,6 +10,7 @@ using BuilderEntities.Entities;
 using BuilderEntities.Extensions;
 using BuildEntities;
 using BuildDataAccess;
+using System.Text;
 
 namespace BuildInstructorFunction.Services
 {
@@ -97,7 +98,8 @@ namespace BuildInstructorFunction.Services
             splitMergeTask.DependsOn = TaskDependencies.OnTasks(splitFramesTasks);
 
             var newVideoMessageTaskId = $"m-{buildId}";
-            var newVideoMessageCommand = $"/bin/bash -c 'az login --identity -u {_instructorConfig.ManagedIdentityIdReference};az storage message put --content {buildId} --queue-name {_instructorConfig.NewVideoQueueName} --account-name {_instructorConfig.PrivateAccountName} --auth-mode login'";
+            var base64Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(buildId.ToString()));
+            var newVideoMessageCommand = $"/bin/bash -c 'az login --identity -u {_instructorConfig.ManagedIdentityIdReference};az storage message put --content {base64Content} --queue-name {_instructorConfig.NewVideoQueueName} --account-name {_instructorConfig.PrivateAccountName} --auth-mode login'";
             var sendNewVideoMessageTask = SetupTaskBase(newVideoMessageTaskId, newVideoMessageCommand, new List<OutputFile>(), outputContainerUri, tempBlobPrefix);
             sendNewVideoMessageTask.DependsOn = TaskDependencies.OnTasks(splitMergeTask);
 

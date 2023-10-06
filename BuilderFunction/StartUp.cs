@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using BuilderFunction;
 using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace BuilderFunction
@@ -27,7 +28,11 @@ namespace BuilderFunction
             {
                 clientBuilder.UseCredential(new DefaultAzureCredential());
                 clientBuilder.AddBlobServiceClient(new Uri(configuration["PrivateBlobStorageUrl"]));
-                clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"]));
+                clientBuilder.AddQueueServiceClient(new Uri(configuration["PrivateQueueStorageUrl"])).ConfigureOptions(queueClientOptions =>
+                {
+                    queueClientOptions.MessageEncoding = QueueMessageEncoding.Base64;
+
+                });
             });
             builder.Services.AddHttpClient(BuilderConstants.WatermarkFileName, httpClient =>
             {

@@ -22,9 +22,9 @@ namespace BuildInstructorFunction.Services
         private readonly IStorageService _storageService;
         private readonly IBuilderFunctionSender _builderFunctionSender;
         private readonly IAzureBatchService _azureBatchService;
-        private readonly IUserCollectionRepository _userLayerRepository;
+        private readonly IUserCollectionRepository _userCollectionRepository;
 
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserCollectionRepository userLayerRepository, ICollectionService collectionService)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserCollectionRepository userCollectionRepository, ICollectionService collectionService)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;
@@ -33,7 +33,7 @@ namespace BuildInstructorFunction.Services
             _storageService = storageService;
             _builderFunctionSender = builderFunctionSender;
             _azureBatchService = azureBatchService;
-            _userLayerRepository = userLayerRepository;
+            _userCollectionRepository = userCollectionRepository;
         }
         public async Task InstructBuildAsync(string paymentIntentId)
         {
@@ -62,7 +62,7 @@ namespace BuildInstructorFunction.Services
             var uniqueClips = video.Clips.DistinctBy(x => x.ClipId).ToList();
             var layerIdsPerClip = new Dictionary<int, IEnumerable<string>>();
             var uniqueLayers = new List<string>();
-            var uniqueDisplayLayers = new List<Guid>();
+            var uniqueCollectionIds = new List<Guid>();
             var clipCommands = new List<FfmpegIOCommand>();
             for (var i = 0; i < uniqueClips.Count(); i++)
             {
@@ -84,7 +84,8 @@ namespace BuildInstructorFunction.Services
 
                 if (clip.ClipDisplayLayers != null)
                 {
-                    uniqueDisplayLayers = uniqueDisplayLayers.Union(clip.ClipDisplayLayers.Select(x => x.DisplayLayerId)).ToList();
+                    collections.Where(c => c.DisplayLayers.Any(d => clip.ClipDisplayLayers.Any(c => c.DisplayLayerId == d.DisplayLayerId)));
+                    uniqueCollectionIds = uniqueCollectionIds.Union(collections.Select(x => x.CollectionId)).ToList();
                     var layerIds = orderedClipLayers.Select(x => x.LayerId.ToString());                    
                     layerIdsPerClip[i] = layerIds;
                     uniqueLayers = uniqueLayers.Union(layerIds).ToList();
@@ -93,7 +94,7 @@ namespace BuildInstructorFunction.Services
 
             if (resolution != Resolution.Free)
             {
-                await _userLayerRepository.SavePendingUserLayersAsync(uniqueDisplayLayers, build.UserObjectId, build.BuildId);
+                await _userCollectionRepository.SavePendingUserCollectionAsync(uniqueCollectionIds, build.UserObjectId, build.BuildId);
             }
 
             var userContainerName = GuidHelper.GetUserContainerName(build.UserObjectId);

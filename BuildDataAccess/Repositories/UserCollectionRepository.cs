@@ -17,7 +17,7 @@ namespace BuildDataAccess.Repositories
             _sqlConnection = connections.Value.DatabaseConnectionString;
         }
 
-        public async Task ConfirmPendingUserLayers(Guid buildId)
+        public async Task ConfirmPendingCollections(Guid buildId)
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {
@@ -41,7 +41,7 @@ namespace BuildDataAccess.Repositories
             }
         }
 
-        public async Task SavePendingUserLayersAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId)
+        public async Task SavePendingUserCollectionAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId)
         {
             var dataTable = new DataTable();
             dataTable.Columns.Add("ForeignId");

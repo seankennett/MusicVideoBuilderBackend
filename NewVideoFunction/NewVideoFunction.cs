@@ -45,7 +45,7 @@ namespace NewVideoFunction
 
             if (userBuild.Resolution != Resolution.Free)
             {
-                await _userLayerRepository.ConfirmPendingUserLayers(buildId);
+                await _userLayerRepository.ConfirmPendingCollections(buildId);
                 if (!await _chargeService.Charge(userBuild.PaymentIntentId))
                 {
                     return;

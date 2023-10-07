@@ -2,11 +2,11 @@
 
 namespace BuildDataAccess.Entities
 {
-    public class UserDisplayLayer
+    public class UserCollection
     {
-        public int UserDisplayLayerId { get; set; }
+        public int UserCollectionId { get; set; }
         public Resolution Resolution { get; set; }
         public License License { get; set; }
-        public Guid DisplayLayerId { get; set; }
+        public Guid CollectionId { get; set; }
     }
 }

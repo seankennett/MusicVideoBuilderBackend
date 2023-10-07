@@ -60,7 +60,7 @@ builder.Services.AddHttpClient("PublicApi", client =>
 builder.Services.AddMemoryCache();
 
 builder.Services.AddSingleton<ICollectionService, CollectionService>();
-builder.Services.AddSingleton<IUserDisplayLayerRepository, UserDisplayLayerRepository>();
+builder.Services.AddSingleton<IUserCollectionRepository, UserCollectionRepository>();
 builder.Services.AddSingleton<IClipRepository, ClipRepository>();
 builder.Services.AddSingleton<IVideoRepository, VideoRepository>();
 builder.Services.AddSingleton<IBuildService, BuildService>();

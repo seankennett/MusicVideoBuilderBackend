@@ -2,7 +2,7 @@
 
 namespace BuildDataAccess.DTOEntities
 {
-    public class UserDisplayLayerDTO : UserDisplayLayer
+    public class UserCollectionDTO : UserCollection
     {
         public short ResolutionId { get; set; }
         public short LicenseId { get; set; }

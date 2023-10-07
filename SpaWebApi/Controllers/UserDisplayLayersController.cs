@@ -11,19 +11,19 @@ namespace SpaWebApi.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAdB2C:Scopes")]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserDisplayLayersController : ControllerBase
+    public class UserCollectionsController : ControllerBase
     {
-        private readonly IUserDisplayLayerRepository _userDisplayLayerRepository;
+        private readonly IUserCollectionRepository _userCollectionRepository;
 
-        public UserDisplayLayersController(IUserDisplayLayerRepository userDisplayLayerRepository)
+        public UserCollectionsController(IUserCollectionRepository userCollectionRepository)
         {
-            _userDisplayLayerRepository = userDisplayLayerRepository;
+            _userCollectionRepository = userCollectionRepository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<UserDisplayLayer>> Get()
+        public async Task<IEnumerable<UserCollection>> Get()
         {
-            return await _userDisplayLayerRepository.GetAllAsync(User.GetUserObjectId());
+            return await _userCollectionRepository.GetAllAsync(User.GetUserObjectId());
         }
     }
 }

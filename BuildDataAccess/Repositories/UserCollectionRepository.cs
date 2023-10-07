@@ -8,11 +8,11 @@ using System.Data;
 
 namespace BuildDataAccess.Repositories
 {
-    public class UserDisplayLayerRepository : IUserDisplayLayerRepository
+    public class UserCollectionRepository : IUserCollectionRepository
     {
         private readonly string _sqlConnection;
 
-        public UserDisplayLayerRepository(IOptions<SqlConfig> connections)
+        public UserCollectionRepository(IOptions<SqlConfig> connections)
         {
             _sqlConnection = connections.Value.DatabaseConnectionString;
         }
@@ -21,20 +21,20 @@ namespace BuildDataAccess.Repositories
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                await connection.ExecuteAsync("ConfirmPendingUserDisplayLayers", new { BuildId = buildId }, commandType: CommandType.StoredProcedure);
+                await connection.ExecuteAsync("ConfirmPendingUserCollections", new { BuildId = buildId }, commandType: CommandType.StoredProcedure);
             }
         }
 
-        public async Task<IEnumerable<UserDisplayLayer>> GetAllAsync(Guid userObjectId)
+        public async Task<IEnumerable<UserCollection>> GetAllAsync(Guid userObjectId)
         {
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                var userLayers = await connection.QueryAsync<UserDisplayLayerDTO>("GetUserDisplayLayers", new { userObjectId }, commandType: CommandType.StoredProcedure);
-                var pendingUserLayers = await connection.QueryAsync<UserDisplayLayerDTO>("GetPendingUserDisplayLayers", new { userObjectId }, commandType: CommandType.StoredProcedure);
-                return userLayers.Concat(pendingUserLayers).Select(ul => new UserDisplayLayer
+                var userLayers = await connection.QueryAsync<UserCollectionDTO>("GetUserCollections", new { userObjectId }, commandType: CommandType.StoredProcedure);
+                var pendingUserLayers = await connection.QueryAsync<UserCollectionDTO>("GetPendingUserCollections", new { userObjectId }, commandType: CommandType.StoredProcedure);
+                return userLayers.Concat(pendingUserLayers).Select(ul => new UserCollection
                 {
-                    DisplayLayerId = ul.DisplayLayerId,
-                    UserDisplayLayerId = ul.UserDisplayLayerId,
+                    CollectionId = ul.CollectionId,
+                    UserCollectionId = ul.UserCollectionId,
                     License = (License)ul.LicenseId,
                     Resolution = (Resolution)ul.ResolutionId
                 });
@@ -53,11 +53,11 @@ namespace BuildDataAccess.Repositories
 
             using (var connection = new SqlConnection(_sqlConnection))
             {
-                await connection.ExecuteAsync("InsertPendingUserDisplayLayers", new
+                await connection.ExecuteAsync("InsertPendingUserCollections", new
                 {
                     userObjectId,
                     BuildId = buildId,
-                    Layers = dataTable.AsTableValuedParameter("GuidOrderType"),
+                    Collections = dataTable.AsTableValuedParameter("GuidOrderType"),
 
                 }, commandType: CommandType.StoredProcedure);
 

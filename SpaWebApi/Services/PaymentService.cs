@@ -1,6 +1,7 @@
 ﻿using BuildDataAccess.Entities;
 using BuildDataAccess.Repositories;
 using BuildEntities;
+using CollectionDataAccess.Services;
 using SharedEntities.Models;
 using SpaWebApi.Models;
 using SpaWebApi.Services;
@@ -9,20 +10,26 @@ using VideoDataAccess.Entities;
 
 public class PaymentService : IPaymentService
 {
-    private readonly IUserDisplayLayerRepository _userLayerRepository;
+    private readonly IUserCollectionRepository _userCollectionRepository;
     private readonly IBuildRepository _buildRepository;
+    private readonly ICollectionService _collectionService;
     private readonly ILogger<PaymentService> _logger;
 
-    public PaymentService(IUserDisplayLayerRepository userLayerRepository, IBuildRepository buildRepository)
+    public PaymentService(IUserCollectionRepository userCollectionRepository, IBuildRepository buildRepository, ICollectionService collectionService)
     {
-        _userLayerRepository = userLayerRepository;
+        _userCollectionRepository = userCollectionRepository;
         _buildRepository = buildRepository;
+        _collectionService = collectionService;
     }
 
     public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)
     {
-        var userLayers = await _userLayerRepository.GetAllAsync(userObjectId);
-        int serverCalculatedCost = GetVideoCost(video.Clips.Where(c => c.ClipDisplayLayers != null).SelectMany(c => c.ClipDisplayLayers).Select(l => l.DisplayLayerId).Distinct(), userLayers, paymentIntentRequest.Resolution, paymentIntentRequest.License);
+        var userCollections = await _userCollectionRepository.GetAllAsync(userObjectId);
+        var collections = await _collectionService.GetAllCollectionsAsync();
+
+        var allDisplayLayers = video.Clips.Where(c => c.ClipDisplayLayers != null).SelectMany(c => c.ClipDisplayLayers).Select(c => c.DisplayLayerId).Distinct();
+        var uniqueVideoCollectionIds = collections.Where(c => c.DisplayLayers.Any(d => allDisplayLayers.Contains(d.DisplayLayerId))).Select(c => c.CollectionId);
+        int serverCalculatedCost = GetVideoCost(uniqueVideoCollectionIds, userCollections, paymentIntentRequest.Resolution, paymentIntentRequest.License);
         if (serverCalculatedCost != paymentIntentRequest.Cost) {
             throw new Exception($"Client cost {paymentIntentRequest.Cost} not the same as server cost {serverCalculatedCost} for video {video.VideoId}");
         }
@@ -56,10 +63,10 @@ public class PaymentService : IPaymentService
         return paymentIntent.ClientSecret;
     }
 
-    private int GetVideoCost(IEnumerable<Guid> uniqueVideoLayers, IEnumerable<UserDisplayLayer> userLayers, Resolution resolution, License license)
+    private int GetVideoCost(IEnumerable<Guid> uniqueCollections, IEnumerable<UserCollection> userCollections, Resolution resolution, License license)
     {
-        var resolutionLicensedUserLayers = userLayers.Where(u => u.Resolution == resolution && u.License == license);
-        return GetBuildCost(resolution) + GetLayerLicenseCost(uniqueVideoLayers.Except(resolutionLicensedUserLayers.Select(x => x.DisplayLayerId)).Count(), license, resolution);
+        var resolutionLicensedUserCollections = userCollections.Where(u => u.Resolution == resolution && u.License == license);
+        return GetBuildCost(resolution) + GetLayerLicenseCost(uniqueCollections.Except(resolutionLicensedUserCollections.Select(x => x.CollectionId)).Count(), license, resolution);
     }
 
     private int GetLayerLicenseCost(int numberOfLicenses, License license, Resolution resolution)

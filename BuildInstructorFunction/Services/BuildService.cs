@@ -22,9 +22,9 @@ namespace BuildInstructorFunction.Services
         private readonly IStorageService _storageService;
         private readonly IBuilderFunctionSender _builderFunctionSender;
         private readonly IAzureBatchService _azureBatchService;
-        private readonly IUserDisplayLayerRepository _userLayerRepository;
+        private readonly IUserCollectionRepository _userLayerRepository;
 
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserDisplayLayerRepository userLayerRepository, ICollectionService collectionService)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserCollectionRepository userLayerRepository, ICollectionService collectionService)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;

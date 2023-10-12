@@ -33,7 +33,7 @@ namespace SpaWebApi.Services
             var userContainerName = GuidHelper.GetUserContainerName(userObjectId);
 
             var result = new List<BuildAsset>();
-            foreach (var build in builds.Where(x => x.BuildStatus != BuildStatus.Failed && x.BuildStatus != BuildStatus.PaymentAuthorisationPending))
+            foreach (var build in builds.Where(x => x.BuildStatus != BuildStatus.Failed && x.BuildStatus != BuildStatus.PaymentAuthorisationPending).OrderByDescending(x => x.DateUpdated))
             {
                 Uri? downloadLink = null;
                 if (build.BuildStatus == BuildStatus.Complete)

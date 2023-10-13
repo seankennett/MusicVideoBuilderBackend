@@ -169,5 +169,14 @@ namespace BuildInstructorFunction.Test.Services
             var result = sut.GetMergeCode(false, "folder1/tmp", "folder1", "output.mov", "something.mp3", "concat.txt");
             Assert.AreEqual("-y -f concat -i folder1/tmp/concat.txt -i folder1/tmp/something.mp3 -c copy folder1/output.mov", result);
         }
+
+        [TestMethod]
+        public void GetSplitFrameCommand()
+        {
+            var sut = new FfmpegService(new FfmpegComplexOperations());
+
+            var result = sut.GetSplitFrameCommand(true, "folder1/tmp", TimeSpan.FromSeconds(15), TimeSpan.FromSeconds(30), "input.mov", "output.mov", 100);
+            Assert.AreEqual("/bin/bash -c 'ffmpeg -y -ss 00:00:15 -t 00:00:30 -i folder1/tmp/input.mov -filter_complex \"fps=24,format=yuv420p,tpad=start_duration=100ms:start_mode=clone\" folder1/tmp/output.mov'", result);
+        }
     }
 }

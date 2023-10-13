@@ -1,3 +1,5 @@
+using BuildDataAccess.Entities;
+using BuildDataAccess.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SpaWebApi.Services;
@@ -16,6 +18,7 @@ namespace SpaWebApi.Test.Services
         private Video _video;
         private Mock<IVideoRepository> _videoRepositoryMock;
         private Mock<IClipRepository> _clipRepositoryMock;
+        private Mock<IBuildRepository> _buildRepositoryMock;
         private VideoService _sut;
         private Guid _userId;
         private Clip _firstClip;
@@ -70,12 +73,13 @@ namespace SpaWebApi.Test.Services
 
             _videoRepositoryMock = new Mock<IVideoRepository>();
             _clipRepositoryMock = new Mock<IClipRepository>();
+            _buildRepositoryMock = new Mock<IBuildRepository>();
 
             _clipRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(_video.Clips);
             _videoRepositoryMock.Setup(x => x.SaveAsync(_userId, _video)).ReturnsAsync(_video);
             _videoRepositoryMock.Setup(x => x.GetAsync(_userId, _video.VideoId)).ReturnsAsync(new Video { Clips = new List<Clip> { _firstClip } });
 
-            _sut = new VideoService(_videoRepositoryMock.Object, _clipRepositoryMock.Object);
+            _sut = new VideoService(_videoRepositoryMock.Object, _clipRepositoryMock.Object, _buildRepositoryMock.Object);
         }
 
         [TestMethod]
@@ -119,6 +123,21 @@ namespace SpaWebApi.Test.Services
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task SaveVideoTooMany()
+        {
+            _video.VideoId = 0;
+            _videoRepositoryMock.Setup(x => x.GetAllAsync(_userId))
+                .ReturnsAsync(new List<Video> 
+                {
+                    new Video(),
+                    new Video()
+                });
+
+            await _sut.SaveAsync(_userId, _video);
+        }
+
+        [TestMethod]
         public async Task Delete()
         {
             await _sut.DeleteAsync(_userId, _video.VideoId);
@@ -132,6 +151,21 @@ namespace SpaWebApi.Test.Services
         {
             _videoRepositoryMock.Setup(x => x.GetAsync(_userId, _video.VideoId)).ReturnsAsync((Video)null);
 
+            await _sut.DeleteAsync(_userId, _video.VideoId);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task DeleteBuildingVideo()
+        {
+            var builds = new List<Build>
+            {
+                new Build
+                {
+                    BuildStatus = SharedEntities.Models.BuildStatus.BuildingPending,
+                    VideoId = _video.VideoId                }
+            };
+            _buildRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(builds);
             await _sut.DeleteAsync(_userId, _video.VideoId);
         }
     }

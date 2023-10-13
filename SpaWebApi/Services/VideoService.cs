@@ -1,4 +1,5 @@
-﻿using VideoDataAccess.Entities;
+﻿using BuildDataAccess.Repositories;
+using VideoDataAccess.Entities;
 using VideoDataAccess.Repositories;
 
 namespace SpaWebApi.Services
@@ -7,11 +8,13 @@ namespace SpaWebApi.Services
     {
         private readonly IVideoRepository _videoRepository;
         private readonly IClipRepository _clipRepository;
+        private readonly IBuildRepository _buildRepository;
 
-        public VideoService(IVideoRepository videoRepository, IClipRepository clipRepository)
+        public VideoService(IVideoRepository videoRepository, IClipRepository clipRepository, IBuildRepository buildRepository)
         {
             _videoRepository = videoRepository;
             _clipRepository = clipRepository;
+            _buildRepository = buildRepository;
         }
         public async Task DeleteAsync(Guid userObjectId, int videoId)
         {
@@ -21,11 +24,11 @@ namespace SpaWebApi.Services
                 throw new Exception($"User doesn't own video id {videoId}");
             }
 
-            //TODO
-            //if (video.IsBuilding)
-            //{
-            //    throw new Exception($"Video {videoId} is building so can't delete yet");
-            //}
+            var builds = await _buildRepository.GetAllAsync(userObjectId);
+            if (builds.Any(b => b.VideoId.HasValue && b.VideoId.Value == videoId && (b.BuildStatus == SharedEntities.Models.BuildStatus.BuildingPending || b.BuildStatus == SharedEntities.Models.BuildStatus.PaymentChargePending)))
+            {
+                throw new Exception($"Video {videoId} is building so can't delete yet");
+            }
 
             await _videoRepository.DeleteAsync(videoId);
         }

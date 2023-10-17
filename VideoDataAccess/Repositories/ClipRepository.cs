@@ -41,6 +41,7 @@ namespace VideoDataAccess.Repositories
             var clipDisplayLayerDataTable = new DataTable();
             clipDisplayLayerDataTable.Columns.Add("TempId");
             clipDisplayLayerDataTable.Columns.Add("DisplayLayerId");
+            clipDisplayLayerDataTable.Columns.Add("Reverse");
             clipDisplayLayerDataTable.Columns.Add("Order");
 
             var layerClipDisplayLayerDataTable = new DataTable();
@@ -51,7 +52,7 @@ namespace VideoDataAccess.Repositories
             for (short i = 0; i < clip.ClipDisplayLayers.Count(); i++)
             {
                 var clipDisplayLayer = clip.ClipDisplayLayers.ElementAt(i);
-                clipDisplayLayerDataTable.Rows.Add(i, clipDisplayLayer.DisplayLayerId, i);
+                clipDisplayLayerDataTable.Rows.Add(i, clipDisplayLayer.DisplayLayerId, clipDisplayLayer.Reverse, i);
                 foreach (var layerClipDisplayLayer in clipDisplayLayer.LayerClipDisplayLayers)
                 {
                     layerClipDisplayLayerDataTable.Rows.Add(i, layerClipDisplayLayer.LayerId, layerClipDisplayLayer.ColourOverride);

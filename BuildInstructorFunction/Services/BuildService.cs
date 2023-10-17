@@ -68,8 +68,8 @@ namespace BuildInstructorFunction.Services
             {
                 var clip = uniqueClips[i];
                 // looks complicated but should preserve order in clip
-                var orderedClipLayers = clip.ClipDisplayLayers?.Where(cdl => cdl != null).SelectMany(cdl => {
-                    return collections.SelectMany(c => c.DisplayLayers).Where(d => cdl.DisplayLayerId == d.DisplayLayerId).SelectMany(d => d.Layers);
+                var orderedClipDisplayLayers = clip.ClipDisplayLayers?.Where(cdl => cdl != null).SelectMany(cdl => {
+                    return collections.SelectMany(c => c.DisplayLayers).Where(d => cdl.DisplayLayerId == d.DisplayLayerId);
                 }).ToList();
 
                 clipCommands.Add(new FfmpegIOCommand
@@ -77,7 +77,7 @@ namespace BuildInstructorFunction.Services
                     FfmpegCode = _ffmpegService.GetClipCode(clip, resolution, video.Format, video.BPM, isForBatchService,
                 isForBatchService ? "." : tempBlobPrefix,
                 watermarkFilePath,
-                orderedClipLayers
+                orderedClipDisplayLayers
                 ),
                     VideoName = $"{clip.ClipId}.{video.Format}"
                 });
@@ -86,7 +86,7 @@ namespace BuildInstructorFunction.Services
                 {
                     collections.Where(c => c.DisplayLayers.Any(d => clip.ClipDisplayLayers.Any(c => c.DisplayLayerId == d.DisplayLayerId)));
                     uniqueCollectionIds = uniqueCollectionIds.Union(collections.Select(x => x.CollectionId)).ToList();
-                    var layerIds = orderedClipLayers.Select(x => x.LayerId.ToString());                    
+                    var layerIds = orderedClipDisplayLayers.SelectMany(d => d.Layers).Select(x => x.LayerId.ToString());                    
                     layerIdsPerClip[i] = layerIds;
                     uniqueLayers = uniqueLayers.Union(layerIds).ToList();
                 }

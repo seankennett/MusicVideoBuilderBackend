@@ -2,6 +2,7 @@
 using CollectionEntities.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using VideoDataAccess.Entities;
 using VideoEntities.Entities;
@@ -17,7 +18,7 @@ namespace BuildInstructorFunction.Services
             _ffmpegComplexOperations = ffmpegComplexOperations;
         }
 
-        public string GetClipCode(Clip clip, Resolution resolution, Formats format, byte bpm, bool fromCommandLine, string outputBlobPrefix, string watermarkFilePath, List<Layer> orderedLayers)
+        public string GetClipCode(Clip clip, Resolution resolution, Formats format, byte bpm, bool fromCommandLine, string outputBlobPrefix, string watermarkFilePath, List<DisplayLayer> orderedDisplayLayers)
         {
             var command = new StringBuilder();
             if (fromCommandLine)
@@ -27,11 +28,12 @@ namespace BuildInstructorFunction.Services
 
             command.Append("-y ");
 
+            var orderedLayers = orderedDisplayLayers?.SelectMany(x => x.Layers).ToList();
             var inputList = _ffmpegComplexOperations.BuildInputList(command, clip.BackgroundColour, bpm, null, resolution, watermarkFilePath, orderedLayers);
 
             command.Append($"-filter_complex \"");
 
-            inputList = _ffmpegComplexOperations.BuildLayerCommand(command, clip, inputList, orderedLayers, watermarkFilePath);
+            inputList = _ffmpegComplexOperations.BuildLayerCommand(command, clip, inputList, orderedDisplayLayers, watermarkFilePath);
             _ffmpegComplexOperations.BuildClipCommand(command, clip.BackgroundColour, inputList, watermarkFilePath, orderedLayers);
             _ffmpegComplexOperations.BuildClipFilterCommand(command, clip);
 

@@ -134,18 +134,24 @@ namespace BuildInstructorFunction.Test.Services
 
             var sb = new StringBuilder("previous");
             var clip = new Clip();
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
             {
                 new Layer
                 {
                     DefaultColour = "ffffff",
                     LayerId = layerId
                 }
+            }
+                }
             };
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildLayerCommand(sb, clip, splitInput, layers, null);
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, null);
 
             Assert.AreEqual("[v:0]", output.Single().ffmpegReference);
 
@@ -179,22 +185,80 @@ namespace BuildInstructorFunction.Test.Services
                     }
                 }
             };
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
             {
                 new Layer
                 {
                     DefaultColour = "ffffff",
                     LayerId = layerId
                 }
+            }
+                }
             };
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildLayerCommand(sb, clip, splitInput, layers, null);
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, null);
 
             Assert.AreEqual("[v:0]", output.Single().ffmpegReference);
 
             Assert.AreEqual($"previous[v:0]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp", sb.ToString());
+        }
+
+        [TestMethod]
+        public void BuildLayerCommandLayerOverrideReverse()
+        {
+            var layerId = Guid.NewGuid();
+            var splitInput = new List<(string id, string ffmpegReference)>
+                {
+                    new (layerId.ToString(), "[v:0]" )
+                };
+
+            var sb = new StringBuilder("previous");
+            var clip = new Clip
+            {
+                ClipDisplayLayers = new List<ClipDisplayLayer>
+                {
+                    new ClipDisplayLayer
+                    {
+                        Reverse = true,
+                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+                        {
+                            new LayerClipDisplayLayer
+                            {
+                                LayerId = layerId,
+                                ColourOverride = "000000"
+                            }
+                        }
+                    }
+                }
+            };
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
+            {
+                new Layer
+                {
+                    DefaultColour = "ffffff",
+                    LayerId = layerId
+                }
+            }
+                }
+            };
+
+            var sut = new FfmpegComplexOperations();
+
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, null);
+
+            Assert.AreEqual("[v:0]", output.Single().ffmpegReference);
+
+            Assert.AreEqual($"previous[v:0]reverse,colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp", sb.ToString());
         }
 
         [TestMethod]
@@ -210,18 +274,24 @@ namespace BuildInstructorFunction.Test.Services
 
             var sb = new StringBuilder("previous");
             var clip = new Clip();
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
             {
                 new Layer
                 {
                     DefaultColour = "ffffff",
                     LayerId = layerId
                 }
+            }
+                }
             };
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildLayerCommand(sb, clip, splitInput, layers, watermark);
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, watermark);
 
             Assert.AreEqual("[l0]", output[0].ffmpegReference);
             Assert.AreEqual("[v:1]", output[1].ffmpegReference);
@@ -245,22 +315,26 @@ namespace BuildInstructorFunction.Test.Services
             var sb = new StringBuilder("previous");
             var clip = new Clip
             {
-                ClipDisplayLayers = new List<ClipDisplayLayer> 
-                { 
-                    new ClipDisplayLayer 
-                    { 
-                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer> 
-                        { 
+                ClipDisplayLayers = new List<ClipDisplayLayer>
+                {
+                    new ClipDisplayLayer
+                    {
+                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+                        {
                             new LayerClipDisplayLayer
                             {
                                 LayerId = layerId2,
                                 ColourOverride = "009911"
-                            } 
-                        } 
-                    } 
+                            }
+                        }
+                    }
                 }
             };
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
             {
                 new Layer
                 {
@@ -272,17 +346,106 @@ namespace BuildInstructorFunction.Test.Services
                     DefaultColour = "ff0000",
                     LayerId = layerId2
                 }
+            }
+                }
             };
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildLayerCommand(sb, clip, splitInput, layers, null);
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, null);
 
             Assert.AreEqual("[l0]", output[0].ffmpegReference);
             Assert.AreEqual("[l1]", output[1].ffmpegReference);
             Assert.AreEqual("[v:3]", output[2].ffmpegReference);
 
             Assert.AreEqual($"previous[v:0]colorchannelmixer=rr=1:gg=1:bb=1,format=gbrp[l0];[v:1]colorchannelmixer=rr=0:gg=0.6:bb=0.06666666666666667,format=gbrp[l1];", sb.ToString());
+        }
+
+        [TestMethod]
+        public void BuildLayerCommandLayersOverrideWatermarkReverse()
+        {
+            var watermark = "watermark";
+            var layerId = Guid.NewGuid();
+            var layerId2 = Guid.NewGuid();
+            var layerId3 = Guid.NewGuid();
+            var splitInput = new List<(string id, string ffmpegReference)>
+                {
+                    new (layerId.ToString(), "[v:0]" ),
+                    new (layerId2.ToString(), "[v:1]" ),
+                    new (layerId3.ToString(), "[v:2]" ),
+                    new (watermark, "[v:3]" )
+                };
+
+            var sb = new StringBuilder("previous");
+            var displayLayerId1 = Guid.NewGuid();
+            var displayLayerId2 = Guid.NewGuid();
+            var clip = new Clip
+            {
+                ClipDisplayLayers = new List<ClipDisplayLayer>
+                {
+                    new ClipDisplayLayer
+                    {
+                        DisplayLayerId = displayLayerId1,
+                        Reverse = true,
+                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+                        {
+                            new LayerClipDisplayLayer
+                            {
+                                LayerId = layerId2,
+                                ColourOverride = "009911"
+                            }
+                        }
+                    },
+                    new ClipDisplayLayer
+                    {
+                        DisplayLayerId = displayLayerId2
+                    }
+                }
+            };
+
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    DisplayLayerId = displayLayerId1,
+                    Layers = new List<Layer>
+            {
+                new Layer
+                {
+                    DefaultColour = "ffffff",
+                    LayerId = layerId,
+                    IsOverlay = true
+                },
+                new Layer
+                {
+                    DefaultColour = "ff0000",
+                    LayerId = layerId2
+                }
+            }
+                },
+                new DisplayLayer
+                {
+                    DisplayLayerId = displayLayerId2,
+                    Layers = new List<Layer>
+                    {
+                        new Layer
+                {
+                    DefaultColour = "0000ff",
+                    LayerId = layerId3
+                }
+                    }
+                }
+            };
+
+            var sut = new FfmpegComplexOperations();
+
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, null);
+
+            Assert.AreEqual("[l0]", output[0].ffmpegReference);
+            Assert.AreEqual("[l1]", output[1].ffmpegReference);
+            Assert.AreEqual("[l2]", output[2].ffmpegReference);
+
+            Assert.AreEqual($"previous[v:0]reverse[l0];[v:1]reverse,colorchannelmixer=rr=0:gg=0.6:bb=0.06666666666666667,format=gbrp[l1];[v:2]colorchannelmixer=rr=0:gg=0:bb=1,format=gbrp[l2];", sb.ToString());               
         }
 
         [TestMethod]
@@ -298,18 +461,24 @@ namespace BuildInstructorFunction.Test.Services
 
             var sb = new StringBuilder("previous");
             var clip = new Clip { BackgroundColour = black };
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
+            {
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
             {
                 new Layer
                 {
                     DefaultColour = "ffffff",
                     LayerId = layerId
                 }
+            }
+                }
             };
 
             var sut = new FfmpegComplexOperations();
 
-            var output = sut.BuildLayerCommand(sb, clip, splitInput, layers, null);
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, displayLayers, null);
 
             Assert.AreEqual(black, output[0].id);
             Assert.AreEqual("[l0]", output[0].ffmpegReference);
@@ -594,12 +763,18 @@ namespace BuildInstructorFunction.Test.Services
                 StartingBeat = 3
             };
 
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
             {
-                new Layer
+                new DisplayLayer
+                {
+                    Layers = new List<Layer>
+                    {
+                        new Layer
                 {
                     LayerId = layerId,
                     DefaultColour = "000000"
+                }
+                    }
                 }
             };
 
@@ -612,7 +787,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegComplexOperations();
 
-            sut.BuildLayerCommand(sb, clip, splitClips, layers, null);
+            sut.BuildLayerCommand(sb, clip, splitClips, displayLayers, null);
             sut.BuildClipFilterCommand(sb, clip);
 
             Assert.AreEqual("[z1]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp,trim=start_frame=32:end_frame=64,setpts=PTS-STARTPTS", sb.ToString());

@@ -16,12 +16,29 @@ namespace BuildInstructorFunction.Test.Services
             var layer2 = Guid.NewGuid();
             var layer3 = Guid.NewGuid();
 
+            var displayLayerId1 = Guid.NewGuid();
+            var displayLayerId2 = Guid.NewGuid();
+
             var watermarkFilePath = "watermark.png";
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
                 {
+                new DisplayLayer
+                {
+                    DisplayLayerId = displayLayerId1,
+                    Layers = new List<Layer>
+                    {
                     new Layer{LayerId = layer1, DefaultColour = "000000"},
-                    new Layer{LayerId = layer2, DefaultColour = "001100" },
-                    new Layer{LayerId = layer3, DefaultColour = "0000FF", IsOverlay = true }
+                    new Layer{LayerId = layer2, DefaultColour = "001100", IsOverlay = true },
+                    }
+                },
+                new DisplayLayer
+                {
+                    DisplayLayerId = displayLayerId2,
+                    Layers = new List<Layer>
+                    {
+                    new Layer{LayerId = layer3, DefaultColour = "0000FF" }
+                    },
+                }
                 };
             var clip = new Clip
             {
@@ -32,6 +49,8 @@ namespace BuildInstructorFunction.Test.Services
                 {
                     new ClipDisplayLayer
                     {
+                        DisplayLayerId = displayLayerId1,
+                        Reverse = true,
                         LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
                         {
                             new LayerClipDisplayLayer
@@ -40,6 +59,11 @@ namespace BuildInstructorFunction.Test.Services
                                 LayerId = layer2
                             }
                         }
+                    },
+                    new ClipDisplayLayer
+                    {
+                        DisplayLayerId = displayLayerId2,
+                        Reverse = true
                     }
                 },
                 BeatLength = 4,
@@ -48,8 +72,8 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", watermarkFilePath, layers);
-            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -i \"{watermarkFilePath}\" -filter_complex \"[3:v]trim=end_frame=64,format=gbrp[l0];[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l1];[1:v]colorchannelmixer=rr=1:gg=0:bb=0,format=gbrp[l2];[l0][l1]blend=all_mode=screen,format=gbrp[o0];[o0][l2]blend=all_mode=screen,format=gbrp[o1];[o1][2:v]overlay,format=gbrp[o2];[o2][4:v]overlay=0:(main_h-overlay_h),format=gbrp\" ouputprefix/2.api'", result);
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", watermarkFilePath, displayLayers);
+            Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -f lavfi -i color=0x000000@1:s=3840x2160:r=2160/90 -i \"{watermarkFilePath}\" -filter_complex \"[3:v]trim=end_frame=64,format=gbrp[l0];[0:v]reverse,colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l1];[1:v]reverse[l2];[2:v]reverse,colorchannelmixer=rr=0:gg=0:bb=1,format=gbrp[l3];[l0][l1]blend=all_mode=screen,format=gbrp[o0];[o0][l2]overlay,format=gbrp[o1];[o1][l3]blend=all_mode=screen,format=gbrp[o2];[o2][4:v]overlay=0:(main_h-overlay_h),format=gbrp\" ouputprefix/2.api'", result);
         }
 
         [TestMethod]
@@ -58,11 +82,15 @@ namespace BuildInstructorFunction.Test.Services
             var layer1 = Guid.NewGuid();
             var layer2 = Guid.NewGuid();
             var layer3 = Guid.NewGuid();
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
                 {
+                new DisplayLayer {
+                    Layers = new List<Layer>{
                     new Layer{LayerId = layer1, DefaultColour = "000000"},
                     new Layer{LayerId = layer2, DefaultColour = "001100" },
                     new Layer{LayerId = layer3, DefaultColour = "0000FF", IsOverlay = true }
+                    }
+                }
                 };
             var clip = new Clip
             {
@@ -75,18 +103,23 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, layers);
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, displayLayers);
             Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l0];[1:v]colorchannelmixer=rr=0:gg=0.06666666666666667:bb=0,format=gbrp[l1];[l0][l1]blend=all_mode=screen,format=gbrp[o0];[o0][2:v]overlay,format=gbrp,trim=start_frame=16:end_frame=64,setpts=PTS-STARTPTS\" ouputprefix/2.api'", result);
+        //                     bin/bash -c 'ffmpeg -y -framerate 2160/90 -i         /4k/%d.png -framerate 2160/90 -i         /4k/%d.png -framerate 2160/90 -i         /4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l1];[1:v]colorchannelmixer=rr=0:gg=0.06666666666666667:bb=0,format=gbrp[l2];[l1][l2]blend=all_mode=screen,format=gbrp[o0];[o0][2:v]overlay,format=gbrp,trim=start_frame=16:end_frame=64,setpts=PTS-STARTPTS" ouputprefix/2.api
         }
 
         [TestMethod]
         public void GetClipCodeLayer()
         {
             var layer1 = Guid.NewGuid();
-            var layers = new List<Layer>
+            var displayLayers = new List<DisplayLayer>
                 {
-                    new Layer{LayerId = layer1, DefaultColour = "000000"}
-                };
+                new DisplayLayer {
+                    Layers = new List<Layer>{
+                        new Layer{LayerId = layer1, DefaultColour = "000000"}
+                }
+                }
+            };
 
             var clip = new Clip
             {
@@ -99,7 +132,7 @@ namespace BuildInstructorFunction.Test.Services
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, layers);
+            var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, displayLayers);
             Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp\" ouputprefix/2.api'", result);
         }
 

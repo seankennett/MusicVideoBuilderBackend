@@ -139,40 +139,64 @@ namespace BuildInstructorFunction.Services
             return $"rr={(double)color.R / byte.MaxValue}:gg={(double)color.G / byte.MaxValue}:bb={(double)color.B / byte.MaxValue}";
         }
 
-        public List<(string id, string ffmpegReference)> BuildLayerCommand(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> splitLayers, List<Layer> uniqueLayers, string watermarkFilePath)
+        public List<(string id, string ffmpegReference)> BuildLayerCommand(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> splitLayers, List<DisplayLayer> uniqueDisplayLayers, string watermarkFilePath)
         {
-            List<string> targetIds = CreateTargetIds(clip.BackgroundColour, uniqueLayers, watermarkFilePath);
-            for (var i = 0; i < targetIds.Count; i++)
+            var hasMultipleLayers = CreateTargetIds(clip.BackgroundColour, uniqueDisplayLayers?.SelectMany(x => x.Layers).ToList(), watermarkFilePath).Count > 1;
+            var i = 0;
+            if (clip.BackgroundColour != null)
             {
-                var targetId = targetIds[i];
-                var matchingInputindex = splitLayers.FindIndex(x => x.id == targetId);
+                var matchingInputindex = splitLayers.FindIndex(x => x.id == clip.BackgroundColour);
                 var matchedReference = splitLayers[matchingInputindex].ffmpegReference;
-                var matchedLayer = uniqueLayers?.FirstOrDefault(x => x.LayerId.ToString() == targetId);
-                if (matchedLayer != null && !matchedLayer.IsOverlay)
+                command.Append($"{matchedReference}trim=end_frame={InstructorConstants.FramesInLayer},format=gbrp");
+                if (hasMultipleLayers)
                 {
-                    var matchedOverrideLayer = clip.ClipDisplayLayers?.Where(x => x.LayerClipDisplayLayers != null).SelectMany(x => x.LayerClipDisplayLayers).FirstOrDefault(x => x.LayerId.ToString() == targetId);
-                    var hexCode = matchedOverrideLayer?.ColourOverride ?? matchedLayer.DefaultColour;
-                    command.Append($"{matchedReference}colorchannelmixer={ConvertToColorChannelMixerMatrix(hexCode)},format=gbrp");
-                    UpdateFfmpegReference(command, splitLayers, targetIds, i, matchingInputindex);
+                    UpdateFfmpegReference(command, splitLayers, i, matchingInputindex);
+                    i++;
                 }
-                else if (clip.BackgroundColour != null && targetId == clip.BackgroundColour)
+            }
+
+            if (uniqueDisplayLayers != null)
+            {
+                foreach (var displayLayer in uniqueDisplayLayers)
                 {
-                    command.Append($"{matchedReference}trim=end_frame={InstructorConstants.FramesInLayer},format=gbrp");
-                    UpdateFfmpegReference(command, splitLayers, targetIds, i, matchingInputindex);
+                    var matchedClipDisplayLayer = clip.ClipDisplayLayers?.FirstOrDefault(c => c.DisplayLayerId == displayLayer.DisplayLayerId);
+                    foreach (var layer in displayLayer.Layers)
+                    {
+                        var matchingInputindex = splitLayers.FindIndex(x => x.id == layer.LayerId.ToString());
+                        var matchedReference = splitLayers[matchingInputindex].ffmpegReference;
+
+                        var hasUsedReference = false;
+                        if (matchedClipDisplayLayer != null && matchedClipDisplayLayer.Reverse)
+                        {
+                            command.Append($"{matchedReference}reverse");
+                            hasUsedReference = true;
+                        }
+
+                        if (!layer.IsOverlay)
+                        {
+                            var matchedOverrideLayer = matchedClipDisplayLayer?.LayerClipDisplayLayers?.FirstOrDefault(x => x.LayerId == layer.LayerId);
+                            var hexCode = matchedOverrideLayer?.ColourOverride ?? layer.DefaultColour;
+                            command.Append($"{(hasUsedReference ? "," : matchedReference)}colorchannelmixer={ConvertToColorChannelMixerMatrix(hexCode)},format=gbrp");
+                            hasUsedReference = true;
+                        }
+
+                        if (hasUsedReference && hasMultipleLayers)
+                        {
+                            UpdateFfmpegReference(command, splitLayers, i, matchingInputindex);
+                        }
+                        i++;
+                    }
                 }
             }
 
             return splitLayers;
         }
 
-        private static void UpdateFfmpegReference(StringBuilder command, List<(string id, string ffmpegReference)> splitLayers, List<string> targetIds, int index, int matchingInputindex)
+        private static void UpdateFfmpegReference(StringBuilder command, List<(string id, string ffmpegReference)> splitLayers, int index, int matchingInputindex)
         {
-            if (targetIds.Count > 1)
-            {
-                string output = $"[l{index}]";
-                command.Append($"{output};");
-                splitLayers[matchingInputindex] = new(splitLayers[matchingInputindex].id, output);
-            }
+            string output = $"[l{index}]";
+            command.Append($"{output};");
+            splitLayers[matchingInputindex] = new(splitLayers[matchingInputindex].id, output);
         }
 
         public void BuildClipFilterCommand(StringBuilder command, Clip clip)

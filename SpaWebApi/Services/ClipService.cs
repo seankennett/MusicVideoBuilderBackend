@@ -119,7 +119,7 @@ namespace SpaWebApi.Services
             {
                 var databaseClipDisplayLayer = databaseClipDisplayLayers[i];
                 var clipDisplayLayer = clipDisplayLayers[i];
-                if (databaseClipDisplayLayer.DisplayLayerId != clipDisplayLayer.DisplayLayerId)
+                if (databaseClipDisplayLayer.DisplayLayerId != clipDisplayLayer.DisplayLayerId || databaseClipDisplayLayer.Reverse != clipDisplayLayer.Reverse)
                 {
                     return false;
                 }                

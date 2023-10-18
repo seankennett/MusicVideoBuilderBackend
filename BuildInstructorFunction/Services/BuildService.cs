@@ -17,6 +17,7 @@ namespace BuildInstructorFunction.Services
     {
         private readonly IBuildRepository _buildRepository;
         private readonly IVideoRepository _videoRepository;
+        private readonly IClipRepository _clipRepository;
         private readonly ICollectionService _collectionService;
         private readonly IFfmpegService _ffmpegService;
         private readonly IStorageService _storageService;
@@ -24,10 +25,11 @@ namespace BuildInstructorFunction.Services
         private readonly IAzureBatchService _azureBatchService;
         private readonly IUserCollectionRepository _userCollectionRepository;
 
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserCollectionRepository userCollectionRepository, ICollectionService collectionService)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserCollectionRepository userCollectionRepository, ICollectionService collectionService, IClipRepository clipRepository)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;
+            _clipRepository = clipRepository;
             _collectionService = collectionService;
             _ffmpegService = ffmpegService;
             _storageService = storageService;
@@ -51,6 +53,8 @@ namespace BuildInstructorFunction.Services
         public async Task InstructBuildAsync(UserBuild build)
         {
             var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId.Value);
+            // get by video id from database
+            var clips = (await _clipRepository.GetAllAsync(build.UserObjectId)).Where(x => video.VideoClips.Any(vc => vc.ClipId == x.ClipId));
             var collections = await _collectionService.GetAllCollectionsAsync();
 
             var buildId = build.BuildId;
@@ -59,14 +63,15 @@ namespace BuildInstructorFunction.Services
 
             var isForBatchService = build.Resolution == Resolution.FourK || build.Resolution == Resolution.Hd;
             var watermarkFilePath = build.Resolution == Resolution.Free ? $"{tempBlobPrefix}/watermark.png" : null;
-            var uniqueClips = video.Clips.DistinctBy(x => x.ClipId).ToList();
+            var uniqueVideoClips = video.VideoClips.DistinctBy(x => x.ClipId).ToList();
             var layerIdsPerClip = new Dictionary<int, IEnumerable<string>>();
             var uniqueLayers = new List<string>();
             var uniqueCollectionIds = new List<Guid>();
             var clipCommands = new List<FfmpegIOCommand>();
-            for (var i = 0; i < uniqueClips.Count(); i++)
+            for (var i = 0; i < uniqueVideoClips.Count(); i++)
             {
-                var clip = uniqueClips[i];
+                var videoClip = uniqueVideoClips[i];
+                var clip = clips.First(x => x.ClipId == videoClip.ClipId);
                 // looks complicated but should preserve order in clip
                 var orderedClipDisplayLayers = clip.ClipDisplayLayers?.Where(cdl => cdl != null).SelectMany(cdl => {
                     return collections.SelectMany(c => c.DisplayLayers).Where(d => cdl.DisplayLayerId == d.DisplayLayerId);
@@ -111,7 +116,7 @@ namespace BuildInstructorFunction.Services
             };
 
             var splitFrameCommands = new List<FfmpegIOCommand>();
-            var videoLengthSeconds = video.Clips.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
+            var videoLengthSeconds = clips.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
             var splitVideoTotal = (int)Math.Ceiling(videoLengthSeconds / InstructorConstants.VideoSplitLengthSeconds);
             for (var i = 0; i < splitVideoTotal; i++)
             {
@@ -129,7 +134,7 @@ namespace BuildInstructorFunction.Services
                 VideoName = videoFileName
             };
 
-            var concatClipFileContents = _ffmpegService.GetConcatCode(video.Clips.Select(x => $"{x.ClipId}.{video.Format}"));
+            var concatClipFileContents = _ffmpegService.GetConcatCode(video.VideoClips.Select(x => $"{x.ClipId}.{video.Format}"));
             await _storageService.UploadTextFile(userContainerName, tempBlobPrefix, InstructorConstants.AllFramesConcatFileName, concatClipFileContents, !hasAudio);
 
             var concatSplitFrameFileContents = _ffmpegService.GetConcatCode(splitFrameCommands.Select(x => x.VideoName));

@@ -58,6 +58,8 @@ namespace SpaWebApi.Test.Services
                 StartingBeat = 1
             };
 
+            var clips = new[] { _firstClip, secondClip };
+
             _video = new Video
             {
                 VideoId = 1,
@@ -65,9 +67,13 @@ namespace SpaWebApi.Test.Services
                 Format = Formats.mp4,
                 VideoDelayMilliseconds = 100,
                 VideoName = "test",
-                Clips = new List<Clip>
+                VideoClips = new List<VideoClip>
                 {
-                    _firstClip, _firstClip, secondClip, _firstClip, secondClip
+                    new VideoClip{ ClipId = _firstClip.ClipId },
+                    new VideoClip{ ClipId = _firstClip.ClipId },
+                    new VideoClip{ ClipId = secondClip.ClipId },
+                    new VideoClip{ ClipId = _firstClip.ClipId },
+                    new VideoClip{ ClipId = secondClip.ClipId }
                 }
             };
 
@@ -75,9 +81,9 @@ namespace SpaWebApi.Test.Services
             _clipRepositoryMock = new Mock<IClipRepository>();
             _buildRepositoryMock = new Mock<IBuildRepository>();
 
-            _clipRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(_video.Clips);
+            _clipRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(clips);
             _videoRepositoryMock.Setup(x => x.SaveAsync(_userId, _video)).ReturnsAsync(_video);
-            _videoRepositoryMock.Setup(x => x.GetAsync(_userId, _video.VideoId)).ReturnsAsync(new Video { Clips = new List<Clip> { _firstClip } });
+            _videoRepositoryMock.Setup(x => x.GetAsync(_userId, _video.VideoId)).ReturnsAsync(new Video { VideoClips = new List<VideoClip> { new VideoClip { ClipId = _firstClip.ClipId } } });
 
             _sut = new VideoService(_videoRepositoryMock.Object, _clipRepositoryMock.Object, _buildRepositoryMock.Object);
         }
@@ -109,6 +115,21 @@ namespace SpaWebApi.Test.Services
         public async Task SaveInvalidClips()
         {
             _clipRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(new List<Clip> { _firstClip });
+
+            await _sut.SaveAsync(_userId, _video);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task SaveInvalidVideoLength()
+        {
+            var videoClips = new List<VideoClip>();
+            for (var i = 0; i < 1000; i++)
+            {
+                videoClips.Add(new VideoClip { ClipId = _firstClip.ClipId });
+            }
+
+            _video.VideoClips = videoClips;
 
             await _sut.SaveAsync(_userId, _video);
         }

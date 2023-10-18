@@ -7,27 +7,31 @@ using SpaWebApi.Models;
 using SpaWebApi.Services;
 using Stripe;
 using VideoDataAccess.Entities;
+using VideoDataAccess.Repositories;
 
 public class PaymentService : IPaymentService
 {
     private readonly IUserCollectionRepository _userCollectionRepository;
     private readonly IBuildRepository _buildRepository;
     private readonly ICollectionService _collectionService;
+    private readonly IClipRepository _clipRepository;
     private readonly ILogger<PaymentService> _logger;
 
-    public PaymentService(IUserCollectionRepository userCollectionRepository, IBuildRepository buildRepository, ICollectionService collectionService)
+    public PaymentService(IUserCollectionRepository userCollectionRepository, IBuildRepository buildRepository, ICollectionService collectionService, IClipRepository clipRepository)
     {
         _userCollectionRepository = userCollectionRepository;
         _buildRepository = buildRepository;
         _collectionService = collectionService;
+        _clipRepository = clipRepository;
     }
 
     public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)
     {
         var userCollections = await _userCollectionRepository.GetAllAsync(userObjectId);
         var collections = await _collectionService.GetAllCollectionsAsync();
+        var clips = (await _clipRepository.GetAllAsync(userObjectId)).Where(x => video.VideoClips.Any(vc => vc.ClipId == x.ClipId));
 
-        var allDisplayLayers = video.Clips.Where(c => c.ClipDisplayLayers != null).SelectMany(c => c.ClipDisplayLayers).Select(c => c.DisplayLayerId).Distinct();
+        var allDisplayLayers = clips.Where(c => c.ClipDisplayLayers != null).SelectMany(c => c.ClipDisplayLayers).Select(c => c.DisplayLayerId).Distinct();
         var uniqueVideoCollectionIds = collections.Where(c => c.DisplayLayers.Any(d => allDisplayLayers.Contains(d.DisplayLayerId))).Select(c => c.CollectionId);
         int serverCalculatedCost = GetVideoCost(uniqueVideoCollectionIds, userCollections, paymentIntentRequest.Resolution, paymentIntentRequest.License);
         if (serverCalculatedCost != paymentIntentRequest.Cost) {

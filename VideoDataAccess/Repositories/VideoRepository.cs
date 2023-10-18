@@ -24,20 +24,13 @@ namespace VideoDataAccess.Repositories
             {
                 var reader = await connection.QueryMultipleAsync("GetVideos", new { userObjectId }, commandType: CommandType.StoredProcedure);
                 var videos = await reader.ReadAsync<VideoDTO>();
-                var clips = await reader.ReadAsync<VideoClipDTO>();
-                var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
-                var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
+                var videoClips = await reader.ReadAsync<VideoClipDTO>();
 
-                var groupedClips = clips.GroupBy(x => x.VideoId);
-                var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
-                var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
+                var groupedClips = videoClips.GroupBy(x => x.VideoId);
 
                 return videos.Select(v => new Video
                 {
-                    Clips = groupedClips.First(gc => gc.Key == v.VideoId).OrderBy(gc => gc.Order).Select(gc =>
-                    {
-                        return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, gc);
-                    }),
+                    VideoClips = groupedClips.First(gc => gc.Key == v.VideoId).OrderBy(gc => gc.Order).Select(gc => new VideoClip { ClipId = gc.ClipId }),
                     BPM = v.BPM,
                     Format = (Formats)v.FormatId,
                     VideoId = v.VideoId,
@@ -53,9 +46,9 @@ namespace VideoDataAccess.Repositories
             var dataTable = new DataTable();
             dataTable.Columns.Add("ForeignId");
             dataTable.Columns.Add("Order");
-            for (short i = 0; i < video.Clips.Count(); i++)
+            for (short i = 0; i < video.VideoClips.Count(); i++)
             {
-                dataTable.Rows.Add(video.Clips.ElementAt(i).ClipId, i);
+                dataTable.Rows.Add(video.VideoClips.ElementAt(i).ClipId, i);
             }
 
             using (var connection = new SqlConnection(_sqlConnection))
@@ -83,29 +76,12 @@ namespace VideoDataAccess.Repositories
 
                 if (video != null)
                 {
-                    var clips = await reader.ReadAsync<VideoClipDTO>();
-                    var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
-                    var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
-
-                    var groupedClips = clips.GroupBy(x => x.VideoId);
-                    var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
-                    var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
+                    var videoClips = await reader.ReadAsync<VideoClipDTO>();
+                    var groupedClips = videoClips.GroupBy(x => x.VideoId);
 
                     return new Video
                     {
-                        Clips = clips.OrderBy(c => c.Order).Select(c =>
-                        {
-                            var clip = new Clip
-                            {
-                                ClipId = c.ClipId,
-                                ClipName = c.ClipName,
-                                BackgroundColour = c.BackgroundColour,
-                                BeatLength = c.BeatLength,
-                                StartingBeat = c.StartingBeat
-                            };
-
-                            return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, clip);
-                        }),
+                        VideoClips = videoClips.OrderBy(c => c.Order).Select(c => new VideoClip { ClipId = c.ClipId }),
                         BPM = video.BPM,
                         Format = (Formats)video.FormatId,
                         VideoId = video.VideoId,

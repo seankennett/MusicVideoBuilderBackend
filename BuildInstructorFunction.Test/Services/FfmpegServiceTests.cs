@@ -177,11 +177,11 @@ namespace BuildInstructorFunction.Test.Services
                 StartingBeat = 1
             };
 
-            var video = new Video { Format = Formats.mov, Clips = new[] { clip2, clip1, clip1, clip2 } };
+            var clips = new[] { clip2, clip1, clip1, clip2 };
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
-            var result = sut.GetConcatCode(video.Clips.Select(x => $"{x.ClipId}.{video.Format}"));
+            var result = sut.GetConcatCode(clips.Select(x => $"{x.ClipId}.{Formats.mov}"));
             Assert.AreEqual("file '2.mov'\r\nfile '1.mov'\r\nfile '1.mov'\r\nfile '2.mov'\r\n", result);
         }
 

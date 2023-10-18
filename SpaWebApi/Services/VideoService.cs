@@ -1,4 +1,5 @@
 ﻿using BuildDataAccess.Repositories;
+using System.ComponentModel.DataAnnotations;
 using VideoDataAccess.Entities;
 using VideoDataAccess.Repositories;
 
@@ -10,6 +11,7 @@ namespace SpaWebApi.Services
         private readonly IClipRepository _clipRepository;
         private readonly IBuildRepository _buildRepository;
 
+        private const int MaxTimeInMinutes = 15;
         public VideoService(IVideoRepository videoRepository, IClipRepository clipRepository, IBuildRepository buildRepository)
         {
             _videoRepository = videoRepository;
@@ -41,9 +43,14 @@ namespace SpaWebApi.Services
         public async Task<Video> SaveAsync(Guid userObjectId, Video video)
         {
             var clips = await _clipRepository.GetAllAsync(userObjectId);
-            if (video.Clips.Any(v => !clips.Any(ul => ul.ClipId == v.ClipId)))
+            if (video.VideoClips.Any(v => !clips.Any(ul => ul.ClipId == v.ClipId)))
             {
                 throw new Exception("Video contains clips user does not have");
+            }
+
+            if (video.BPM * MaxTimeInMinutes < video.VideoClips.Sum(vc => clips.First(c => c.ClipId == vc.ClipId).BeatLength))
+            {
+                throw new Exception($"Video longer than {MaxTimeInMinutes} minutes");
             }
 
             IEnumerable<Video>? videos = null;
@@ -74,7 +81,7 @@ namespace SpaWebApi.Services
                     databaseVideo.BPM == video.BPM &&
                     databaseVideo.Format == video.Format &&
                     databaseVideo.VideoDelayMilliseconds == video.VideoDelayMilliseconds &&
-                    databaseVideo.Clips.Select(x => x.ClipId).SequenceEqual(video.Clips.Select(x => x.ClipId)))
+                    databaseVideo.VideoClips.Select(x => x.ClipId).SequenceEqual(video.VideoClips.Select(x => x.ClipId)))
                 {
                     return video;
                 }

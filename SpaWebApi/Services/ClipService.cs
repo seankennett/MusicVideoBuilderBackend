@@ -20,7 +20,7 @@ namespace SpaWebApi.Services
         public async Task DeleteAsync(Guid userObjectId, int clipId)
         {
             var videos = await _videoRepository.GetAllAsync(userObjectId);
-            if (videos.Any(v => v.Clips.Any(c => c.ClipId == clipId)))
+            if (videos.Any(v => v.VideoClips.Any(c => c.ClipId == clipId)))
             {
                 throw new Exception($"Clip Id {clipId} has videos dependent on it");
             }

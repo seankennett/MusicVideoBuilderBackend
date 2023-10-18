@@ -179,7 +179,7 @@ namespace SpaWebApi.Test.Services
         [ExpectedException(typeof(Exception))]
         public async Task DeleteDependentVideo()
         {
-            _videoRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(new List<Video> { new Video { Clips = new List<Clip> { _firstClip } } });
+            _videoRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(new List<Video> { new Video { VideoClips = new List<VideoClip> { new VideoClip { ClipId = _firstClip.ClipId } } } });
             await _sut.DeleteAsync(_userId, _firstClip.ClipId);
         }
 

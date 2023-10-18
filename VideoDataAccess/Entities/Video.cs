@@ -22,8 +22,7 @@ namespace VideoDataAccess.Entities
         [Required]
         [MinLength(1)]
         [MaxLength(short.MaxValue)]
-        [ClipLength("BPM", 15)]
-        public IEnumerable<Clip> Clips { get; set; }
+        public IEnumerable<VideoClip> VideoClips { get; set; }
 
         [Range(0, int.MaxValue)]
         public int? VideoDelayMilliseconds { get; set; }

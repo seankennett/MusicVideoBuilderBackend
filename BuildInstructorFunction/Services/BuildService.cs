@@ -54,7 +54,8 @@ namespace BuildInstructorFunction.Services
         {
             var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId.Value);
             // get by video id from database
-            var clips = (await _clipRepository.GetAllAsync(build.UserObjectId)).Where(x => video.VideoClips.Any(vc => vc.ClipId == x.ClipId));
+            var clips = await _clipRepository.GetAllAsync(build.UserObjectId);
+            var videoClipsFull = video.VideoClips.Select(vc => clips.First(c => c.ClipId == vc.ClipId));
             var collections = await _collectionService.GetAllCollectionsAsync();
 
             var buildId = build.BuildId;
@@ -116,7 +117,7 @@ namespace BuildInstructorFunction.Services
             };
 
             var splitFrameCommands = new List<FfmpegIOCommand>();
-            var videoLengthSeconds = clips.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
+            var videoLengthSeconds = videoClipsFull.Sum(x => x.BeatLength) * TimeSpan.FromMinutes(1).TotalSeconds / video.BPM;
             var splitVideoTotal = (int)Math.Ceiling(videoLengthSeconds / InstructorConstants.VideoSplitLengthSeconds);
             for (var i = 0; i < splitVideoTotal; i++)
             {

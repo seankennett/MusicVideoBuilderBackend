@@ -26,19 +26,33 @@ namespace BuildDataAccess.Repositories
             using (var connection = new SqlConnection(_sqlConnection))
             {
                 var builds = await connection.QueryAsync<BuildDTO>("GetBuilds", new { userObjectId }, commandType: CommandType.StoredProcedure);
-                return builds.Select(b => new Build
-                {
-                    License = (License)b.LicenseId,
-                    Resolution = (Resolution)b.ResolutionId,
-                    BuildId = b.BuildId,
-                    BuildStatus = (BuildStatus)b.BuildStatusId,
-                    VideoId = b.VideoId,
-                    VideoName = b.VideoName,
-                    Format = (Formats)b.FormatId,
-                    HasAudio = b.HasAudio,
-                    PaymentIntentId = b.PaymentIntentId,
-                    DateUpdated = b.DateUpdated
-                });
+                return ReadBuilds(builds);
+            }
+        }
+
+        private static IEnumerable<Build> ReadBuilds(IEnumerable<BuildDTO> builds)
+        {
+            return builds.Select(b => new Build
+            {
+                License = (License)b.LicenseId,
+                Resolution = (Resolution)b.ResolutionId,
+                BuildId = b.BuildId,
+                BuildStatus = (BuildStatus)b.BuildStatusId,
+                VideoId = b.VideoId,
+                VideoName = b.VideoName,
+                Format = (Formats)b.FormatId,
+                HasAudio = b.HasAudio,
+                PaymentIntentId = b.PaymentIntentId,
+                DateUpdated = b.DateUpdated
+            });
+        }
+
+        public async Task<IEnumerable<Build>> GetAllByVideoIdAsync(Guid userObjectId, int videoId)
+        {
+            using (var connection = new SqlConnection(_sqlConnection))
+            {
+                var builds = await connection.QueryAsync<BuildDTO>("GetBuildsByVideoId", new { userObjectId, VideoId = videoId }, commandType: CommandType.StoredProcedure);
+                return ReadBuilds(builds);
             }
         }
 

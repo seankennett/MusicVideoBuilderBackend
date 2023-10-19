@@ -26,8 +26,8 @@ namespace SpaWebApi.Services
                 throw new Exception($"User doesn't own video id {videoId}");
             }
 
-            var builds = await _buildRepository.GetAllAsync(userObjectId);
-            if (builds.Any(b => b.VideoId.HasValue && b.VideoId.Value == videoId && (b.BuildStatus == SharedEntities.Models.BuildStatus.BuildingPending || b.BuildStatus == SharedEntities.Models.BuildStatus.PaymentChargePending)))
+            var builds = await _buildRepository.GetAllByVideoIdAsync(userObjectId, videoId);
+            if (builds.Any(b => b.BuildStatus == SharedEntities.Models.BuildStatus.BuildingPending || b.BuildStatus == SharedEntities.Models.BuildStatus.PaymentChargePending))
             {
                 throw new Exception($"Video {videoId} is building so can't delete yet");
             }

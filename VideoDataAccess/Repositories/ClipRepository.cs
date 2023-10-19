@@ -22,18 +22,23 @@ namespace VideoDataAccess.Repositories
             using (var connection = new SqlConnection(_sqlConnection))
             {
                 var reader = await connection.QueryMultipleAsync("GetClips", new { userObjectId }, commandType: CommandType.StoredProcedure);
-                var clips = await reader.ReadAsync<Clip>();
-                var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
-                var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
-
-                var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
-                var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
-
-                return clips.Select(x =>
-                {
-                    return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, x);
-                });
+                return await ReadVideos(reader);
             }
+        }
+
+        private static async Task<IEnumerable<Clip>> ReadVideos(SqlMapper.GridReader reader)
+        {
+            var clips = await reader.ReadAsync<Clip>();
+            var clipDisplayLayers = await reader.ReadAsync<ClipDisplayLayerDTO>();
+            var layerClipDisplayLayers = await reader.ReadAsync<LayerClipDisplayLayerDTO>();
+
+            var groupedClipDisplayLayers = clipDisplayLayers.GroupBy(x => x.ClipId);
+            var groupedLayerClipDisplayLayers = layerClipDisplayLayers.GroupBy(x => x.ClipDisplayLayerId);
+
+            return clips.Select(x =>
+            {
+                return ClipHelper.HydrateClip(groupedClipDisplayLayers, groupedLayerClipDisplayLayers, x);
+            });
         }
 
         public async Task<Clip> SaveAsync(Guid userObjectId, Clip clip)
@@ -102,6 +107,15 @@ namespace VideoDataAccess.Repositories
             using (var connection = new SqlConnection(_sqlConnection))
             {
                 await connection.ExecuteAsync("DeleteClip", new { ClipId = clipId }, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<IEnumerable<Clip>> GetAllByVideoIdAsync(Guid userObjectId, int videoId)
+        {
+            using (var connection = new SqlConnection(_sqlConnection))
+            {
+                var reader = await connection.QueryMultipleAsync("GetClipsByVideoId", new { userObjectId, VideoId = videoId }, commandType: CommandType.StoredProcedure);
+                return await ReadVideos(reader);
             }
         }
     }

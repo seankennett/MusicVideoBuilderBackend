@@ -53,8 +53,7 @@ namespace BuildInstructorFunction.Services
         public async Task InstructBuildAsync(UserBuild build)
         {
             var video = await _videoRepository.GetAsync(build.UserObjectId, build.VideoId.Value);
-            // get by video id from database
-            var clips = await _clipRepository.GetAllAsync(build.UserObjectId);
+            var clips = await _clipRepository.GetAllByVideoIdAsync(build.UserObjectId, build.VideoId.Value);
             var videoClipsFull = video.VideoClips.Select(vc => clips.First(c => c.ClipId == vc.ClipId));
             var collections = await _collectionService.GetAllCollectionsAsync();
 

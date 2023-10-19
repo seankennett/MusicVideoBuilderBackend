@@ -186,7 +186,7 @@ namespace SpaWebApi.Test.Services
                     BuildStatus = SharedEntities.Models.BuildStatus.BuildingPending,
                     VideoId = _video.VideoId                }
             };
-            _buildRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(builds);
+            _buildRepositoryMock.Setup(x => x.GetAllByVideoIdAsync(_userId, _video.VideoId)).ReturnsAsync(builds);
             await _sut.DeleteAsync(_userId, _video.VideoId);
         }
     }

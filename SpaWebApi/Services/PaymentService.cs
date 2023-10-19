@@ -29,7 +29,7 @@ public class PaymentService : IPaymentService
     {
         var userCollections = await _userCollectionRepository.GetAllAsync(userObjectId);
         var collections = await _collectionService.GetAllCollectionsAsync();
-        var clips = (await _clipRepository.GetAllAsync(userObjectId)).Where(x => video.VideoClips.Any(vc => vc.ClipId == x.ClipId));
+        var clips = await _clipRepository.GetAllByVideoIdAsync(userObjectId, video.VideoId);
 
         var allDisplayLayers = clips.Where(c => c.ClipDisplayLayers != null).SelectMany(c => c.ClipDisplayLayers).Select(c => c.DisplayLayerId).Distinct();
         var uniqueVideoCollectionIds = collections.Where(c => c.DisplayLayers.Any(d => allDisplayLayers.Contains(d.DisplayLayerId))).Select(c => c.CollectionId);

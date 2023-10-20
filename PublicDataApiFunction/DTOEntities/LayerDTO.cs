@@ -10,6 +10,6 @@ namespace PublicDataApiFunction.DTOEntities
     public class LayerDTO : Layer
     {
         public Guid DisplayLayerId { get; set; }
-        public DateTime DateCreated { get; set; }
+        public byte Order { get; set; }
     }
 }

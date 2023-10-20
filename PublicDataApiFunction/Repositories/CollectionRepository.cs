@@ -43,7 +43,7 @@ namespace PublicDataApiFunction.Repositories
                     {
                         DisplayLayerId = d.DisplayLayerId,
                         IsCollectionDefault = d.IsCollectionDefault,
-                        Layers = groupedLayers.First(l => l.Key == d.DisplayLayerId).OrderByDescending(l => l.IsOverlay).ThenBy(l => l.DateCreated).Select(l => new Layer
+                        Layers = groupedLayers.First(l => l.Key == d.DisplayLayerId).OrderBy(l => l.Order).Select(l => new Layer
                         {
                             DefaultColour = l.DefaultColour,
                             IsOverlay = l.IsOverlay,

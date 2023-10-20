@@ -1,8 +1,8 @@
 ﻿namespace CollectionEntities.Entities
 {
-    public class Layer
+    public class LayerCollectionDisplayLayer
     {
         public Guid LayerId { get; set; }
-        public bool IsOverlay { get; set; }        
+        public string Colour { get; set; }
     }
 }

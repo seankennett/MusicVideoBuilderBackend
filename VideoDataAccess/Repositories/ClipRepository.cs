@@ -52,7 +52,7 @@ namespace VideoDataAccess.Repositories
             var layerClipDisplayLayerDataTable = new DataTable();
             layerClipDisplayLayerDataTable.Columns.Add("ClipDisplayLayerId");
             layerClipDisplayLayerDataTable.Columns.Add("LayerId");
-            layerClipDisplayLayerDataTable.Columns.Add("ColourOverride");
+            layerClipDisplayLayerDataTable.Columns.Add("Colour");
 
             for (short i = 0; i < clip.ClipDisplayLayers.Count(); i++)
             {
@@ -60,7 +60,7 @@ namespace VideoDataAccess.Repositories
                 clipDisplayLayerDataTable.Rows.Add(i, clipDisplayLayer.DisplayLayerId, clipDisplayLayer.Reverse, i);
                 foreach (var layerClipDisplayLayer in clipDisplayLayer.LayerClipDisplayLayers)
                 {
-                    layerClipDisplayLayerDataTable.Rows.Add(i, layerClipDisplayLayer.LayerId, layerClipDisplayLayer.ColourOverride);
+                    layerClipDisplayLayerDataTable.Rows.Add(i, layerClipDisplayLayer.LayerId, layerClipDisplayLayer.Colour);
                 }
             }
 

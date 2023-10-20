@@ -159,14 +159,14 @@ namespace BuildInstructorFunction.Services
             {
                 foreach (var displayLayer in uniqueDisplayLayers)
                 {
-                    var matchedClipDisplayLayer = clip.ClipDisplayLayers?.FirstOrDefault(c => c.DisplayLayerId == displayLayer.DisplayLayerId);
+                    var matchedClipDisplayLayer = clip.ClipDisplayLayers.First(c => c.DisplayLayerId == displayLayer.DisplayLayerId);
                     foreach (var layer in displayLayer.Layers)
                     {
                         var matchingInputindex = splitLayers.FindIndex(x => x.id == layer.LayerId.ToString());
                         var matchedReference = splitLayers[matchingInputindex].ffmpegReference;
 
                         var hasUsedReference = false;
-                        if (matchedClipDisplayLayer != null && matchedClipDisplayLayer.Reverse)
+                        if (matchedClipDisplayLayer.Reverse)
                         {
                             command.Append($"{matchedReference}reverse");
                             hasUsedReference = true;
@@ -174,9 +174,8 @@ namespace BuildInstructorFunction.Services
 
                         if (!layer.IsOverlay)
                         {
-                            var matchedOverrideLayer = matchedClipDisplayLayer?.LayerClipDisplayLayers?.FirstOrDefault(x => x.LayerId == layer.LayerId);
-                            var hexCode = matchedOverrideLayer?.ColourOverride ?? layer.DefaultColour;
-                            command.Append($"{(hasUsedReference ? "," : matchedReference)}colorchannelmixer={ConvertToColorChannelMixerMatrix(hexCode)},format=gbrp");
+                            var matchedOverrideLayer = matchedClipDisplayLayer.LayerClipDisplayLayers.First(x => x.LayerId == layer.LayerId);
+                            command.Append($"{(hasUsedReference ? "," : matchedReference)}colorchannelmixer={ConvertToColorChannelMixerMatrix(matchedOverrideLayer.Colour)},format=gbrp");
                             hasUsedReference = true;
                         }
 

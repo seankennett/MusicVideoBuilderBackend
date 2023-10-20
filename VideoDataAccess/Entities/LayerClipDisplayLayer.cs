@@ -8,6 +8,6 @@ namespace VideoDataAccess.Entities
 
         [MinLength(6)]
         [MaxLength(6)]
-        public string ColourOverride { get; set; }
+        public string Colour { get; set; }
     }
 }

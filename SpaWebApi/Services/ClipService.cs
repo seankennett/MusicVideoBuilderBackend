@@ -142,7 +142,7 @@ namespace SpaWebApi.Services
                     {
                         var databaseLayerClipDisplayLayer = databaseLayerClipDisplayLayers[j];
                         var layerClipDisplayLayer = layerClipDisplayLayers[j];
-                        if (databaseLayerClipDisplayLayer.LayerId != layerClipDisplayLayer.LayerId || databaseLayerClipDisplayLayer.ColourOverride != layerClipDisplayLayer.ColourOverride)
+                        if (databaseLayerClipDisplayLayer.LayerId != layerClipDisplayLayer.LayerId || databaseLayerClipDisplayLayer.Colour != layerClipDisplayLayer.Colour)
                         {
                             return false;
                         }

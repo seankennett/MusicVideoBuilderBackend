@@ -27,8 +27,8 @@ namespace BuildInstructorFunction.Test.Services
                     DisplayLayerId = displayLayerId1,
                     Layers = new List<Layer>
                     {
-                    new Layer{LayerId = layer1, DefaultColour = "000000"},
-                    new Layer{LayerId = layer2, DefaultColour = "001100", IsOverlay = true },
+                    new Layer{LayerId = layer1 },
+                    new Layer{LayerId = layer2, IsOverlay = true },
                     }
                 },
                 new DisplayLayer
@@ -36,7 +36,7 @@ namespace BuildInstructorFunction.Test.Services
                     DisplayLayerId = displayLayerId2,
                     Layers = new List<Layer>
                     {
-                    new Layer{LayerId = layer3, DefaultColour = "0000FF" }
+                    new Layer{LayerId = layer3 }
                     },
                 }
                 };
@@ -55,15 +55,28 @@ namespace BuildInstructorFunction.Test.Services
                         {
                             new LayerClipDisplayLayer
                             {
-                                ColourOverride = "ff0000",
+                                Colour = "ff0000",
                                 LayerId = layer2
+                            },
+                            new LayerClipDisplayLayer
+                            {
+                                Colour = "000000",
+                                LayerId = layer1
                             }
                         }
                     },
                     new ClipDisplayLayer
                     {
                         DisplayLayerId = displayLayerId2,
-                        Reverse = true
+                        Reverse = true,
+                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+                        {
+                            new LayerClipDisplayLayer
+                            {
+                                LayerId = layer3,
+                                Colour = "0000FF"
+                            }
+                        }
                     }
                 },
                 BeatLength = 4,
@@ -86,9 +99,9 @@ namespace BuildInstructorFunction.Test.Services
                 {
                 new DisplayLayer {
                     Layers = new List<Layer>{
-                    new Layer{LayerId = layer1, DefaultColour = "000000"},
-                    new Layer{LayerId = layer2, DefaultColour = "001100" },
-                    new Layer{LayerId = layer3, DefaultColour = "0000FF", IsOverlay = true }
+                    new Layer{LayerId = layer1/*, DefaultColour = "000000"*/},
+                    new Layer{LayerId = layer2/*, DefaultColour = "001100"*/ },
+                    new Layer{LayerId = layer3/*, DefaultColour = "0000FF"*/, IsOverlay = true }
                     }
                 }
                 };
@@ -98,14 +111,37 @@ namespace BuildInstructorFunction.Test.Services
                 ClipName = "second",
                 BackgroundColour = null,
                 BeatLength = 3,
-                StartingBeat = 2
+                StartingBeat = 2,
+                ClipDisplayLayers = new List<ClipDisplayLayer>
+                {
+                    new ClipDisplayLayer
+                    {
+                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+                        {
+                            new LayerClipDisplayLayer
+                            {
+                                LayerId = layer1,
+                                Colour = "000000"
+                            },
+                            new LayerClipDisplayLayer
+                            {
+                                LayerId = layer2,
+                                Colour = "001100"
+                            },
+                            new LayerClipDisplayLayer
+                            {
+                                LayerId = layer3,
+                                Colour = "0000FF"
+                            }
+                        }
+                    }
+                }
             };
 
             var sut = new FfmpegService(new FfmpegComplexOperations());
 
             var result = sut.GetClipCode(clip, Resolution.FourK, Formats.api, 90, true, "ouputprefix", null, displayLayers);
             Assert.AreEqual($"/bin/bash -c 'ffmpeg -y -framerate 2160/90 -i {layer1}/4k/%d.png -framerate 2160/90 -i {layer2}/4k/%d.png -framerate 2160/90 -i {layer3}/4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l0];[1:v]colorchannelmixer=rr=0:gg=0.06666666666666667:bb=0,format=gbrp[l1];[l0][l1]blend=all_mode=screen,format=gbrp[o0];[o0][2:v]overlay,format=gbrp,trim=start_frame=16:end_frame=64,setpts=PTS-STARTPTS\" ouputprefix/2.api'", result);
-        //                     bin/bash -c 'ffmpeg -y -framerate 2160/90 -i         /4k/%d.png -framerate 2160/90 -i         /4k/%d.png -framerate 2160/90 -i         /4k/%d.png -filter_complex \"[0:v]colorchannelmixer=rr=0:gg=0:bb=0,format=gbrp[l1];[1:v]colorchannelmixer=rr=0:gg=0.06666666666666667:bb=0,format=gbrp[l2];[l1][l2]blend=all_mode=screen,format=gbrp[o0];[o0][2:v]overlay,format=gbrp,trim=start_frame=16:end_frame=64,setpts=PTS-STARTPTS" ouputprefix/2.api
         }
 
         [TestMethod]
@@ -116,7 +152,7 @@ namespace BuildInstructorFunction.Test.Services
                 {
                 new DisplayLayer {
                     Layers = new List<Layer>{
-                        new Layer{LayerId = layer1, DefaultColour = "000000"}
+                        new Layer{LayerId = layer1/*, DefaultColour = "000000"*/}
                 }
                 }
             };
@@ -127,7 +163,21 @@ namespace BuildInstructorFunction.Test.Services
                 ClipName = "second",
                 BackgroundColour = null,
                 BeatLength = 4,
-                StartingBeat = 1
+                StartingBeat = 1,
+                ClipDisplayLayers = new List<ClipDisplayLayer>
+                {
+                    new ClipDisplayLayer
+                    {
+                        LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+                        {
+                            new LayerClipDisplayLayer
+                            {
+                                Colour = "000000",
+                                LayerId = layer1
+                            }
+                        }
+                    }
+                }
             };
 
             var sut = new FfmpegService(new FfmpegComplexOperations());

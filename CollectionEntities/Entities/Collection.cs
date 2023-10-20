@@ -6,6 +6,6 @@
         public string CollectionName { get; set; }
         public CollectionType CollectionType { get; set; }
         public IEnumerable<DisplayLayer> DisplayLayers { get; set; }
-        public int UserCount { get; set; }
+        public CollectionDisplayLayer CollectionDisplayLayer { get; set; }
     }
 }

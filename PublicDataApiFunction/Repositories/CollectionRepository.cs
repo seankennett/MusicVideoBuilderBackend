@@ -30,30 +30,40 @@ namespace PublicDataApiFunction.Repositories
                 var collections = await reader.ReadAsync<CollectionDTO>();
                 var displayLayers = await reader.ReadAsync<DisplayLayerDTO>();
                 var layers = await reader.ReadAsync<LayerDTO>();
+                var collectionDisplayLayers = await reader.ReadAsync<CollectionDisplayLayerDTO>();
+                var layerCollectionDisplayLayers = await reader.ReadAsync<LayerCollectionDisplayLayerDTO>();
+
 
                 var groupedDisplayLayers = displayLayers.GroupBy(x => x.CollectionId);
                 var groupedLayers = layers.GroupBy(x => x.DisplayLayerId);
+                var groupedLayerCollectionDisplayLayers = layerCollectionDisplayLayers.GroupBy(x => x.DisplayLayerId);
 
                 return collections.Select(l => new Collection
                 {
                     CollectionId = l.CollectionId,
                     CollectionName = l.CollectionName,
                     CollectionType = (CollectionType)l.CollectionTypeId,
+                    CollectionDisplayLayer = new CollectionDisplayLayer
+                    {
+                        DisplayLayerId = collectionDisplayLayers.First(x => x.CollectionId == l.CollectionId).DisplayLayerId,
+                        LayerCollectionDisplayLayers = groupedLayerCollectionDisplayLayers.First(lc => lc.Key == collectionDisplayLayers.First(x => x.CollectionId == l.CollectionId).DisplayLayerId).Select(cd => new LayerCollectionDisplayLayer
+                        {
+                            Colour = cd.Colour,
+                            LayerId = cd.LayerId
+                        })
+                    },
                     DisplayLayers = groupedDisplayLayers.First(x => x.Key == l.CollectionId).Select(d => new DisplayLayer
                     {
                         DisplayLayerId = d.DisplayLayerId,
-                        IsCollectionDefault = d.IsCollectionDefault,
                         Layers = groupedLayers.First(l => l.Key == d.DisplayLayerId).OrderByDescending(l => l.IsOverlay).ThenBy(l => l.Order).Select(l => new Layer
                         {
-                            DefaultColour = l.DefaultColour,
                             IsOverlay = l.IsOverlay,
                             LayerId = l.LayerId
                         }),
                         Direction = directions.First(dr => dr.DirectionId == d.DirectionId),
                         LinkedPreviousDisplayLayerId = d.LinkedPreviousDisplayLayerId,
                         NumberOfSides = d.NumberOfSides
-                    }),
-                    UserCount = l.UserCount
+                    })
                 });
             }
         }

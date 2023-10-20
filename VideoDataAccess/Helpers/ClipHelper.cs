@@ -28,7 +28,7 @@ namespace VideoDataAccess.Helpers
                     {
                         clipDisplayLayer.LayerClipDisplayLayers = groupedLayerClipDisplayLayer.Select(glc => new LayerClipDisplayLayer
                         {
-                            ColourOverride = glc.ColourOverride,
+                            Colour = glc.Colour,
                             LayerId = glc.LayerId
                         });
                     }

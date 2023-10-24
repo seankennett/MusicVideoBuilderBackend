@@ -172,6 +172,18 @@ namespace BuildInstructorFunction.Services
                             hasUsedReference = true;
                         }
 
+                        if (matchedClipDisplayLayer.FlipHorizontal)
+                        {
+                            command.Append($"{(hasUsedReference ? "," : matchedReference)}hflip");
+                            hasUsedReference = true;
+                        }
+
+                        if (matchedClipDisplayLayer.FlipVertical)
+                        {
+                            command.Append($"{(hasUsedReference ? "," : matchedReference)}vflip");
+                            hasUsedReference = true;
+                        }
+
                         if (!layer.IsOverlay)
                         {
                             var matchedOverrideLayer = matchedClipDisplayLayer.LayerClipDisplayLayers.First(x => x.LayerId == layer.LayerId);

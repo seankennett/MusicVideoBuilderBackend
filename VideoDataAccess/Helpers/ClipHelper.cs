@@ -21,6 +21,8 @@ namespace VideoDataAccess.Helpers
                     {
                         DisplayLayerId = x.DisplayLayerId,
                         Reverse = x.Reverse,
+                        FlipHorizontal = x.FlipHorizontal,
+                        FlipVertical = x.FlipVertical
                     };
 
                     var groupedLayerClipDisplayLayer = groupedLayerClipDisplayLayers.FirstOrDefault(gl => gl.Key == x.ClipDisplayLayerId);

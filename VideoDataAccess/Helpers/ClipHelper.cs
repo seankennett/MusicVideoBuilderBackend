@@ -22,7 +22,9 @@ namespace VideoDataAccess.Helpers
                         DisplayLayerId = x.DisplayLayerId,
                         Reverse = x.Reverse,
                         FlipHorizontal = x.FlipHorizontal,
-                        FlipVertical = x.FlipVertical
+                        FlipVertical = x.FlipVertical,
+                        Colour = x.Colour,
+                        FadeType = (FadeTypes?)x.FadeTypeId
                     };
 
                     var groupedLayerClipDisplayLayer = groupedLayerClipDisplayLayers.FirstOrDefault(gl => gl.Key == x.ClipDisplayLayerId);
@@ -31,6 +33,7 @@ namespace VideoDataAccess.Helpers
                         clipDisplayLayer.LayerClipDisplayLayers = groupedLayerClipDisplayLayer.Select(glc => new LayerClipDisplayLayer
                         {
                             Colour = glc.Colour,
+                            EndColour = glc.EndColour,
                             LayerId = glc.LayerId
                         });
                     }

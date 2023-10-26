@@ -11,6 +11,7 @@ namespace VideoDataAccess.DTOEntities
     {
         public int ClipDisplayLayerId { get; set; }
         public int ClipId { get; set; }
+        public short? FadeTypeId { get; set; }
         public short Order { get; set; }
     }
 }

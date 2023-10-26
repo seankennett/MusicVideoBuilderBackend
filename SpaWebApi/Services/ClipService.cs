@@ -122,7 +122,9 @@ namespace SpaWebApi.Services
                 if (databaseClipDisplayLayer.DisplayLayerId != clipDisplayLayer.DisplayLayerId || 
                     databaseClipDisplayLayer.Reverse != clipDisplayLayer.Reverse ||
                     databaseClipDisplayLayer.FlipHorizontal != clipDisplayLayer.FlipHorizontal ||
-                    databaseClipDisplayLayer.FlipVertical != clipDisplayLayer.FlipVertical)
+                    databaseClipDisplayLayer.FlipVertical != clipDisplayLayer.FlipVertical ||
+                    databaseClipDisplayLayer.FadeType != clipDisplayLayer.FadeType ||
+                    databaseClipDisplayLayer.Colour != clipDisplayLayer.Colour)
                 {
                     return false;
                 }                
@@ -145,7 +147,9 @@ namespace SpaWebApi.Services
                     {
                         var databaseLayerClipDisplayLayer = databaseLayerClipDisplayLayers[j];
                         var layerClipDisplayLayer = layerClipDisplayLayers[j];
-                        if (databaseLayerClipDisplayLayer.LayerId != layerClipDisplayLayer.LayerId || databaseLayerClipDisplayLayer.Colour != layerClipDisplayLayer.Colour)
+                        if (databaseLayerClipDisplayLayer.LayerId != layerClipDisplayLayer.LayerId || 
+                            databaseLayerClipDisplayLayer.Colour != layerClipDisplayLayer.Colour ||
+                            databaseLayerClipDisplayLayer.EndColour != layerClipDisplayLayer.EndColour)
                         {
                             return false;
                         }

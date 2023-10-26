@@ -1,4 +1,5 @@
 ﻿using CollectionDataAccess.Services;
+using CollectionEntities.Entities;
 using VideoDataAccess;
 using VideoDataAccess.Entities;
 using VideoDataAccess.Repositories;
@@ -49,12 +50,9 @@ namespace SpaWebApi.Services
             if (clip.BackgroundColour == null && (clip.ClipDisplayLayers == null || !clip.ClipDisplayLayers.Any()))
             {
                 throw new Exception("Must have a background colour or background clip defined");
-            }
+            }        
 
-            if (!await AreLayerIdsInDisplayLayers(clip.ClipDisplayLayers))
-            {
-                throw new Exception("Layer id is not related to display layer");
-            }            
+            await ValidateClipDisplayLayersAgainstCollections(clip.ClipDisplayLayers);   
 
             if (clip.ClipId != 0)
             {
@@ -79,33 +77,52 @@ namespace SpaWebApi.Services
             return await _clipRepository.SaveAsync(userObjectId, clip);
         }
 
-        private async Task<bool> AreLayerIdsInDisplayLayers(IEnumerable<ClipDisplayLayer>? clipDisplayLayers)
+        private async Task ValidateClipDisplayLayersAgainstCollections(IEnumerable<ClipDisplayLayer>? clipDisplayLayers)
         {
             if (clipDisplayLayers != null)
             {
-                var collections = await _collectionService.GetAllCollectionsAsync();
                 foreach (var clipDisplayLayer in clipDisplayLayers)
                 {
-                    var displayLayer = collections.SelectMany(c => c.DisplayLayers).FirstOrDefault(d => d.DisplayLayerId == clipDisplayLayer.DisplayLayerId);
-                    if (displayLayer == null)
+                    if (clipDisplayLayer.FadeType == null && clipDisplayLayer.Colour != null)
                     {
-                        return false;
+                        throw new Exception("Clip display layer colour must be null if fade type is null");
                     }
 
+                    var collections = await _collectionService.GetAllCollectionsAsync();
+                    var collection = collections.FirstOrDefault(c => c.DisplayLayers.Any(d => d.DisplayLayerId == clipDisplayLayer.DisplayLayerId));
+                    if (collection == null)
+                    {
+                        throw new Exception("Unknown display Layer in clip display layer");
+                    }
+
+                    if (collection.CollectionType == CollectionType.Background && clipDisplayLayer.FadeType != null && clipDisplayLayer.Colour == null)
+                    {
+                        throw new Exception("Background fades must have colour defined");
+                    }
+
+                    if (collection.CollectionType == CollectionType.Foreground && clipDisplayLayer.FadeType != null && clipDisplayLayer.Colour != null)
+                    {
+                        throw new Exception("Foreground fades must not have colour defined");
+                    }
+
+                    var displayLayer = collection.DisplayLayers.First(d => d.DisplayLayerId == clipDisplayLayer.DisplayLayerId);
                     if (clipDisplayLayer.LayerClipDisplayLayers != null)
                     {
                         foreach (var layerClipDisplayLayer in clipDisplayLayer.LayerClipDisplayLayers)
                         {
                             if (!displayLayer.Layers.Any(l => l.LayerId == layerClipDisplayLayer.LayerId))
                             {
-                                return false;
+                                throw new Exception("Layer clip display layer not belonging inside display layer");
+                            }
+
+                            if (clipDisplayLayer.FadeType != null && layerClipDisplayLayer.EndColour != null)
+                            {
+                                throw new Exception("Can't have fade and layer end colours defined");
                             }
                         }
                     }
                 }
             }
-
-            return true;
         }
 
         private bool AreClipDiplayLayersTheSame(List<ClipDisplayLayer> databaseClipDisplayLayers, List<ClipDisplayLayer> clipDisplayLayers)

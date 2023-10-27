@@ -15,12 +15,14 @@ namespace SpaWebApi.Test.Services
     [TestClass]
     public class ClipServiceTests
     {
+        private List<Collection> _collections;
         private Mock<IVideoRepository> _videoRepositoryMock;
         private Mock<IClipRepository> _clipRepositoryMock;
         private Mock<ICollectionService> _collectionServiceMock;
         private ClipService _sut;
         private Guid _userId;
         private Clip _firstClip;
+        private Guid _layer1;
 
         [TestInitialize]
         public void Init()
@@ -57,13 +59,14 @@ namespace SpaWebApi.Test.Services
                 BeatLength = 4,
                 StartingBeat = 1
             };
-            var layer1 = Guid.NewGuid();
+            _layer1 = Guid.NewGuid();
             var layer2 = Guid.NewGuid();
             var layer3 = Guid.NewGuid();
-            var collections = new List<Collection>
+            _collections = new List<Collection>
             {
                 new Collection
                 {
+                    CollectionType = CollectionType.Background,
                     DisplayLayers = new List<DisplayLayer>
                     {
                         new DisplayLayer
@@ -71,7 +74,7 @@ namespace SpaWebApi.Test.Services
                             DisplayLayerId = displayLayer1,
                             Layers = new List<Layer>
                             {
-                                new Layer{LayerId = layer1}
+                                new Layer{LayerId = _layer1}
                             }
                         },
                         new DisplayLayer
@@ -97,7 +100,7 @@ namespace SpaWebApi.Test.Services
             _videoRepositoryMock = new Mock<IVideoRepository>();
             _clipRepositoryMock = new Mock<IClipRepository>();
             _collectionServiceMock = new Mock<ICollectionService>();
-            _collectionServiceMock.Setup(x => x.GetAllCollectionsAsync()).ReturnsAsync(collections);
+            _collectionServiceMock.Setup(x => x.GetAllCollectionsAsync()).ReturnsAsync(_collections);
             _clipRepositoryMock.Setup(x => x.GetAllAsync(_userId)).ReturnsAsync(new List<Clip> { _firstClip, secondClip });
             _clipRepositoryMock.Setup(x => x.SaveAsync(_userId, _firstClip)).ReturnsAsync(_firstClip);
             _clipRepositoryMock.Setup(x => x.GetAsync(_userId, _firstClip.ClipId)).ReturnsAsync(new Clip());
@@ -154,6 +157,32 @@ namespace SpaWebApi.Test.Services
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
+        public async Task SaveClipDisplayLayerColourNoFade()
+        {
+            _firstClip.ClipDisplayLayers.First().Colour = "000000";
+            await _sut.SaveAsync(_userId, _firstClip);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task SaveBackgroundFadeNoColour()
+        {            
+            _firstClip.ClipDisplayLayers.First().FadeType = FadeTypes.In;
+            await _sut.SaveAsync(_userId, _firstClip);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task SaveForegroundFadeColour()
+        {
+            _collections.First().CollectionType = CollectionType.Foreground;
+            _firstClip.ClipDisplayLayers.First().FadeType = FadeTypes.In;
+            _firstClip.ClipDisplayLayers.First().Colour = "000000";
+            await _sut.SaveAsync(_userId, _firstClip);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public async Task SaveBadLayers()
         {
             _firstClip.ClipDisplayLayers.Single().LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
@@ -164,6 +193,24 @@ namespace SpaWebApi.Test.Services
                 }
             };
             _clipRepositoryMock.Setup(x => x.GetAsync(_userId, _firstClip.ClipId)).ReturnsAsync((Clip)null);
+            await _sut.SaveAsync(_userId, _firstClip);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task SaveFadeAndLayerEndColour()
+        {
+            _collections.First().CollectionType = CollectionType.Foreground;
+            var clipDisplayLayer = _firstClip.ClipDisplayLayers.First();
+            clipDisplayLayer.FadeType = FadeTypes.In;
+            clipDisplayLayer.LayerClipDisplayLayers = new List<LayerClipDisplayLayer>
+            {
+                new LayerClipDisplayLayer
+                {
+                    LayerId = _layer1,
+                    EndColour = "000000"
+                }
+            };
             await _sut.SaveAsync(_userId, _firstClip);
         }
 

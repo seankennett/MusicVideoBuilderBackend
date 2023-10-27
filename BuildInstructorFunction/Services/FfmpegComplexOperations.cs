@@ -1,6 +1,7 @@
 ﻿using BuildEntities;
 using BuilderEntities.Extensions;
 using CollectionEntities.Entities;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -132,11 +133,10 @@ namespace BuildInstructorFunction.Services
             return targetIds;
         }
 
-        private string ConvertToColorChannelMixerMatrix(string hexCode)
+        private Color ConvertToColor(string hexCode)
         {
             ColorConverter converter = new ColorConverter();
-            Color color = (Color)converter.ConvertFromString("#" + hexCode);
-            return $"rr={(double)color.R / byte.MaxValue}:gg={(double)color.G / byte.MaxValue}:bb={(double)color.B / byte.MaxValue}";
+            return (Color)converter.ConvertFromString("#" + hexCode);
         }
 
         public List<(string id, string ffmpegReference)> BuildLayerCommand(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> splitLayers, List<DisplayLayer> uniqueDisplayLayers, string watermarkFilePath)
@@ -182,12 +182,39 @@ namespace BuildInstructorFunction.Services
                         {
                             command.Append($"{(hasUsedReference ? "," : matchedReference)}vflip");
                             hasUsedReference = true;
-                        }
+                        }                        
 
                         if (!layer.IsOverlay)
                         {
                             var matchedOverrideLayer = matchedClipDisplayLayer.LayerClipDisplayLayers.First(x => x.LayerId == layer.LayerId);
-                            command.Append($"{(hasUsedReference ? "," : matchedReference)}colorchannelmixer={ConvertToColorChannelMixerMatrix(matchedOverrideLayer.Colour)},format=gbrp");
+                            var startColour = ConvertToColor(matchedOverrideLayer.Colour);
+                            if (matchedOverrideLayer.EndColour == null)
+                            {
+                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r='r(X,Y)*({startColour.R}/255)':b='b(X,Y)*({startColour.B}/255)':g='g(X,Y)*({startColour.G}/255)'");
+                            }
+                            else
+                            {
+                                var framesInLayer = InstructorConstants.FramesInLayer - 1;
+                                var endColour = ConvertToColor(matchedOverrideLayer.EndColour);
+                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r='r(X,Y)/{framesInLayer}*(N*({endColour.R}/255)+{framesInLayer}*({startColour.R}/255)-N*({startColour.R}/255))':b='b(X,Y)/{framesInLayer}*(N*({endColour.B}/255)+{framesInLayer}*({startColour.B}/255)-N*({startColour.B}/255))':g='g(X,Y)/{framesInLayer}*(N*({endColour.G}/255)+{framesInLayer}*({startColour.G}/255)-N*({startColour.G}/255))'");
+                            }
+                            command.Append(",format=gbrp");
+                            hasUsedReference = true;
+                        }
+
+                        if (matchedClipDisplayLayer.FadeType != null)
+                        {
+                            var fadeCommand = matchedClipDisplayLayer.FadeType.ToString().ToLower();
+                            command.Append($"{(hasUsedReference ? "," : matchedReference)}fade={fadeCommand}:s=0:n={InstructorConstants.FramesInLayer}");
+                            if (matchedClipDisplayLayer.Colour != null)
+                            {
+                                command.Append($":c={"#" + matchedClipDisplayLayer.Colour}");
+                            }
+                            else if (layer.IsOverlay)
+                            {
+                                command.Append(":alpha=1");
+                            }
+
                             hasUsedReference = true;
                         }
 

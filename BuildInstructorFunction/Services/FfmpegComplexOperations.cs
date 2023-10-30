@@ -39,13 +39,13 @@ namespace BuildInstructorFunction.Services
 
             if (watermarkFilePath != null)
             {
-                command.Append($"-i \"{watermarkFilePath}\" ");
+                command.Append($"-i \\'{watermarkFilePath}\\' ");
                 inputList.Add((watermarkFilePath, $"[{overallIndex}:v]"));
             }
 
             if (audioFileName != null)
             {
-                command.Append($"-i \"{audioFileName}\" ");
+                command.Append($"-i \\'{audioFileName}\\' ");
             }
 
             return inputList;
@@ -190,13 +190,13 @@ namespace BuildInstructorFunction.Services
                             var startColour = ConvertToColor(matchedOverrideLayer.Colour);
                             if (matchedOverrideLayer.EndColour == null)
                             {
-                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r=\"r(X,Y)*({startColour.R}/255)\":b=\"b(X,Y)*({startColour.B}/255)\":g=\"g(X,Y)*({startColour.G}/255)\"");
+                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r=\\'r(X,Y)*({startColour.R}/255)\\':b=\\'b(X,Y)*({startColour.B}/255)\\':g=\\'g(X,Y)*({startColour.G}/255)\\'");
                             }
                             else
                             {
                                 var framesInLayer = InstructorConstants.FramesInLayer - 1;
                                 var endColour = ConvertToColor(matchedOverrideLayer.EndColour);
-                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r=\"r(X,Y)/{framesInLayer}*(N*({endColour.R}/255)+{framesInLayer}*({startColour.R}/255)-N*({startColour.R}/255))\":b=\"b(X,Y)/{framesInLayer}*(N*({endColour.B}/255)+{framesInLayer}*({startColour.B}/255)-N*({startColour.B}/255))\":g=\"g(X,Y)/{framesInLayer}*(N*({endColour.G}/255)+{framesInLayer}*({startColour.G}/255)-N*({startColour.G}/255))\"");
+                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r=\\'r(X,Y)/{framesInLayer}*(N*({endColour.R}/255)+{framesInLayer}*({startColour.R}/255)-N*({startColour.R}/255))\\':b=\\'b(X,Y)/{framesInLayer}*(N*({endColour.B}/255)+{framesInLayer}*({startColour.B}/255)-N*({startColour.B}/255))\\':g=\\'g(X,Y)/{framesInLayer}*(N*({endColour.G}/255)+{framesInLayer}*({startColour.G}/255)-N*({startColour.G}/255))\\'");
                             }
                             command.Append(",format=gbrp");
                             hasUsedReference = true;

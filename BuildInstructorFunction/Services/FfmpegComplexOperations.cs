@@ -139,7 +139,7 @@ namespace BuildInstructorFunction.Services
             return (Color)converter.ConvertFromString("#" + hexCode);
         }
 
-        public List<(string id, string ffmpegReference)> BuildLayerCommand(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> splitLayers, List<DisplayLayer> uniqueDisplayLayers, string watermarkFilePath)
+        public List<(string id, string ffmpegReference)> BuildLayerCommand(StringBuilder command, Clip clip, List<(string id, string ffmpegReference)> splitLayers, List<DisplayLayer> uniqueDisplayLayers, string watermarkFilePath, bool fromCommandLine)
         {
             var hasMultipleLayers = CreateTargetIds(clip.BackgroundColour, uniqueDisplayLayers?.SelectMany(x => x.Layers).ToList(), watermarkFilePath).Count > 1;
             var i = 0;
@@ -188,15 +188,16 @@ namespace BuildInstructorFunction.Services
                         {
                             var matchedOverrideLayer = matchedClipDisplayLayer.LayerClipDisplayLayers.First(x => x.LayerId == layer.LayerId);
                             var startColour = ConvertToColor(matchedOverrideLayer.Colour);
+                            var singleQuote = fromCommandLine ? "'\\''" : "'";
                             if (matchedOverrideLayer.EndColour == null)
                             {
-                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r=\\'r(X,Y)*({startColour.R}/255)\\':b=\\'b(X,Y)*({startColour.B}/255)\\':g=\\'g(X,Y)*({startColour.G}/255)\\'");
+                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r={singleQuote}r(X,Y)*({startColour.R}/255){singleQuote}:b={singleQuote}b(X,Y)*({startColour.B}/255){singleQuote}:g={singleQuote}g(X,Y)*({startColour.G}/255){singleQuote}");
                             }
                             else
                             {
                                 var framesInLayer = InstructorConstants.FramesInLayer - 1;
                                 var endColour = ConvertToColor(matchedOverrideLayer.EndColour);
-                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r=\\'r(X,Y)/{framesInLayer}*(N*({endColour.R}/255)+{framesInLayer}*({startColour.R}/255)-N*({startColour.R}/255))\\':b=\\'b(X,Y)/{framesInLayer}*(N*({endColour.B}/255)+{framesInLayer}*({startColour.B}/255)-N*({startColour.B}/255))\\':g=\\'g(X,Y)/{framesInLayer}*(N*({endColour.G}/255)+{framesInLayer}*({startColour.G}/255)-N*({startColour.G}/255))\\'");
+                                command.Append($"{(hasUsedReference ? "," : matchedReference)}geq=r={singleQuote}r(X,Y)/{framesInLayer}*(N*({endColour.R}/255)+{framesInLayer}*({startColour.R}/255)-N*({startColour.R}/255)){singleQuote}:b={singleQuote}b(X,Y)/{framesInLayer}*(N*({endColour.B}/255)+{framesInLayer}*({startColour.B}/255)-N*({startColour.B}/255)){singleQuote}:g={singleQuote}g(X,Y)/{framesInLayer}*(N*({endColour.G}/255)+{framesInLayer}*({startColour.G}/255)-N*({startColour.G}/255)){singleQuote}");
                             }
                             command.Append(",format=gbrp");
                             hasUsedReference = true;

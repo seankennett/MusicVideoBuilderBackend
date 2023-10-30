@@ -33,7 +33,7 @@ namespace BuildInstructorFunction.Services
 
             command.Append($"-filter_complex \"");
 
-            inputList = _ffmpegComplexOperations.BuildLayerCommand(command, clip, inputList, orderedDisplayLayers, watermarkFilePath);
+            inputList = _ffmpegComplexOperations.BuildLayerCommand(command, clip, inputList, orderedDisplayLayers, watermarkFilePath, fromCommandLine);
             _ffmpegComplexOperations.BuildClipCommand(command, clip.BackgroundColour, inputList, watermarkFilePath, orderedLayers);
             _ffmpegComplexOperations.BuildClipFilterCommand(command, clip);
 

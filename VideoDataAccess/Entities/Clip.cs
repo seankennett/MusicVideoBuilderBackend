@@ -7,7 +7,7 @@ namespace VideoDataAccess.Entities
     {
         [Required]
         [MaxLength(50)]
-        [RegularExpression(@"^[a-zA-Z0-9]*$")]
+        [RegularExpression(@"^[a-zA-Z0-9_-]*$")]
         public string ClipName { get; set; }
         public int ClipId { get; set; }
 

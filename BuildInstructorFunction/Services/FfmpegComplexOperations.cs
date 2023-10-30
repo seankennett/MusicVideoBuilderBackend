@@ -39,13 +39,13 @@ namespace BuildInstructorFunction.Services
 
             if (watermarkFilePath != null)
             {
-                command.Append($"-i \\'{watermarkFilePath}\\' ");
+                command.Append($"-i \"{watermarkFilePath}\" ");
                 inputList.Add((watermarkFilePath, $"[{overallIndex}:v]"));
             }
 
             if (audioFileName != null)
             {
-                command.Append($"-i \\'{audioFileName}\\' ");
+                command.Append($"-i \"{audioFileName}\" ");
             }
 
             return inputList;

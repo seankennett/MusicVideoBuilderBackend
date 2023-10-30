@@ -77,7 +77,7 @@ namespace BuildInstructorFunction.Test.Services
             Assert.AreEqual("[3:v]", output[3].ffmpegReference);
             Assert.AreEqual(4, output.Count);
 
-            Assert.AreEqual($"-framerate 2160/90 -i {layer1}/free/%d.png -framerate 2160/90 -i {layer2}/free/%d.png -f lavfi -i color=0x{colour.ToUpper()}@1:s=384x216:r=2160/90 -i \\'{watermarkFilePath}\\' -i \\'{audioFilePath}\\' ", sb.ToString());
+            Assert.AreEqual($"-framerate 2160/90 -i {layer1}/free/%d.png -framerate 2160/90 -i {layer2}/free/%d.png -f lavfi -i color=0x{colour.ToUpper()}@1:s=384x216:r=2160/90 -i \"{watermarkFilePath}\" -i \"{audioFilePath}\" ", sb.ToString());
         }
 
         [TestMethod]

@@ -65,6 +65,7 @@ namespace SpaWebApi.Services
                 // no change so return original
                 if (databaseClip.ClipName == clip.ClipName &&
                     databaseClip.BackgroundColour == clip.BackgroundColour &&
+                    databaseClip.EndBackgroundColour == clip.EndBackgroundColour &&
                     databaseClip.BeatLength == clip.BeatLength &&
                     databaseClip.StartingBeat == clip.StartingBeat && (databaseClip.ClipDisplayLayers == null && clip.ClipDisplayLayers == null ||
                     databaseClip.ClipDisplayLayers != null && clip.ClipDisplayLayers != null &&

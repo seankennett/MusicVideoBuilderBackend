@@ -87,6 +87,7 @@ namespace VideoDataAccess.Repositories
                     clip.ClipId,
                     clip.ClipName,
                     clip.BackgroundColour,
+                    clip.EndBackgroundColour,
                     clip.BeatLength,
                     clip.StartingBeat,
                     ClipDisplayLayers = clipDisplayLayerDataTable.AsTableValuedParameter("ClipDisplayLayerType"),

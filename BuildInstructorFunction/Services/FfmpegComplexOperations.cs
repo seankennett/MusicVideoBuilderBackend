@@ -148,6 +148,11 @@ namespace BuildInstructorFunction.Services
                 var matchingInputindex = splitLayers.FindIndex(x => x.id == clip.BackgroundColour);
                 var matchedReference = splitLayers[matchingInputindex].ffmpegReference;
                 command.Append($"{matchedReference}trim=end_frame={InstructorConstants.FramesInLayer},format=gbrp");
+                if (clip.EndBackgroundColour != null)
+                {
+                    command.Append($",fade=out:s=0:n={InstructorConstants.FramesInLayer}:c=#{clip.EndBackgroundColour}");
+                }
+
                 if (hasMultipleLayers)
                 {
                     UpdateFfmpegReference(command, splitLayers, i, matchingInputindex);

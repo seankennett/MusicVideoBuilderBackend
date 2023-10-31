@@ -17,7 +17,13 @@ namespace VideoDataAccess.Entities
 
         [MinLength(6)]
         [MaxLength(6)]
+        [RegularExpression(@"\A\b[0-9a-fA-F]+\b\Z")]
         public string? BackgroundColour { get; set; }
+
+        [MinLength(6)]
+        [MaxLength(6)]
+        [RegularExpression(@"\A\b[0-9a-fA-F]+\b\Z")]
+        public string? EndBackgroundColour { get; set; }
 
         [Range(1, VideoDataAccessConstants.BeatsPerDisplayLayer)]
         public byte BeatLength { get; set; }

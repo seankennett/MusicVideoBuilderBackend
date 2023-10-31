@@ -101,6 +101,27 @@ namespace BuildInstructorFunction.Test.Services
         }
 
         [TestMethod]
+        public void BuildLayerCommandEndColour()
+        {
+            var black = "000000";
+            var red = "ff0000";
+            var splitInput = new List<(string id, string ffmpegReference)>
+                {
+                    new (black, "[v:0]" )
+                };
+
+            var sb = new StringBuilder("previous");
+            var clip = new Clip { BackgroundColour = black, EndBackgroundColour = red };
+            var sut = new FfmpegComplexOperations();
+
+            var output = sut.BuildLayerCommand(sb, clip, splitInput, null, null, false);
+
+            Assert.AreEqual("[v:0]", output.Single().ffmpegReference);
+
+            Assert.AreEqual($"previous[v:0]trim=end_frame=64,format=gbrp,fade=out:s=0:n=64:c=#{red}", sb.ToString());
+        }
+
+        [TestMethod]
         public void BuildLayerCommandColourWatermark()
         {
             var watermark = "watermark";

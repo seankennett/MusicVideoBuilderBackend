@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicDataApiFunction", "Pu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionEntities", "CollectionEntities\CollectionEntities.csproj", "{19DCFC06-9875-4FA1-B456-D0DEB02856DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserSubscriptionAccess", "UserSubscriptionAccess\UserSubscriptionAccess.csproj", "{E7F83E92-E921-400C-9539-085BEB3308C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19DCFC06-9875-4FA1-B456-D0DEB02856DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7F83E92-E921-400C-9539-085BEB3308C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7F83E92-E921-400C-9539-085BEB3308C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7F83E92-E921-400C-9539-085BEB3308C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7F83E92-E921-400C-9539-085BEB3308C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

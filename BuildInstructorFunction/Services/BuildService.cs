@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserSubscriptionAccess;
+using UserSubscriptionAccess.Repositories;
 using VideoDataAccess.Repositories;
 
 namespace BuildInstructorFunction.Services
@@ -24,8 +26,12 @@ namespace BuildInstructorFunction.Services
         private readonly IBuilderFunctionSender _builderFunctionSender;
         private readonly IAzureBatchService _azureBatchService;
         private readonly IUserCollectionRepository _userCollectionRepository;
+        private readonly IUserSubscriptionRepository _userSubscriptionRepository;
 
-        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, IUserCollectionRepository userCollectionRepository, ICollectionService collectionService, IClipRepository clipRepository)
+        public BuildService(IBuildRepository buildRepository, IVideoRepository videoRepository, IFfmpegService ffmpegService, 
+            IStorageService storageService, IBuilderFunctionSender builderFunctionSender, IAzureBatchService azureBatchService, 
+            IUserCollectionRepository userCollectionRepository, ICollectionService collectionService, IClipRepository clipRepository,
+            IUserSubscriptionRepository userSubscriptionRepository)
         {
             _buildRepository = buildRepository;
             _videoRepository = videoRepository;
@@ -36,6 +42,7 @@ namespace BuildInstructorFunction.Services
             _builderFunctionSender = builderFunctionSender;
             _azureBatchService = azureBatchService;
             _userCollectionRepository = userCollectionRepository;
+            _userSubscriptionRepository = userSubscriptionRepository;
         }
         public async Task InstructBuildAsync(string paymentIntentId)
         {
@@ -97,7 +104,10 @@ namespace BuildInstructorFunction.Services
                 }
             }
 
-            if (resolution != Resolution.Free)
+            var userSubscription = await _userSubscriptionRepository.GetAsync(build.UserObjectId);
+            if (build.License != License.Personal && 
+                (userSubscription == null || 
+                userSubscription.IsStatusActive() && userSubscription.ProductId != SubscriptionProducts.License && userSubscription.ProductId != SubscriptionProducts.LicenseBuilder))
             {
                 await _userCollectionRepository.SavePendingUserCollectionAsync(uniqueCollectionIds, build.UserObjectId, build.BuildId);
             }

@@ -10,5 +10,8 @@ namespace SpaWebApi.Models
 
         [Required]
         public Resolution Resolution { get; set; }
+
+        [Required]
+        public License License { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using UserSubscriptionAccess.Repositories;
 using VideoDataAccess.Repositories;
 
 [assembly: FunctionsStartup(typeof(Startup))]
@@ -58,6 +59,9 @@ namespace BuildInstructorFunction
             builder.Services.AddSingleton<IAzureBatchService, AzureBatchService>();
             builder.Services.AddSingleton<IBuilderFunctionSender, BuilderFunctionSender>();
             builder.Services.AddSingleton<ICollectionService, CollectionService>();
+            builder.Services.AddSingleton<IUserSubscriptionService, UserSubscriptionService>();
+            builder.Services.AddSingleton<IUserSubscriptionRepository, UserSubscriptionRepository>();
+            builder.Services.AddSingleton<ISubscriptionProductService, SubscriptionProductService>();
         }
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

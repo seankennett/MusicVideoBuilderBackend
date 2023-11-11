@@ -41,14 +41,14 @@ namespace BuildDataAccess.Repositories
             }
         }
 
-        public async Task SavePendingUserCollectionAsync(IEnumerable<Guid> uniqueLayers, Guid userObjectId, Guid buildId)
+        public async Task SavePendingUserCollectionAsync(IEnumerable<Guid> uniqueCollectionIds, Guid userObjectId, Guid buildId)
         {
             var dataTable = new DataTable();
             dataTable.Columns.Add("ForeignId");
             dataTable.Columns.Add("Order");
-            for (short i = 0; i < uniqueLayers.Count(); i++)
+            for (short i = 0; i < uniqueCollectionIds.Count(); i++)
             {
-                dataTable.Rows.Add(uniqueLayers.ElementAt(i), i);
+                dataTable.Rows.Add(uniqueCollectionIds.ElementAt(i), i);
             }
 
             using (var connection = new SqlConnection(_sqlConnection))

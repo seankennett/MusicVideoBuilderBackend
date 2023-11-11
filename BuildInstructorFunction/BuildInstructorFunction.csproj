@@ -14,12 +14,13 @@
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.6.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.3" />
-    <PackageReference Include="Stripe.net" Version="41.9.0" />
+    <PackageReference Include="Stripe.net" Version="43.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BuildDataAccess\BuildDataAccess.csproj" />
     <ProjectReference Include="..\BuilderEntities\BuilderEntities.csproj" />
     <ProjectReference Include="..\CollectionDataAccess\CollectionDataAccess.csproj" />
+    <ProjectReference Include="..\UserSubscriptionAccess\UserSubscriptionAccess.csproj" />
     <ProjectReference Include="..\VideoDataAccess\VideoDataAccess.csproj" />
   </ItemGroup>
   <ItemGroup>

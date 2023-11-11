@@ -28,7 +28,7 @@ namespace NewVideoFunction
             _chargeService = chargeService;
             _userLayerRepository = userLayerRepository;
         }
-        
+
         [FunctionName("NewVideoFunction")]
         public async Task Run([QueueTrigger("%QueueName%", Connection = "ConnectionString")] string buildIdString, ILogger log)
         {
@@ -43,13 +43,16 @@ namespace NewVideoFunction
             userBuild.BuildStatus = BuildStatus.PaymentChargePending;
             await _buildRepository.SaveAsync(userBuild, userBuild.UserObjectId);
 
-            if (userBuild.Resolution != Resolution.Free)
+            // maybe unecessary and could check against subscription but it is a safe call and subscription may change during build
+            if (userBuild.License != License.Personal)
             {
                 await _userLayerRepository.ConfirmPendingCollections(buildId);
-                if (!await _chargeService.Charge(userBuild.PaymentIntentId))
-                {
-                    return;
-                }
+            }
+
+            if (userBuild.PaymentIntentId != null && !await _chargeService.Charge(userBuild.PaymentIntentId))
+            {
+                log.LogError($"Could not charge payment intent {userBuild.PaymentIntentId}");
+                return;
             }
 
             var videoName = $"{userBuild.VideoName}.{userBuild.Format}";

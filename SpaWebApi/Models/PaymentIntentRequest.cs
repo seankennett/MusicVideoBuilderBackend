@@ -9,7 +9,7 @@ namespace SpaWebApi.Models
         public License License { get; set; }
 
         [Required]
-        [Range(5, int.MaxValue)]
+        [Range(0, int.MaxValue)]
         public int Cost { get; set; }
     }
 }

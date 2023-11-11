@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Stripe;
 using Microsoft.Extensions.Options;
 using BuildInstructorFunction.Services;
+using Newtonsoft.Json;
 
 namespace BuildInstructorFunction
 {
@@ -16,11 +17,13 @@ namespace BuildInstructorFunction
     {
         private readonly string _stripeWebhookKey;
         private readonly IBuildService _buildService;
+        private readonly IUserSubscriptionService _subscriptionService;
 
-        public BuildInstructorFunction(IOptions<InstructorConfig> config, IBuildService buildService)
+        public BuildInstructorFunction(IOptions<InstructorConfig> config, IBuildService buildService, IUserSubscriptionService subscriptionService)
         {
             _stripeWebhookKey = config.Value.StripeWebhookKey;
             _buildService = buildService;
+            _subscriptionService = subscriptionService;
         }
 
         [FunctionName("BuildInstructorFunction")]
@@ -39,22 +42,45 @@ namespace BuildInstructorFunction
                 var signatureHeader = request.Headers["Stripe-Signature"];
 
                 stripeEvent = EventUtility.ConstructEvent(json, signatureHeader, _stripeWebhookKey);
-                var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
                 if (stripeEvent.Type == Events.PaymentIntentSucceeded)
                 {
-                    log.LogInformation($"PaymentIntent {paymentIntent.Id} sucessful for amount {paymentIntent?.Amount}");
+                    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+                    log.LogInformation($"PaymentIntent {paymentIntent.Id} sucessful for amount {paymentIntent.Amount}");
                 }
                 else if (stripeEvent.Type == Events.PaymentIntentAmountCapturableUpdated) // card on hold so can crack on with building video
                 {
+                    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
                     await _buildService.InstructBuildAsync(paymentIntent.Id);
                 }
                 else if (stripeEvent.Type == Events.PaymentIntentPaymentFailed)
                 {
+                    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
                     log.LogWarning($"PaymentIntent {paymentIntent.Id} failed");
+                }
+                else if (stripeEvent.Type == Events.CustomerSubscriptionCreated)
+                {
+                    var subscription = stripeEvent.Data.Object as Subscription;
+                    await _subscriptionService.UpdateUserSubscriptionAsync(subscription);
+
+                }
+                else if (stripeEvent.Type == Events.CustomerSubscriptionUpdated)
+                {
+                    var subscription = stripeEvent.Data.Object as Subscription;
+                    await _subscriptionService.UpdateUserSubscriptionAsync(subscription);
+                }
+                else if (stripeEvent.Type == Events.CustomerSubscriptionDeleted)
+                {
+                    var subscription = stripeEvent.Data.Object as Subscription;
+                    await _subscriptionService.UpdateUserSubscriptionAsync(subscription);
+                }
+                else if (stripeEvent.Type == Events.CustomerDeleted)
+                {
+                    var customer = stripeEvent.Data.Object as Customer;
+                    await _subscriptionService.DeleteUserSubscriptionAsync(customer.Id);
                 }
                 else
                 {
-                    log.LogInformation($"Unknown stripe event json: {stripeEvent.ToJson()}");
+                    log.LogInformation($"Unknown stripe event json: {stripeEvent.Type}");
                 }
 
                 return new OkResult();

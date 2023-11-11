@@ -29,41 +29,36 @@ namespace SpaWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task Post(int videoId, VideoBuildRequest videoAssetRequest)
+        public async Task Post(int videoId, VideoBuildRequest videoBuildRequest)
         {
             if (!ModelState.IsValid)
             {
                 throw new Exception($"Audio blob invalid: {string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))}");
             }
 
-            if (videoAssetRequest.Resolution != Resolution.Free)
-            {
-                throw new Exception("Resolution must be free to call this route");
-            }
-
-            await _videoAssetService.BuildFreeVideoAsync(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId);
+            await _videoAssetService.BuildFreeVideoAsync(User.GetUserObjectId(), videoId, videoBuildRequest);
         }
 
         [HttpPost("CreateAudioBlobUri")]
-        public async Task<Uri> CreateAudioBlobUri(int videoId, VideoBuildRequest videoAssetRequest)
+        public async Task<Uri> CreateAudioBlobUri(int videoId, VideoBuildRequest videoBuildRequest)
         {
             if (!ModelState.IsValid)
             {
                 throw new Exception($"Create audio blob invalid: {string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))}");
             }
 
-            return await _videoAssetService.CreateUserAudioBlobUri(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId, videoAssetRequest.Resolution);
+            return await _videoAssetService.CreateUserAudioBlobUri(User.GetUserObjectId(), videoId, videoBuildRequest);
         }
 
         [HttpPost("ValidateAudioBlob")]
-        public async Task ValidateAudioBlob(int videoId, VideoBuildRequest videoAssetRequest)
+        public async Task ValidateAudioBlob(int videoId, VideoBuildRequest videoBuildRequest)
         {
             if (!ModelState.IsValid)
             {
                 throw new Exception($"Validate audio blob invalid: {string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))}");
             }
 
-            await _videoAssetService.ValidateAudioBlob(User.GetUserObjectId(), videoId, videoAssetRequest.BuildId, videoAssetRequest.Resolution);
+            await _videoAssetService.ValidateAudioBlob(User.GetUserObjectId(), videoId, videoBuildRequest);
         }
 
         [HttpPost("Checkout")]

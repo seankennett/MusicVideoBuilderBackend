@@ -56,9 +56,17 @@ namespace SpaWebApi.Services
             return result;
         }        
 
-        public async Task BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId)
+        public async Task BuildFreeVideoAsync(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest)
         {            
-            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
+            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, videoBuildRequest);
+            Video? video = null;
+
+            // make certain that if request is not free on license and resolution that amount is 0
+            if (videoBuildRequest.Resolution != Resolution.Free && videoBuildRequest.License != License.Personal)
+            {
+                video = await GetAndValidateFreeVideo(userObjectId, videoId, videoBuildRequest);
+            }
+
             if (currentBuild != null)
             {
                 currentBuild.BuildStatus = BuildStatus.BuildingPending;
@@ -66,9 +74,13 @@ namespace SpaWebApi.Services
             }
             else
             {
-                var video = await GetAndValidateVideo(userObjectId, videoId);
+                // free license and resolution
+                if (video == null)
+                {
+                    video = await GetAndValidateVideo(userObjectId, videoId);
+                }
 
-                currentBuild = new Build { BuildId = buildId, BuildStatus = BuildStatus.BuildingPending, HasAudio = false, License = License.Personal, Resolution = Resolution.Free, VideoId = videoId, VideoName = video.VideoName, Format = video.Format };
+                currentBuild = new Build { BuildId = videoBuildRequest.BuildId, BuildStatus = BuildStatus.BuildingPending, HasAudio = false, License = videoBuildRequest.License, Resolution = videoBuildRequest.Resolution, VideoId = videoId, VideoName = video.VideoName, Format = video.Format };
                 await _buildRepository.SaveAsync(currentBuild, userObjectId);
             }
 
@@ -89,6 +101,13 @@ namespace SpaWebApi.Services
             return video;
         }
 
+        private async Task<Video> GetAndValidateFreeVideo(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest)
+        {
+            var video = await GetAndValidateVideo(userObjectId, videoId);
+            var cost = _paymentService.GetVideoCost(video, videoBuildRequest.Resolution, videoBuildRequest.License, userObjectId);
+            return video;
+        }
+
         private async Task<Build?> GetAndValidateBuild(Guid userObjectId, int videoId, Guid buildId)
         {
             var builds = await GetValidBuilds(userObjectId);
@@ -97,48 +116,56 @@ namespace SpaWebApi.Services
                 throw new Exception($"User is already building video {videoId}");
             }
 
-            return builds?.FirstOrDefault(b => b.BuildId == buildId);
+            return builds?.FirstOrDefault(x => x.BuildId == buildId);
         }
 
-        public async Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, Guid buildId, Resolution resolution)
-        {            
-            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
-            if (resolution != Resolution.Free && currentBuild == null)
+        private async Task<Build?> GetAndValidateBuild(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest)
+        {
+            var build = await GetAndValidateBuild(userObjectId, videoId, videoBuildRequest.BuildId);
+            if (build != null && (build.License != videoBuildRequest.License || build.Resolution != videoBuildRequest.Resolution))
             {
-                throw new Exception($"Could not find build {buildId} for resolution {resolution} for video {videoId}");
+                throw new Exception("Previous build resolution and license not same as request");
             }
 
+            return build;
+        }
+
+        public async Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest)
+        {            
+            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, videoBuildRequest);
+            // only on freebie purchase as no payment intent step
             if (currentBuild == null)
             {
-                await GetAndValidateVideo(userObjectId, videoId);
+                await GetAndValidateFreeVideo(userObjectId, videoId, videoBuildRequest);
             }
 
-            var blobName = GuidHelper.GetAudioBlobName(buildId);
+            var blobName = GuidHelper.GetAudioBlobName(videoBuildRequest.BuildId);
             return await _storageService.CreateBlobAsync(GuidHelper.GetUserContainerName(userObjectId), blobName, true, DateTimeOffset.UtcNow.AddMinutes(10));
         }
 
-        public async Task ValidateAudioBlob(Guid userObjectId, int videoId, Guid buildId, Resolution resolution)
+        public async Task ValidateAudioBlob(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest)
         {
-            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, buildId);
-            if (resolution != Resolution.Free && currentBuild == null)
+            var currentBuild = await GetAndValidateBuild(userObjectId, videoId, videoBuildRequest);
+            // only on freebie purchase as no payment intent step
+            if (currentBuild == null)
             {
-                throw new Exception($"Could not find build {buildId} for resolution {resolution} for video {videoId}");
+                await GetAndValidateFreeVideo(userObjectId, videoId, videoBuildRequest);
             }
 
             var userContainerName = GuidHelper.GetUserContainerName(userObjectId);
 
-            var isValidAudio = await _storageService.ValidateAudioBlob(userContainerName, GuidHelper.GetAudioBlobName(buildId));
+            var isValidAudio = await _storageService.ValidateAudioBlob(userContainerName, GuidHelper.GetAudioBlobName(videoBuildRequest.BuildId));
             if (!isValidAudio)
             {
                 throw new Exception($"Problem finding audio blob or blob too big for user {userObjectId}");
             }
 
-            if (resolution == Resolution.Free)
+            if (currentBuild == null)
             {
-                var video = await GetAndValidateVideo(userObjectId, videoId);
-                await _buildRepository.SaveAsync(new Build { BuildId = buildId, BuildStatus = BuildStatus.PaymentAuthorisationPending, HasAudio = true, License = License.Personal, Resolution = resolution, PaymentIntentId = null, VideoId = videoId, VideoName = video.VideoName, Format = video.Format }, userObjectId);
+                var video = await GetAndValidateFreeVideo(userObjectId, videoId, videoBuildRequest);
+                await _buildRepository.SaveAsync(new Build { BuildId = videoBuildRequest.BuildId, BuildStatus = BuildStatus.PaymentAuthorisationPending, HasAudio = true, License = videoBuildRequest.License, Resolution = videoBuildRequest.Resolution, PaymentIntentId = null, VideoId = videoId, VideoName = video.VideoName, Format = video.Format }, userObjectId);
             }
-            else if (currentBuild != null)
+            else
             {
                 currentBuild.HasAudio = true;
                 await _buildRepository.SaveAsync(currentBuild, userObjectId);

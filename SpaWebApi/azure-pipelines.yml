@@ -12,6 +12,7 @@ trigger:
         - CollectionEntities
         - VideoDataAccess
         - VideoEntities
+        - UserSubscriptionAccess
         - SqlConfig
 
 pool:

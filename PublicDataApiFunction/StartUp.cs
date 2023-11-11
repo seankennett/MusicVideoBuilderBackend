@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using PublicDataApiFunction;
 using PublicDataApiFunction.Repositories;
+using Stripe;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace PublicDataApiFunction
@@ -27,11 +28,18 @@ namespace PublicDataApiFunction
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            builder.ConfigurationBuilder
+            var configuration = builder.ConfigurationBuilder.Build();
+
+            var keyVaultEndpoint = configuration["AzureKeyVaultEndpoint"];
+
+            configuration = builder.ConfigurationBuilder
                         .SetBasePath(Environment.CurrentDirectory)
+                        .AddAzureKeyVault(new Uri(keyVaultEndpoint), new DefaultAzureCredential())
                         .AddJsonFile("local.settings.json", true)
                         .AddEnvironmentVariables()
                     .Build();
+
+            StripeConfiguration.ApiKey = configuration["StripeSecretKey"];
         }
     }
 }

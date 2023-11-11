@@ -6,10 +6,10 @@ namespace SpaWebApi.Services
 {
     public interface IBuildService
     {
-        Task BuildFreeVideoAsync(Guid userObjectId, int videoId, Guid buildId);
+        Task BuildFreeVideoAsync(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest);
         Task<string> CreatePaymentIntent(Guid userObjectId, int videoId, PaymentIntentRequest paymentIntent);
-        Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, Guid buildId, Resolution resolution);
+        Task<Uri> CreateUserAudioBlobUri(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest);
         Task<IEnumerable<BuildAsset>> GetAllAsync(Guid userObjectId);
-        Task ValidateAudioBlob(Guid userObjectId, int videoId, Guid buildId, Resolution resolution);
+        Task ValidateAudioBlob(Guid userObjectId, int videoId, VideoBuildRequest videoBuildRequest);
     }
 }

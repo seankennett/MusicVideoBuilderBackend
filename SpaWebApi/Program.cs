@@ -8,7 +8,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Identity.Web;
 using SpaWebApi;
 using SpaWebApi.Services;
-using Stripe;
+using UserSubscriptionAccess.Repositories;
 using VideoDataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,6 +69,9 @@ builder.Services.AddSingleton<IClipService, ClipService>();
 builder.Services.AddSingleton<IVideoService, VideoService>();
 builder.Services.AddSingleton<IBuildRepository, BuildRepository>();
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
+builder.Services.AddSingleton<ISubscriptionService, SubscriptionService>();
+builder.Services.AddSingleton<IUserSubscriptionRepository, UserSubscriptionRepository>();
+builder.Services.AddSingleton<ISubscriptionProductService, SubscriptionProductService>();
 
 builder.Services.AddControllers(options =>
 {
@@ -77,7 +80,7 @@ builder.Services.AddControllers(options =>
 
 var app = builder.Build();
 
-StripeConfiguration.ApiKey = builder.Configuration["StripeSecretKey"];
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["StripeSecretKey"];
 
 if (app.Environment.IsDevelopment())
 {

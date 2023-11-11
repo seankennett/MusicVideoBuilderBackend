@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BuildEntities;
+using SpaWebApi.Extensions;
 
 namespace SpaWebApi.Models
 {
@@ -9,6 +10,7 @@ namespace SpaWebApi.Models
         public Guid BuildId { get; set; }
 
         [Required]
+        [FreeResolutionLicense(ErrorMessage ="Free resolution must have personal license")]
         public Resolution Resolution { get; set; }
 
         [Required]

@@ -28,7 +28,7 @@ public class PaymentService : IPaymentService
         _userSubscriptionRepository = userSubscriptionRepository;
     }
 
-    public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId)
+    public async Task<string> CreatePaymentIntent(Video video, PaymentIntentRequest paymentIntentRequest, Guid userObjectId, string email)
     {
         int serverCalculatedCost = await GetVideoCost(video, paymentIntentRequest.Resolution, paymentIntentRequest.License, userObjectId);
         if (serverCalculatedCost != paymentIntentRequest.Cost)
@@ -45,7 +45,8 @@ public class PaymentService : IPaymentService
             AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
             {
                 Enabled = true,
-            }
+            },
+            ReceiptEmail = email
         };
 
         var paymentIntent = await paymentIntentService.CreateAsync(paymentIntentCreateOptions);

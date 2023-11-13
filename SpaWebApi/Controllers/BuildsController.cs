@@ -69,7 +69,7 @@ namespace SpaWebApi.Controllers
                 throw new Exception($"PaymentIntentRequest model invalid: {string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))}");
             }
 
-            return await _videoAssetService.CreatePaymentIntent(User.GetUserObjectId(), videoId, paymentIntentRequest);
+            return await _videoAssetService.CreatePaymentIntent(User.GetUserObjectId(), videoId, paymentIntentRequest, User.GetEmail());
         }
     }
 }

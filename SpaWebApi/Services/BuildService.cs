@@ -172,7 +172,7 @@ namespace SpaWebApi.Services
             }
         }
 
-        public async Task<string> CreatePaymentIntent(Guid userObjectId, int videoId, PaymentIntentRequest paymentIntentRequest)
+        public async Task<string> CreatePaymentIntent(Guid userObjectId, int videoId, PaymentIntentRequest paymentIntentRequest, string email)
         {
             var video = await GetAndValidateVideo(userObjectId, videoId);
             var currentBuild = await GetAndValidateBuild(userObjectId, videoId, paymentIntentRequest.BuildId);
@@ -181,7 +181,7 @@ namespace SpaWebApi.Services
                 throw new Exception($"Build {paymentIntentRequest.BuildId} already exists");
             }
 
-            return await _paymentService.CreatePaymentIntent(video, paymentIntentRequest, userObjectId);
+            return await _paymentService.CreatePaymentIntent(video, paymentIntentRequest, userObjectId, email);
         }
 
         private async Task<IEnumerable<Build>> GetValidBuilds(Guid userObjectId)

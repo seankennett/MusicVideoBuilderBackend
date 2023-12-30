@@ -18,6 +18,9 @@
 		<ProjectReference Include="..\SqlConfig\SqlConfig.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Update="collectionData.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="ffmpeg.exe">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

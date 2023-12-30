@@ -1,0 +1,3350 @@
+[
+  {
+    "CollectionId": "e5833482-f542-4e1b-be8e-033ad982144a",
+    "CollectionName": "Dual Grid",
+    "CollectionType": 1,
+    "DisplayLayers": [
+      {
+        "DisplayLayerId": "94f9dae4-2e71-4dad-a1ba-113826941c8d",
+        "Direction": {
+          "DirectionId": 9,
+          "DirectionName": "Rotated",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "a73c6d7c-5b5e-482f-9124-d1d7d38400cb",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "661e0166-6e4f-4e2d-a767-54bedd8cb149",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "bc7340d1-3eed-443a-8503-1857086fa033",
+        "Direction": {
+          "DirectionId": 9,
+          "DirectionName": "Rotated",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "5b95369f-4665-496e-91b6-33e3ba98c5f0",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5df676bd-ce57-4f4c-811c-294e64ec8c0c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "854407f6-cd29-4b77-8149-226bc7ecedba",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "dd681843-a4a2-494e-b7aa-9314d0138091",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "f026f026-2d7f-4145-a420-7ebf32e12659",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "ed035674-f69a-444e-a691-245373f819bd",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "be79d9a4-7b04-4a9e-8bc9-1a8710635158",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "e23976ea-59c9-4f3d-83f5-1c01b8eea33d",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "7383cb31-4893-4a64-b2c1-2ca5ee825221",
+        "Direction": {
+          "DirectionId": 10,
+          "DirectionName": "StraightRotated",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "b60d6199-ed44-4c73-9baf-3798326792fb",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ab029e8b-925a-4c05-9b0d-bdefe138b2ff",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "af21975a-590e-490e-a237-376c8a09d6c7",
+        "Direction": {
+          "DirectionId": 10,
+          "DirectionName": "StraightRotated",
+          "IsTransition": true
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "eca93cc4-a0cf-466a-8aae-5e35e8669b9c",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9dadaa7c-5878-4287-816d-24ca771c9f5a",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "e07d76cc-1b5a-4ffc-a0dc-3ea8498a4516",
+        "Direction": {
+          "DirectionId": 8,
+          "DirectionName": "RotatedStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "6f94e294-7932-4f2b-9a4f-1feb4a7adba3",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0268971e-735b-4042-84d4-5e8bd6bcd4d9",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "cea31388-fba1-4d33-93a5-45eb944e941a",
+        "Direction": {
+          "DirectionId": 10,
+          "DirectionName": "StraightRotated",
+          "IsTransition": true
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "978036c9-0123-4f7c-9409-0c40ce149248",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "e1c65983-3e5b-4fd0-b93c-3200b72bc265",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "ebcaa7d6-37a4-4b13-9a58-7595013ac482",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "b82d2771-e8d9-45cb-852d-e3701dc2e963",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "2a502dbc-43ca-4dda-8c4f-b3d79c74d88e",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "e2d4f904-ec99-4695-b843-7b7f9830d2ab",
+        "Direction": {
+          "DirectionId": 9,
+          "DirectionName": "Rotated",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "11fdd13c-de02-4db1-9683-c81b83ae29af",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "602dd5a5-b54d-4ff9-912d-360b23d251d3",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "f9a0db64-b127-430d-bcda-7c3565b3ead9",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "88f26f25-8255-40a8-80ca-d8468f635516",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5587391b-3d36-42de-8adb-1a120d07ff08",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "01ffae5f-79ee-43ff-ad5a-9af5f30e1e76",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "76e6d5d7-e767-4d62-9063-1ea92ac3faf4",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "2627b49b-4840-412d-9e9e-eb3e61d42066",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3ddb79b3-23c7-4cbc-ac98-b8f825aed868",
+        "Direction": {
+          "DirectionId": 8,
+          "DirectionName": "RotatedStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "a6c6b716-bb81-4192-8a2a-8979ba0966a8",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "de5c2207-8b26-4a05-ba56-74f335e1ca47",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "c9f623d2-9ca6-4b74-88a0-bd50a1241ea8",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "0a30501f-af9a-4611-96ef-f267270f326d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "57865af5-d6e2-43f3-8b06-edf2e8985fdf",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "d5cfcc2f-dfa3-40b1-93ea-c6c0283c12e9",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "be3d0b97-0d58-4c15-88a4-f46ccb4dd08f",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "f2c9b2e3-9a01-485c-b5ff-9e683634f866",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "07f99451-2b1b-4fe8-b4ca-ea0e97a01ef6",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "3c1ae54e-db26-409d-92ed-74c1eeabb945",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "dfb7da50-c3ef-4a33-9485-fbf00d696b03",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "2e0a249a-e81f-45dd-84e7-f2b1f1f128fd",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "b5bf3f3d-151f-442e-8a9a-0dfc758baa7c",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9dcb32b3-ba90-4878-8ef2-e97538a5d091",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "df080380-dce7-4e74-837a-fa495f4100b7",
+        "Direction": {
+          "DirectionId": 8,
+          "DirectionName": "RotatedStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "cf9a3d65-5d6c-4b00-b0f3-0112dfdc0262",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "fa19d27c-d469-4c37-93ea-40f8c7f84596",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      }
+    ],
+    "CollectionDisplayLayer": {
+      "DisplayLayerId": "d5cfcc2f-dfa3-40b1-93ea-c6c0283c12e9",
+      "LayerCollectionDisplayLayers": [
+        {
+          "LayerId": "f2c9b2e3-9a01-485c-b5ff-9e683634f866",
+          "Colour": "A6FFFF"
+        },
+        {
+          "LayerId": "be3d0b97-0d58-4c15-88a4-f46ccb4dd08f",
+          "Colour": "00FFFF"
+        }
+      ]
+    }
+  },
+  {
+    "CollectionId": "91d36331-523c-4eb8-b46e-0cd161368e4f",
+    "CollectionName": "Ico Sphere Cage",
+    "CollectionType": 2,
+    "DisplayLayers": [
+      {
+        "DisplayLayerId": "deaebcab-a5ee-4ae2-81da-02252af01c8b",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "1f3834cd-9acd-4a28-b6c4-2faf937d2866",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "63b663fd-ada1-4087-b698-1677d8ba2360",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0c8268be-18b2-4fb7-9fe7-70bd2b553a49",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "b9ee759d-8c91-4bf1-8d34-df5b04ed9f44"
+      },
+      {
+        "DisplayLayerId": "c74a6b34-c6ee-4505-93e0-15528bce9975",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "a84edf7a-95af-41ae-9a68-1a429d62f927",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "60f9a48c-3dd1-43a3-8d6f-a44f049f29e7",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "67520764-e806-438c-b79d-5d7c6a1c8a2e",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "79f450ee-4cb1-496d-8235-45cc34d523d4"
+      },
+      {
+        "DisplayLayerId": "9430d692-61d8-4f99-8121-2246e8a2bde4",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 0,
+        "Layers": [
+          {
+            "LayerId": "66a48149-0cf8-46ff-b4b2-3dd3170f7cba",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "27a5d2b8-81f8-4b34-9ba5-a933a137aed7",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ddb42e10-6a44-4c5d-8a0b-a5488907f388",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "f84f82cf-4d85-436c-b6b5-2ab614f9fd75",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "1d99518c-1e90-4075-b656-4568bb2bbdcb",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "2d95b8f8-1b5b-44bb-848f-1cb33b3d9c81",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ec464317-b118-42fc-b998-6a589f756e5d",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "6655794d-bf6e-4be9-944a-3fc46bab320b",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "54d791b9-69f2-4548-8f4f-ef2c4946c58c",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "6ab5d33f-3b23-43ec-84e7-f0cbbf33d324",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "7ff06422-c793-4f1e-ba79-6ce2cf746a59",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "79f450ee-4cb1-496d-8235-45cc34d523d4",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "53305cea-5e62-45b0-bf69-4f2245b76e5d",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "ccea8b12-8c3a-427c-b034-17ebe089e199",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "f583d1e6-0ce4-4062-b758-ad8375aeca9c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "177e7f98-ed89-4530-8ffa-504fece52cbd",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "280a9959-981c-4cc3-8163-2d151ff325b5",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "6abbd071-e863-497e-9d03-d643969fffd6",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "fa244485-2a36-45f8-9f1a-23646a42cdaf",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3a5ebf78-cdf9-41d5-86e7-5ce268bf99f8",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "d6acddd9-4094-4c14-a1ad-b24099ad2a50",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "b756baca-ab45-42c8-8e8b-56f3b51aade2",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "87b10807-f7e8-4553-91fe-50e1eacf13f4",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "06fdafc8-9820-4de2-8261-8c3e861ea430"
+      },
+      {
+        "DisplayLayerId": "d3f1c45a-d08c-4e77-9a50-6bb1acc020ff",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "49f3e1b4-9b75-4e1a-8bd8-aa417e6da43b",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "a4601555-e37f-4b35-a0e5-6d62a684c14b",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "76b0c384-32e8-43e0-8f17-d70ff071309a",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "f84f82cf-4d85-436c-b6b5-2ab614f9fd75"
+      },
+      {
+        "DisplayLayerId": "fd3de440-ec96-4dd4-ae6e-742561518769",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "aeaa3864-90fd-4174-b6fa-db9f9fcc0932",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "7964fd17-e170-4b35-9504-e37a4150ca54",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5c5ec948-01fa-4aaf-957d-0d128838bdca",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "801eb0a6-9a38-49d2-bba6-7538a5911fe2",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "9b5554ac-83e6-4902-bc00-a32019f065a8",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "91b4ead7-e779-46cf-8d57-a5cc5602b5e3",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9824fc49-057b-4991-8f85-8ffb512ea6ea",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "d1af58e4-1ebb-4e8b-8045-f6e916836a5d"
+      },
+      {
+        "DisplayLayerId": "b072e63e-9887-4398-9233-777aea543eea",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "1f3291c8-73e8-4750-b3f2-106ee2c454ca",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "529220ea-1171-47e8-95da-312437125877",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0920ceec-e742-4f6c-9e56-41df14db5368",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "920bf30d-1195-4727-9efe-ea10321fdf64"
+      },
+      {
+        "DisplayLayerId": "f11edacc-c8df-4239-ad87-77b6331995b4",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 0,
+        "Layers": [
+          {
+            "LayerId": "b574da28-f784-46fd-abd4-501ec8869793",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "37d94b9e-c468-4a60-a450-dd6bf0bfa8c3",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "b0f869d2-4faa-4b5f-9bc0-e827bf0546ca",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "13d7a846-5ffc-4653-a245-f6b19faac859"
+      },
+      {
+        "DisplayLayerId": "322bda03-4734-4ce5-b014-7d426ff8b2c1",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "772f4018-e708-495d-a137-877297f24453",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "53bb3b2e-51f0-4b3c-8756-051b9389ff0c",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "22910175-83ed-49ac-85ed-47a635965bda",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "651611c0-fd35-448f-8116-a6abdb6da1b0"
+      },
+      {
+        "DisplayLayerId": "d5ff8fa7-660c-4fa6-bb40-7ffc4b6fb508",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "26a2c252-3d67-46d3-829c-b10d41c80481",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "68aa9ec6-634b-4727-bf98-4ef36877df81",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "97a55da7-76ba-43c2-b8c0-9ea039353b54",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "177e7f98-ed89-4530-8ffa-504fece52cbd"
+      },
+      {
+        "DisplayLayerId": "06fdafc8-9820-4de2-8261-8c3e861ea430",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "69ce18c8-ae60-4bec-a72d-c37a29993433",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "d9aab288-ecec-473e-91cc-ff3e26c027ed",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ed250501-17c8-4f61-a6c3-9f2a7f675aab",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "651611c0-fd35-448f-8116-a6abdb6da1b0",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "7c2801c2-0c0d-444b-bd7f-b7f97612de57",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "dc7733df-1cad-4bc3-8c4a-82363b755d36",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "fa36747a-2665-4023-a29a-39f9c6d5d461",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b9ee759d-8c91-4bf1-8d34-df5b04ed9f44",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "a70ebe74-d6c6-40e8-bfb6-283c3a4065c7",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "0b891edb-e974-4174-8b0e-3b276bc2417d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "d639dd11-767d-4e6c-96f3-f336e344172a",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3852ddb6-2346-4cde-89a7-e282b0bb1c25",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "8c4e7ae6-78b0-4d96-8952-ec946ec15f60",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "7c35374b-a82f-4eac-9312-978d3b72b357",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "00e1577e-3bd4-4b07-846b-a752e9456247",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "6655794d-bf6e-4be9-944a-3fc46bab320b"
+      },
+      {
+        "DisplayLayerId": "f935bb18-d532-48e4-bb75-e5a83e5672f6",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 0,
+        "Layers": [
+          {
+            "LayerId": "d0947bee-8d7a-400f-8f75-2c3c7c7d1fa9",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "a3ea3c24-71c4-457a-b11c-92f49c7fd9a5",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "15a07490-c7b8-464b-bdeb-647603df4c63",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "9430d692-61d8-4f99-8121-2246e8a2bde4"
+      },
+      {
+        "DisplayLayerId": "920bf30d-1195-4727-9efe-ea10321fdf64",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "074524fa-9c8d-4187-8a5a-75bcfa48a1e6",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "258ad7cf-bae4-44f7-815e-b3a78cdb78ce",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "05afb228-532b-4873-9d5e-6f021b6ede32",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "9456d590-55e5-4843-a84d-f227d41fe303",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "222ca593-2a13-4c4c-8f72-0f095362a3c2",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "dbb7a1ac-91b6-4041-a843-b597b084a104",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "e4eb39fe-8cdf-4c30-b1f2-01b79ab32296",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "fd3de440-ec96-4dd4-ae6e-742561518769"
+      },
+      {
+        "DisplayLayerId": "13d7a846-5ffc-4653-a245-f6b19faac859",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 0,
+        "Layers": [
+          {
+            "LayerId": "2877e082-a1da-436a-ade1-80c450c805d3",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "3e3a0a4f-0aa3-4f38-9157-3c3097c8d89d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0d49f8b3-040b-4182-b4a9-a660bcda81c0",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "d1af58e4-1ebb-4e8b-8045-f6e916836a5d",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "ecbc23da-b67f-46d7-b660-382ba9b873ce",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "d8a9b078-37f9-4774-a607-53fe2f3a376a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "4011727f-f43f-4496-8ee3-521126035c4a",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      }
+    ],
+    "CollectionDisplayLayer": {
+      "DisplayLayerId": "06fdafc8-9820-4de2-8261-8c3e861ea430",
+      "LayerCollectionDisplayLayers": [
+        {
+          "LayerId": "ed250501-17c8-4f61-a6c3-9f2a7f675aab",
+          "Colour": "0D6EFD"
+        },
+        {
+          "LayerId": "69ce18c8-ae60-4bec-a72d-c37a29993433",
+          "Colour": "000000"
+        },
+        {
+          "LayerId": "d9aab288-ecec-473e-91cc-ff3e26c027ed",
+          "Colour": "00FFFF"
+        }
+      ]
+    }
+  },
+  {
+    "CollectionId": "7f704410-1efb-48e0-89ed-4a9f093a1aad",
+    "CollectionName": "Lattice Reflective Tunnel",
+    "CollectionType": 1,
+    "DisplayLayers": [
+      {
+        "DisplayLayerId": "3dec072e-2050-4faf-bf73-07faf7039c41",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "76bedf8b-4aa9-41e9-b89b-9ee94366ee30",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "a19b1bb2-6a9e-491a-9917-811088dc620a",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b39fa50b-4140-4cb6-8d6a-0946417167b1",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "a72bb8f0-7a9b-470a-8b2b-22a58b86aa63",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c6b27284-117a-4dd7-a0e3-20564156bd85",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3393cff5-12d8-47c4-b655-0985a772116b",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "bc4b3544-0182-478b-a8d1-9b768b9fa18a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c821e398-685d-46da-81ef-13f5bf220c89",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "e3a59401-8d71-4b8c-ac84-14eb507bb4c4",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "b4abdcc9-ed31-4b23-baef-17dd545d5bb7",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "bec8105f-de9d-4027-a53d-48698c5b6a25",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "e1820f7f-ae43-4895-8132-1d112e32cca4"
+      },
+      {
+        "DisplayLayerId": "929bacbf-f96e-4d97-90fb-165098662c09",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "d7c16328-1814-49e2-bd76-43d78b7e52c5",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "22dfa437-6389-4e5a-b0a0-b1f71935abd5",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b784abda-39e4-45f9-99f3-1a95e0501b19",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "8966af78-8227-4493-8b18-dd2b2359c2e5",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "3f4dc9ca-5ba3-44cb-8eeb-ae082f46eced",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "e1820f7f-ae43-4895-8132-1d112e32cca4",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "d5826af4-83b6-4ce5-b605-b2e90d1e5575",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "551ded8c-ffb1-482b-a8d6-5cba9e360b80",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "a26d922e-66bc-4f30-a84d-21de4696480c",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "98402d57-d7fd-4131-b7e2-c26064a70dc6",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "cd041205-65c7-4c91-8c71-9f9d3437a820",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "c660c2ee-9317-4eea-a636-271fa3b8cfc8",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "adfa13b3-9f1b-44b5-a51a-0cd75a7f54b5",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "dd8c3270-7a19-4867-b4ac-4043f3d5fa10",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "360dafbb-c310-45f7-8bdc-2d7e4bc18877",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "7abb9600-0819-4e66-84e2-2cf079f74e11",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "4266a566-6e7a-4a5b-8e49-62912e6f7fd9",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "152d3194-bbda-42a0-adf5-32430c1f50bc",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "803f8397-d27d-4803-bcc4-6771273a2a54",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "16744499-597f-405f-8c4e-28d191b2738d",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "a26d922e-66bc-4f30-a84d-21de4696480c"
+      },
+      {
+        "DisplayLayerId": "93abba6e-233b-4364-bd58-33769411530e",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "88124c04-a445-44fb-b6fe-57196b994d6a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "a45d4256-dfad-4042-8e1d-50cdb5aeb017",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "03409e0e-e77d-4caf-abbf-ae7e30f7ce9a"
+      },
+      {
+        "DisplayLayerId": "e1d0ff9c-4b26-470a-a4fa-3468f6d10c41",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "8ef54fe1-73d2-4e47-8434-7dcc89a1ca50",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0aaa6e2c-f62f-459a-ab00-feff6dd324ca",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3e8a2656-4eef-4414-8eb8-34f230d5186f",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "4bafbbc5-96cc-486e-a73b-a82d9c2f643d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "57bcf4c2-2cef-4675-969f-9c8b3c167c30",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "21d3804c-3161-44d4-be10-4239a31a1508",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "76685b19-c9f3-4275-8d12-d40c66ccf387",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ed73fb79-ff88-4536-96b1-5fa77657210f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "c8ea0d46-2f49-4a6d-8abf-431c33911ecc",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "18246a0e-f170-474c-a3a8-2e35008f2dd5",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "57e7f6fe-90d6-44ca-9209-6c2268c37ee1",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "f6fbada9-c6d2-41fe-8a8c-4e7d5d785509",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "a9712dd3-5814-47d9-a78f-73a67ad368da",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "961ee4b7-e720-4647-8557-d81deb1d0b32",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "6cfac1a6-a677-4aa1-a993-50dca7b71289",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "1389c5c8-964c-4d29-ac6c-936e7e347d90",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "f9ffa7a4-0b3b-4327-a756-fb2295e93896",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "898ba378-af4f-492a-b0f5-52d6a8333b4e",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "55b4b3d2-1ede-4af4-8331-bcc18e883f61",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "07534cd5-0f6c-4ed4-b292-e4a18c486d3f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "c327c089-30d2-4757-906c-539c9adcc458",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "eeb60248-f0dc-48e4-a0ee-4bccac811d87",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "3d72a0ea-3372-440b-b408-aada87b29a81",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "5ffe5148-ecee-4362-8eb0-ed178c89a3a1"
+      },
+      {
+        "DisplayLayerId": "9a37e214-018f-474a-a511-54ce4a3a3dd1",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "e4885375-560c-4076-b952-8eb1a98bfb99",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "7e42609c-098b-44f0-a627-046e941c9106",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "f2de76fc-d1ff-4c73-8f3a-65fcd8434f5c"
+      },
+      {
+        "DisplayLayerId": "76a5e4d4-c8b1-46a0-ba76-56735de27fc4",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "ac9cbd5f-7c27-4ed3-905b-241692f62071",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "b754d522-5806-45de-83cc-6a5f7bd1fd58",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "81b1dbb3-1605-40f0-b40b-65e0ae6ba949"
+      },
+      {
+        "DisplayLayerId": "08bf221a-97e6-4383-9b22-56d9868c37a8",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "cd934366-5229-4e56-9f99-b03eb107c287",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9037c9dd-69b5-45be-84fc-df098534e412",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "acc24bb1-7b72-4ff5-992a-89ba7685086f"
+      },
+      {
+        "DisplayLayerId": "50bea36d-4873-4d83-9d2a-5ff661467b9d",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "ea5186a1-907b-4ce0-98d5-4f87201466b0",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "86a8fa68-b882-41fb-a71f-a42ba00b9750",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "3e8a2656-4eef-4414-8eb8-34f230d5186f"
+      },
+      {
+        "DisplayLayerId": "81b1dbb3-1605-40f0-b40b-65e0ae6ba949",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "b057bbbd-7d55-44a7-bb25-81e8f4599be9",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "add4784c-8c41-4780-b150-a5384c5059c8",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "f2de76fc-d1ff-4c73-8f3a-65fcd8434f5c",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "a7677dc0-6088-4702-92cd-382a7d14bfee",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "7901139b-4704-49e2-ba04-17ce55addbb3",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "50826006-bdf7-4be3-96de-68197e3888f2",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "0a3d2f94-0a38-4ab6-9291-7c0efd13210a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "59c5745a-42e1-4b33-9108-afdecbf7ce7c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "10d631f4-d656-4b43-8bd0-6945e989dc33",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "c99162e7-e4bf-430c-b520-92a9921403e1",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "121cdb12-77f4-4fb2-91e2-fc694857acf5",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b6c005c1-5e81-4e70-8a15-6ca90eb9a398",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "1f10605d-4e3a-46f2-9cfc-580b9e0a1c30",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "be1afaa1-9e24-493c-9778-706d5d2b2287",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "63562741-402b-40af-9858-731dc84e7287",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "795c1fe1-916e-482a-a51f-c59837d472c5",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "66e5f7e7-eafb-42fe-9fce-bc29d72fc65e",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "14386ddd-7d26-4591-84ff-7355a1c118cb",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "8dc4d309-f85d-4638-bd78-5eb456422577",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5e9c91ae-ea09-432a-9814-2a5fcb4f597c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "580fc164-09c2-4c39-8749-7f1211d9d5b5",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "b7250ca3-cd0c-4df6-bad1-0c3cddf1aede",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "eb1f973a-b449-456f-8dfc-b3eee1c11c82",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "c8ea0d46-2f49-4a6d-8abf-431c33911ecc"
+      },
+      {
+        "DisplayLayerId": "b4edc6b9-cc7b-4585-8947-7f3e87ad0cb2",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "97a4a6c6-5f6e-4d77-a2aa-a7e52ea8f4e8",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "823b1f45-52ce-46dc-b929-e736102a3d43",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "2d2d0b74-d469-49b4-b3fb-81fd5253c3d2",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "f7600094-c6ec-4391-bc49-d50b2bf8eeba",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "1845ec51-f171-49e7-bb04-2d36fee52659",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "42a6ad12-5cc5-4a51-af78-88b289dc594e",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "352a4935-4192-46a3-83f1-187027fc5a25",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9990350b-3637-4fe0-89a5-bcae7d0e0f22",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "acc24bb1-7b72-4ff5-992a-89ba7685086f",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "a6d950a2-5296-413b-bb7a-9a6c5f8fc6b1",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ae40cd91-e33a-4700-a89d-1b47ad41dfd8",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "89f29644-9e13-4685-a2c9-8fada12561ff",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "eb1159c0-1679-4a86-baa1-34ba00435b0d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9b0b5ae4-54a1-45a4-90bb-ae6ffad0255f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "c9fae041-b08f-4a9f-a2ea-941b20511ad1",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "8e3ce467-742c-4f0e-a40c-314eb38a228f",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "19cda44d-e194-4656-8887-cd73ae198982",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "bb84eae5-059a-4dd0-86cc-a78b9935fef5",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "ac85e2ed-5e25-448f-9d60-cb61d3786b1e",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "25657c6c-72e9-4cc7-aa32-9c627bb9faeb",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "317739d8-1dd7-4c23-9f89-dd1e8e14b4b4"
+      },
+      {
+        "DisplayLayerId": "96e16f47-ca24-42fc-9ecc-a874bac1f592",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "c8d5a6ae-b1f9-4bd5-9dd5-3b9a35039a90",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c9573633-b730-47df-ad48-434f371273e8",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "03409e0e-e77d-4caf-abbf-ae7e30f7ce9a",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "3afcc3f1-dca3-4737-877d-033b351fd945",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "57325919-9d39-4b00-910e-b331b1363ebd",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "d1c5f873-8820-476a-9494-b8f1ddf03e63",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "2665f93c-aa72-4f96-9412-baa0ba35a7c2",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "642ac8d3-a646-4327-8ab2-35028bc6f589",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "4ee3a969-d7c0-41af-95d5-c414d64f1ee5",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "247c49d3-4903-4450-8a78-5a73cf2ce26a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "6bf97364-cecd-42fa-8be2-e21901847b8c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3edd8814-54f1-4660-a7d3-cc749cc29ce4",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "cf94a8bf-d358-4527-bd0a-5451f06e963b",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0c27a46b-34f1-464b-85f2-d83a197f8ad9",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "b7342872-e96f-4192-a76c-ebaf9cc5d18b"
+      },
+      {
+        "DisplayLayerId": "b3c68e5b-5fa3-4284-9289-d20628b464d5",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "2a2a172e-bf8b-481a-be4f-1b362eab0780",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "939ebfaa-34c8-4b4a-83b0-38c91eddb219",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "898ba378-af4f-492a-b0f5-52d6a8333b4e"
+      },
+      {
+        "DisplayLayerId": "d42da763-8666-4ab6-848f-d8ce9e07f3b5",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "3f7a9eb5-1e12-450e-9a4f-bfc50340942b",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "884c5c8b-0f0e-4a08-bc28-62fcaf792f76",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "317739d8-1dd7-4c23-9f89-dd1e8e14b4b4",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "2a4be163-4449-4513-bccb-e52b775786e4",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "49c901f0-6ab1-4ef8-a65a-cd72fa551197",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "f6141b11-f356-458f-b506-e39328354f99",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "f26a1aac-5a21-4404-92f2-0292630024bb",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "3f3c78da-2fa6-4dd6-911d-35bd43144a3b",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "38c366c4-eff9-42b5-bb15-e718a36f218b",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "062f00fd-febc-465e-8492-cc3fc6966512",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "1c87d2de-2029-4fa8-a716-cad95971f12f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "05e4a980-d3dd-42b0-b196-e87496168bc6",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "31a4763e-a160-400e-a8f1-03b7f469ada7",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5239915c-9cd3-4de3-b559-0341dffb9232",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b7342872-e96f-4192-a76c-ebaf9cc5d18b",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "790293d4-cc48-44b4-9a82-20641e62d978",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "a6aafcb3-f0df-4b44-b1f9-d69fbfb32e20",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "5ffe5148-ecee-4362-8eb0-ed178c89a3a1",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "e131d02c-caa2-48c6-bf0c-043a81082f2f",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "7674ad61-d836-4fd2-8130-218f2dd792b1",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "d25e4be8-511a-4bef-8581-ee8b2e692236",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "fbd05f61-da1c-4a5f-8e80-317afdde43f3",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "3cef739f-7f1a-4923-a185-866cda62ab97",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "cd058995-7743-4dc8-b2b6-fc2c8666a2b9",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "f2cd5c5d-8c3a-4fa1-8e4d-011511d23298",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "6a00c947-edea-4f4e-89dc-567f3f7c8a51",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      }
+    ],
+    "CollectionDisplayLayer": {
+      "DisplayLayerId": "360dafbb-c310-45f7-8bdc-2d7e4bc18877",
+      "LayerCollectionDisplayLayers": [
+        {
+          "LayerId": "7abb9600-0819-4e66-84e2-2cf079f74e11",
+          "Colour": "00FFFF"
+        },
+        {
+          "LayerId": "4266a566-6e7a-4a5b-8e49-62912e6f7fd9",
+          "Colour": "0D6EFD"
+        }
+      ]
+    }
+  },
+  {
+    "CollectionId": "070c351d-a25a-4434-92ab-7a576ce140ae",
+    "CollectionName": "Sphere Reveal",
+    "CollectionType": 2,
+    "DisplayLayers": [
+      {
+        "DisplayLayerId": "b1c649b1-db17-40eb-ae26-073b776d583b",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "40b57fc0-b479-416a-b40c-6e1f1dae871e",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "b27edbbe-9e2b-4746-9b7c-59dd0163a68a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "310966b5-44bf-447d-b4cf-6a540fb44676",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "0ee9174c-f2de-4d4c-a4ed-0d23f16c4637",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "b99fdffb-d36e-4d88-a1a5-e8ce44a0abce",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "90898cfe-c3f6-4ec9-a3fa-a8367df043c6",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9b9d9243-96a2-4bd8-b557-692ecb868265",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "5408d5eb-fe4e-4577-8718-9d2c98975cba",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "b960d57d-4905-4430-a15f-45485cf250cf",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "2ced0134-bda4-4360-8158-0ebfa3c215b8",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "6c004e3a-8e13-43f6-82ac-a0a146d93310",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "08768837-8934-4f94-93ab-d4e2cf14a67a",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 2,
+        "Layers": [
+          {
+            "LayerId": "c8198f2b-e174-4975-b561-cf74d323715e",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "c3faa431-1513-4a14-a902-b21b2d4c3309",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c75730e8-244d-4aee-8380-3d3c1b581d1d",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "2fc2710a-f33f-4834-b9a1-d55ce652665e",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "48883264-549b-4abf-b550-d862208f9d18",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "015d800d-f944-4629-b2b8-1e9b758fbdb8",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "2a3dbb6f-f46f-4040-8415-91819da13db6",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "339bf875-a986-45dd-8379-e43fe8369836",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 1,
+        "Layers": [
+          {
+            "LayerId": "20ff7e5b-8c89-4a02-9dff-a4d943e7aab2",
+            "IsOverlay": true
+          },
+          {
+            "LayerId": "31aae4f1-5829-4872-8869-c96fe3bd5226",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "4a9b13ad-ba3c-4528-8f35-ea1633613280",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      }
+    ],
+    "CollectionDisplayLayer": {
+      "DisplayLayerId": "5408d5eb-fe4e-4577-8718-9d2c98975cba",
+      "LayerCollectionDisplayLayers": [
+        {
+          "LayerId": "2ced0134-bda4-4360-8158-0ebfa3c215b8",
+          "Colour": "A6FFFF"
+        },
+        {
+          "LayerId": "b960d57d-4905-4430-a15f-45485cf250cf",
+          "Colour": "000000"
+        },
+        {
+          "LayerId": "6c004e3a-8e13-43f6-82ac-a0a146d93310",
+          "Colour": "00FFFF"
+        }
+      ]
+    }
+  },
+  {
+    "CollectionId": "02e7bf3e-ccbb-4b9e-9ad6-b0cbbde9027e",
+    "CollectionName": "Wireframe Reflective Tunnel",
+    "CollectionType": 1,
+    "DisplayLayers": [
+      {
+        "DisplayLayerId": "1bd59375-7e4c-4dda-9f0a-004c6ce7d993",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "77e0e4fd-ead6-4db0-ae08-df9daa63b1b2",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "69134794-3b04-419a-9cc1-bcc55e8a6d99",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "6578d845-f7df-4c87-a2f7-009c86e7d0ef",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "32a9da21-90b6-4452-a3ab-600c54ea6cb3",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ce3d13fb-a8ea-417f-a86c-e69b340a4f4a",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "54eff658-1a46-4360-88b4-01873a0ce8f4",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "9fb246ff-8b54-4e7b-87e9-5529a55bbee3",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "60161b5c-896b-4e29-91e2-609bf223b86e",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "bda0a0dc-a0f4-4040-8c09-04ba263fc776",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "42cb14a0-1d7e-4859-82d2-a203d759dfae",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "11440b52-16fa-44bd-9dfa-30716e70ec11",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "6687722b-b5eb-453c-9742-06d699041354",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "fa4cdc35-7712-4269-b005-6f8c495790a8",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "df3108d8-aca6-4cfb-8453-5dda351b38c3",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b388c22e-41ca-4fb6-b791-0d3e8a6b2e76",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "8b95f1b6-44ac-45e6-945a-dbfceddf71be",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "3bae2acb-fd6e-4b69-9f4b-011b4e1a3e95",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "ebbe2682-6fb7-4fb7-8130-a7f5a42f84be"
+      },
+      {
+        "DisplayLayerId": "cebc7b79-ed4b-4323-8308-0ffaa46ad342",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "eff1d01a-a362-4b4a-967f-04a2d7e8ffeb",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ad39a19f-fbc1-44ce-9a2d-ba6c07caa243",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "4b2682ed-066c-4fee-b745-1aa408f7091f",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "09b7765e-f20d-41e2-b167-6cf49f6ef453",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c23f3d81-19aa-47e0-b33b-90055beeff49",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "8618bc4c-48cc-4c00-ae70-22492aa28607",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "46247b56-d777-44ca-9f72-6a526dbbad2b",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "61c3c939-2db4-4547-be60-d054df504496",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "9fb9ca8f-208b-4ea9-b2b4-320130053807",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "37b6cd24-2f01-41b5-93bb-e1ff524308a4",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "70e2426a-818f-4cba-971a-e924e8e97d18",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "ca8f70df-bebf-421e-93b1-388f688eea4a",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "dd2db7c9-128b-41c6-a1fd-324a217d29ec",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "779722b7-fed3-4e9a-b750-b3b173193706",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "0228502f-e500-4f41-9c59-440f3ee9d5a1",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "eac2c6db-6b72-4af6-935b-e37acba7af0b",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "065aa42d-2924-40e0-aab2-57e3a54ef3a7",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "fae1c7c7-4376-42a0-a01a-47f15f6e1ecf",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "22b06f60-eb80-4394-b4ef-7378947d55ab",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "b90b9105-dcc6-45cf-9112-abafd7cac2dc",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "632786b5-abc8-4cb0-9905-47fc5178a826",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "020aac1b-fd07-4c58-add7-4f86c6913a86",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "9662c768-0e0e-4d50-bb03-da7353e6e28e",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "1fd40a4c-c8a2-4682-867d-e4f14cafbfab"
+      },
+      {
+        "DisplayLayerId": "e886df04-e99f-4d66-8632-5312bbc6d2c7",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "cf4e21ff-910e-467e-918e-db28179be939",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "6619e68f-2968-4d75-a77e-0afd0f4a5900",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "63ca61c2-4a96-4f86-be54-d820744bf651"
+      },
+      {
+        "DisplayLayerId": "2ea052dd-b497-4bdd-a674-59a3bde75710",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "0734ebd5-4b1c-4709-9622-aa78700b7fd4",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "84277906-051b-434a-8c21-f89e1edc0cc1",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "238ef381-8617-4c4e-9251-5cf34a525c83",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "ff0cb4cd-beb7-427d-a306-ae81b7f933eb",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "2bc210e5-396b-4042-9b93-ac1724f5e883",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "08a4b75f-e041-4030-8128-5f71c2d9aaa6",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "2c32dc46-d933-4c74-933d-f1ce4880e1e4",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ee0d6278-c5ff-4ba1-b133-ece0af1339c3",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "5a4f86d5-5d2b-43c3-a693-6db69f52612d",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "187cc087-38c4-4af3-b68f-b96cf7f16a77",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5623c120-861c-4861-9c44-656f64ffafcb",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "4af92c1d-d9d4-475a-a118-a2fa983f27da"
+      },
+      {
+        "DisplayLayerId": "8bbc1265-ae53-44e0-8c78-740a66d28a5c",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "ec083653-0863-4bc3-9891-b0a0345d4522",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "bcc02097-7c18-48fe-a6b9-f37e6dd36ee7",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "9691c95e-988c-4b00-a774-7cb922df0b9a",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "fc51325d-c3f6-4a5a-9940-675599aefb28",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "383c2601-ad1f-4901-9cda-60936f58e52c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "6b3a35f4-9f6b-44ef-9ab4-86c8cf8678dc",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "d103c05e-a93d-4059-92a0-b5a16d3c172d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "648101e2-f8da-40f6-adf9-9bbdbb6d2a39",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "852ec848-e56b-42b2-a0be-91715a83e4ef",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "8486934c-e996-4126-b4d1-3750ee8d1982",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "d4f7c15e-0624-4026-82ca-2bd3731b44a6",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "3d8786e7-5ef1-4ae9-8a27-d62cbbed64ac"
+      },
+      {
+        "DisplayLayerId": "377acaf1-2874-4600-8e8a-95692343f84d",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "5223e069-8955-4d8c-baf8-db63e89bed4d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "dc8f0f15-0471-413e-a529-cf30a8fd678f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "4af92c1d-d9d4-475a-a118-a2fa983f27da",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "402303d5-81d0-4bbd-8615-1129b1750f51",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "149575cf-1a49-47df-8504-c0118d91c64b",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "ebbe2682-6fb7-4fb7-8130-a7f5a42f84be",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "c02f5af7-d93f-4d51-ad45-1856d0e222e9",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "5db76413-10b9-4f4a-a4b5-319a844c64ef",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "3bd3ffcc-4756-4807-8206-a9aed3745771",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "c1825cd7-356a-4b94-8a12-9eb7ff577e46",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c88e254f-b5bc-4a9e-9194-5998fb2e5887",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "9fb9ca8f-208b-4ea9-b2b4-320130053807"
+      },
+      {
+        "DisplayLayerId": "e2234e3d-9cf6-4ded-8679-ab88f74add25",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "720b8c3c-149b-439f-b401-eeec093aef88",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "04717fd1-05e5-412f-ad1c-554698c5cc1c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "54eff658-1a46-4360-88b4-01873a0ce8f4"
+      },
+      {
+        "DisplayLayerId": "27e400f6-1e6f-4e0c-afbf-af2192bd3a94",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "f06646ce-f5ea-4e63-a0be-7110c63a0243",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "655ee21f-f12d-423c-ac23-86374873e842",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "a38ca847-f11d-4036-bc25-f1781e3da7b1"
+      },
+      {
+        "DisplayLayerId": "0f776466-fd8b-4882-b11c-b1d8f3daa2df",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "c0fc1155-092d-4a57-9f40-76d071284003",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0396e1e8-a842-42e1-b9e5-3152d9a74780",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "6702b8f7-6d4f-4db3-828b-b40b41f1410b",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "ae9776ba-d441-45f8-a0da-0863a7ba730d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "55c8cb6b-d669-40a7-bde9-0261fff090f0",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "126561b2-e93e-48b1-83d3-b62d710ebd2e",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "28950986-014a-4191-b828-96858c21a77e",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "c6254e5c-dac3-4471-8ab4-9263422ae1b6",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "d6b782b9-5b75-474b-8d3a-b75f1d12ed86",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "da1104fc-8d3d-4574-aa88-2879e7a6dbb8",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "70ecf4c2-57d5-4f44-a3de-ba34fb407db3",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "0a54d052-c964-48a8-bc17-bcfa3f386832",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "7dd7f90c-12d7-4fe7-b98d-9699212002d7",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "eb56cb3f-bac1-4eae-afc2-b3e56c8381da",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "82cfd56f-a378-40c1-a83a-be8252a922e8",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "7623f828-ea51-4a2e-a4d8-ffe3bc90f563",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "12f35787-b7c6-44ea-9b18-c17a4c1928dd",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "164f9a8c-22da-4223-bf9c-c13c072f9ad7",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "44a84ee5-dd96-4349-9a75-9c293540b98d",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "713ae238-355b-42eb-8041-b7ba3c43fb48",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "6578d845-f7df-4c87-a2f7-009c86e7d0ef"
+      },
+      {
+        "DisplayLayerId": "2edd0009-ec93-438a-b251-ce662103503c",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "dc881ea1-6e75-48ff-b2cb-81723b38aee2",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "83395996-3bbd-4a02-a673-e54f35a50b28",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "2420f68b-b62a-48e1-815c-d379b8380b7e",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "1708acdf-bbe6-4285-bbf3-cb9378668ded",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "68a48ec1-a561-4181-8ae9-bbff7550a74f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "67f1510d-33f9-489f-bac7-d53b78687f55",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "0eaa0164-03bc-438b-8fe4-f5aa180f8bd9",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "60e438d0-6f30-4915-92a9-967952a5446e",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "8bbc1265-ae53-44e0-8c78-740a66d28a5c"
+      },
+      {
+        "DisplayLayerId": "3d8786e7-5ef1-4ae9-8a27-d62cbbed64ac",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "7450315f-b831-441e-89ed-44e0fe707d00",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0fc9dd96-0957-4718-b259-d086eec08207",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "950cd942-a9ea-4857-9051-d7d084d44e02",
+        "Direction": {
+          "DirectionId": 3,
+          "DirectionName": "Right",
+          "IsTransition": false
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "b6decd9d-a0e0-43c5-808a-53c8360e4824",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "237a3ced-52ed-42d5-b7ea-4b23977f307f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "63ca61c2-4a96-4f86-be54-d820744bf651",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 3,
+        "Layers": [
+          {
+            "LayerId": "e29cd69a-36cc-4c1d-b1be-e2a4468b6cc6",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "783c97d0-6dba-4eaf-b949-dc940137d31d",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b51ee724-3aaf-4211-b058-d8216fe84c7a",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "c62bb3cd-9b8c-4db6-9f58-a52b246d962f",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ade22bac-deef-4e2a-9399-63cf41b3b9ce",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "daf7ae96-765c-48d0-82f2-da0bd0bcd6f2",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "821fbb9f-81b5-4f42-becc-c79d17683e01",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "65e4b8a1-029a-4de4-9781-0d1af181c482",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "133c5d64-6822-4fd7-9f0b-dbde2497070d",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 8,
+        "Layers": [
+          {
+            "LayerId": "b9cec9bd-542c-4364-bf33-6934497e9828",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "d8627209-940c-4e13-a39b-58684a84c6b5",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "43da9963-fe02-4727-8eb3-dbf32bb0e619",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "874f0a73-c8b0-4b88-8084-b5786ecd11cd",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "ff5ca4a2-40ac-49e1-bc48-466a7ee58c3f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "1fd40a4c-c8a2-4682-867d-e4f14cafbfab",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "b172c015-82f4-4594-8364-f87cb115de8a",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "d9ce0c63-149c-4cc7-a467-85d1b5c97793",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "0b091d84-9421-4809-a48f-e697044816a5",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 12,
+        "Layers": [
+          {
+            "LayerId": "18d1bc21-e17e-4ef4-9c33-be8b29875daf",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "3f3fd357-6c6e-4547-98eb-3be7f0300ec6",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "377acaf1-2874-4600-8e8a-95692343f84d"
+      },
+      {
+        "DisplayLayerId": "2ca6413d-03c8-4e08-9061-e7e22de25265",
+        "Direction": {
+          "DirectionId": 4,
+          "DirectionName": "RightStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 5,
+        "Layers": [
+          {
+            "LayerId": "5fce6c4a-398f-4d24-90e6-162b999f3285",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "a992f095-e756-4257-8dd6-26b711d93e26",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "b0aaa77f-5752-4503-aac2-eb85b9282043",
+        "Direction": {
+          "DirectionId": 2,
+          "DirectionName": "StraightRight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "cdf44795-84bc-4835-914f-7f9051e316c6",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "b7ec7032-3f24-4fdf-9cba-8135cd40f992",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": "b51ee724-3aaf-4211-b058-d8216fe84c7a"
+      },
+      {
+        "DisplayLayerId": "e069d72a-fe4b-4009-ae5a-f08fee487751",
+        "Direction": {
+          "DirectionId": 6,
+          "DirectionName": "Up",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "6d6bbe21-3c25-4c87-a041-498b7d01a8fb",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "4c0df9db-4178-47be-8646-53a33649ff5f",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "a38ca847-f11d-4036-bc25-f1781e3da7b1",
+        "Direction": {
+          "DirectionId": 5,
+          "DirectionName": "StraightUp",
+          "IsTransition": true
+        },
+        "NumberOfSides": 6,
+        "Layers": [
+          {
+            "LayerId": "28f6158f-cb41-4eed-98f9-fb3bd3faaff7",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "93d6667e-66ca-4f11-90e8-3acb5c4bc56c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "20d879a1-411e-4b59-952e-fcd0dad7c1e2",
+        "Direction": {
+          "DirectionId": 7,
+          "DirectionName": "UpStraight",
+          "IsTransition": true
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "2a4781b9-7949-4aaa-a1f6-fc535d0dc8cc",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "0832b1cb-fb23-4c35-b22b-0ea3c996cc7c",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      },
+      {
+        "DisplayLayerId": "4775fbf3-7bcd-4525-a080-ffcb26524c28",
+        "Direction": {
+          "DirectionId": 1,
+          "DirectionName": "Straight",
+          "IsTransition": false
+        },
+        "NumberOfSides": 4,
+        "Layers": [
+          {
+            "LayerId": "6d04177b-9391-4fa5-abeb-f32c402ac7e1",
+            "IsOverlay": false
+          },
+          {
+            "LayerId": "88ab9baf-cc85-4654-ae33-9491151100d3",
+            "IsOverlay": false
+          }
+        ],
+        "LinkedPreviousDisplayLayerId": null
+      }
+    ],
+    "CollectionDisplayLayer": {
+      "DisplayLayerId": "9691c95e-988c-4b00-a774-7cb922df0b9a",
+      "LayerCollectionDisplayLayers": [
+        {
+          "LayerId": "383c2601-ad1f-4901-9cda-60936f58e52c",
+          "Colour": "0D6EFD"
+        },
+        {
+          "LayerId": "fc51325d-c3f6-4a5a-9940-675599aefb28",
+          "Colour": "00FFFF"
+        }
+      ]
+    }
+  }
+]
